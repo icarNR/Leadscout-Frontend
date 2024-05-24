@@ -1,0 +1,9 @@
+tailwind not working? https://github.com/tailwindlabs/tailwindcss/discussions/12312#discussioncomment-8560256
+
+//installled:	
+tailwind
+mui
+mui-icons
+reactirouter-dom
+react-icons
+axios
