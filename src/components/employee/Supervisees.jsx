@@ -19,6 +19,7 @@ import FolderIcon from '@mui/icons-material/Folder';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { Margin } from '@mui/icons-material';
 import RecButton from '../common/Button.jsx';
+import Alert from '@mui/material/Alert';
 
 
 // function generate(element) {
@@ -52,10 +53,14 @@ const StyledAvatar = styled(Avatar)(({ theme }) => ({
 
   export default function InteractiveList() {
     const [dense, setDense] = React.useState(false);
-    const [secondary, setSecondary] = React.useState(false);
-    
+    const [secondary, setSecondary] = React.useState(false); 
     const [group, setGroup] = useState([]);
-    
+    const [showAlert, setShowAlert] = useState(true);
+
+    const toggleAlert = () => {
+      setShowAlert(!showAlert);
+    };
+
     useEffect(() => {
       // Try to get the supervisees list from the session storage
       const storedGroup = sessionStorage.getItem('supervisees');
@@ -77,29 +82,36 @@ const StyledAvatar = styled(Avatar)(({ theme }) => ({
 
     return (
       <Box sx={{ flexGrow: 1, maxWidth: 500 }}>
-        <Demo sx={{background: 'white', borderRadius: '8px', border: '1px solid gray'}}>
+        <Demo sx={{ background: 'white', borderRadius: '8px', border: '1px solid gray' }}>
           {group && group.length > 0 ? (
             <List dense={dense}>
               {group.map(item => {
                 const handleAssessClick = () => {
-                  // Action to perform when the button is clicked
-                  sessionStorage.setItem('assessed_id', item.user_id)
-                  console.log("Assessing "+ item.user_id)
-                  window.location.href = "/Assesment";
+                  sessionStorage.setItem('assessed_id', item.user_id);
+                  console.log("Assessing " + item.user_id);
+                  //window.location.href = "/Assessment";
+                  console.log(item.observed)
                 };
   
                 return (
-                  <ListItem key={item.user_id}>
+                  <ListItem
+                    key={item.user_id}
+                    // secondaryAction={
+                    //   !item.observed && (
+                    //     <Alert severity="success" sx={{ my: 'auto' }}>
+                    //       Assessed
+                    //     </Alert>
+                    //   )
+                    // }
+                  >
                     <ListItemAvatar sx={{ paddingRight: '8px' }}>
                       <Avatar alt={item.name} src={item.image} />
                     </ListItemAvatar>
-                    
                     <ListItemText
                       sx={{ marginLeft: '20px' }}
                       primary={item.user_id}
                       secondary={secondary ? 'Secondary text' : null}
                     />
-  
                     <ListItemText
                       primary={item.name}
                       secondary={secondary ? 'Secondary text' : null}
@@ -111,7 +123,7 @@ const StyledAvatar = styled(Avatar)(({ theme }) => ({
             </List>
           ) : (
             <Typography variant="h6" component="div">
-              //display an image
+              // Display an image or message if no supervisees
             </Typography>
           )}
         </Demo>
