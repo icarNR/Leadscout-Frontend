@@ -3,7 +3,7 @@ import Layout from './layouts/EPLayout.jsx';
 import CustomizedProgressBars from './components/common/ProgressBar.jsx';
 import BasicTabs from './components/common/tab.jsx';
 import PersonalityPage from './pages/employee/employee_Personality.jsx';
-import AssessmentPage from './pages/employee/Assesment.jsx';
+import AssessmentPage from './pages/employee/Assessment.jsx';
 import HomePage from './pages/employee/employee_Home.jsx';
 
 import { createTheme } from '@mui/material';

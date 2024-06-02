@@ -24,35 +24,38 @@ const WelcomeText = styled(Typography)(({ theme }) => ({
 const HomePage = ({ name }) => {
   const [buttonText, setButtonText] = useState('Attempt');
   const [buttonColor, setButtonColor] = useState('primary');
-  const [requested, setrequested] = useState(true);
+  const [requested, setRequested] = useState(null);
   const [attempts, setAttempts] = useState(1);
+  const [allowed, setAllowed] = useState(false);
   
   useEffect(() => {
     let userId="001"//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<   user_id
-    sessionStorage.setItem('user_id', userId)
+    sessionStorage.setItem('user_id', userId);
     sessionStorage.setItem('assessed_id', userId);
 
-    // Fetch the number of attempts for the current user
+    // Fetch the number of attempts, requeested and allowed for the current user
     fetch(`${server}/api/users/${userId}/attempts`)
     .then(response => response.json())
     .then(data => {
       console.log(data)
-      if (data.requested){
+      if (data.requested && !data.allowed){ //check id already requested and if its allowed
         // Change button text and color
         setButtonText('Requested');
         setButtonColor('secondary');
-        setrequested(true)
        }
+       setRequested(data.requested)
        setAttempts(data.attempts)
+       setAllowed(data.allowed)
     })
     .catch(error => console.error('Error:', error));
   }, []);  // The empty array means this useEffect will run once when the component mounts
 
   const handleButtonClick = () => {
     console.log(attempts)
-    if (attempts == 0) { //change this-----------------------------------------------------------------------
+    console.log(requested)
+    if (attempts == 0 || allowed) { //change this-----------------------------------------------------------------------
         // Navigate to the assessment page
-        window.location.href = "/Assesment";}
+        window.location.href = "/Assessment";}
     else if(requested==false){
         // Set the `requested` flag to `true` for the current user and send notifications 
         fetch(`${server}/api/users/${sessionStorage.getItem('user_id')}/request`, { method: 'POST' })

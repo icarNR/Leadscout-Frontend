@@ -66,8 +66,9 @@ const StyledAvatar = styled(Avatar)(({ theme }) => ({
       const storedGroup = sessionStorage.getItem('supervisees');
       const userID = sessionStorage.getItem('user_id');
       // If the supervisees list is in the session storage, use it
-      if (storedGroup) {
+      if (storedGroup) 
         setGroup(JSON.parse(storedGroup));
+      else{
         //If the supervisees list is not in the session storage, fetch it from the database
         fetch(`http://localhost:8000/get_users/${userID}`)
           .then(response => response.json())
@@ -77,7 +78,7 @@ const StyledAvatar = styled(Avatar)(({ theme }) => ({
             setGroup(data);
           })
           .catch(error => console.error('Error fetching data: ', error));
-      }
+  }
     }, []);
 
     return (
@@ -89,7 +90,7 @@ const StyledAvatar = styled(Avatar)(({ theme }) => ({
                 const handleAssessClick = () => {
                   sessionStorage.setItem('assessed_id', item.user_id);
                   console.log("Assessing " + item.user_id);
-                  //window.location.href = "/Assessment";
+                  window.location.href = "/Assessment";
                   console.log(item.observed)
                 };
   
