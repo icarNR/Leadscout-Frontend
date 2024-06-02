@@ -24,7 +24,8 @@ const WelcomeText = styled(Typography)(({ theme }) => ({
 const HomePage = ({ name }) => {
   const [buttonText, setButtonText] = useState('Attempt');
   const [buttonColor, setButtonColor] = useState('primary');
-  const [requested, setrequested] = useState(false);
+  const [requested, setrequested] = useState(true);
+  const [attempts, setAttempts] = useState(1);
   
   useEffect(() => {
     let userId="001"//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<   user_id
@@ -35,28 +36,31 @@ const HomePage = ({ name }) => {
     fetch(`${server}/api/users/${userId}/attempts`)
     .then(response => response.json())
     .then(data => {
+      console.log(data)
       if (data.requested){
         // Change button text and color
         setButtonText('Requested');
         setButtonColor('secondary');
         setrequested(true)
-      }
+       }
+       setAttempts(data.attempts)
     })
     .catch(error => console.error('Error:', error));
   }, []);  // The empty array means this useEffect will run once when the component mounts
 
   const handleButtonClick = () => {
-    if (requested==false)//(data.attempts === 0) { //change this-----------------------------------------------------------------------
+    console.log(attempts)
+    if (attempts == 0) { //change this-----------------------------------------------------------------------
         // Navigate to the assessment page
-        window.location.href = "/Assesment";
-    else {
+        window.location.href = "/Assesment";}
+    else if(requested==false){
         // Set the `requested` flag to `true` for the current user and send notifications 
-        fetch(`${server}/api/users/${userId}/request`, { method: 'POST' })
+        fetch(`${server}/api/users/${sessionStorage.getItem('user_id')}/request`, { method: 'POST' })
         .then(() => {
           setButtonText('Requested'); 
           setButtonColor('secondary'); 
         });
-      
+    
         // Add the username to the notification dictionary for their supervisor
         // fetch(`${server}/api/supervisors/${supervisorId}/notifications`, {
         //   method: 'POST',
@@ -64,6 +68,7 @@ const HomePage = ({ name }) => {
         //   body: JSON.stringify({ userId: userId })
         // });
             }
+        
     }
 
   const pageContent=(
