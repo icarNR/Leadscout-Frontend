@@ -1,0 +1,48 @@
+/* Styles for Notification page */
+
+/* Container styles */
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+  /* DataGrid styles */
+.MuiDataGrid-root {
+    width: 100%;
+}
+
+.MuiDataGrid-main {
+    height: 100%;
+}
+
+.MuiDataGrid-window {
+    overflow: auto !important;
+}
+
+  /* Button styles */
+.button {
+    background-color: blue;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+  /* Hover effect */
+.button:hover {
+    background-color: darkblue;
+}
+
+  /* Accept button */
+.accept-button {
+    background-color: green;
+}
+
+  /* Decline button */
+.decline-button {
+    background-color: red;
+}
