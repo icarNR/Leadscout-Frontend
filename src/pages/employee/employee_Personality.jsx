@@ -16,18 +16,19 @@ const data = [
   { imageSrc: 'image3.jpg', bodyText1: '...', bodyText2: '...'  },
   { imageSrc: 'image3.jpg', bodyText1: '...', bodyText2: '...'  },
 ];
-
+data[0].bodyText1="Almost heaven, West Virginia Bluecasssssss Ridge Mountains, Shenandoah RiverLife is old there, older than the treesYounger than the mountains, growin' like a breezeCountry roads, take me homeTo the place I belongWest Virginia, mountain mamaTake me home, country roadsAll my memories gather 'round herMiner's lady, stranger to blue waterDark and dusty, painted on the skyMisty taste of moonshine, teardrop in my eyeCountry roads, take me homeTo the place I belong West Virginia, mountain mama"
 
 
 const Div1 = ({ imageSrc, bodyText1, bodyText2 }) => (
   <div className="text-sm lg:flex rounded-lg overflow-hidden shadow-lg ">
-    <div className="rounded-l-lg h-64 w-64 border">
+    <div className="rounded-l-lg h-[300px] w-[300px] border">
       <img src={imageSrc} alt="Image" className="w-full h-auto" />
     </div>
-    <div style={{ scrollbarWidth: 'none' }} className=" p-4 rounded-r-lg h-64 w-64 overflow-auto">
-    <h2 className="text-lg font-bold mb-2 ">Go Forward</h2>      <p>{bodyText1}</p>
+    <div style={{ scrollbarWidth: 'none' }} className=" p-4 rounded-r-lg h-[300px] w-[300px] overflow-auto">
+      <h2 className="text-lg font-bold mb-2 ">Go Forward</h2>      
+      <p >{bodyText1}</p>
     </div>
-    <div style={{ scrollbarWidth: 'none' }}  className="p-4 rounded-r-lg h-64 w-64">
+    <div style={{ scrollbarWidth: 'none' }}  className="p-4 rounded-r-lg h-[300px] w-[300px]">
       <h2 className="text-lg font-bold mb-2">Keep in mind</h2>
       <p>{bodyText2}</p>
     </div>
@@ -37,7 +38,14 @@ const Div1 = ({ imageSrc, bodyText1, bodyText2 }) => (
 
 const PersonalityPage = () => {
   
-  const [results, setResults] = useState({
+const [results, setResults] = useState({
+    Extraversion: 0,
+    Agreeableness: 0,
+    Conscientiousness: 0,
+    Neuroticism: 0,
+    Openness: 0
+  });
+  const [averages, setAverages] = useState({
     Extraversion: 0,
     Agreeableness: 0,
     Conscientiousness: 0,
@@ -50,16 +58,26 @@ const PersonalityPage = () => {
 
   useEffect(() => {
     const userId = sessionStorage.getItem('user_id'); 
-    const storedResults = sessionStorage.getItem('results');
+    const storedResults = JSON.parse(sessionStorage.getItem('results'));
+    const storedAverages = JSON.parse(sessionStorage.getItem('averages'));
 
-    //if (!storedResults) {
+    if(storedResults && storedAverages){
+      console.log("storedResults");
+
+      console.log(storedResults);
+      console.log(storedAverages);
+      setAverages(storedAverages);
+      setResults(storedResults); }
+
       Promise.all([
         fetch(`http://localhost:8000/api/assessment_status/${userId}`),
-        fetch(`http://localhost:8000/send_results/${userId}`)
+        fetch(`http://localhost:8000/send_results/${userId}`),
+        fetch(`http://localhost:8000/send_average_results`)
       ])
-      .then(async ([res1, res2]) => {
+      .then(async ([res1, res2, res3]) => {
         const data1 = await res1.json();
         const data2 = await res2.json();
+        const data3 = await res3.json();
     
         setselfAssessment(data1.self_assessment);
         //sessionStorage.setItem('self_assessment',data1.self_assessment);
@@ -73,6 +91,15 @@ const PersonalityPage = () => {
           Neuroticism: data2.neuroticism,
           Openness: data2.openness
         };
+        const averageResults = {
+          Extraversion: data3.extraversion,
+          Agreeableness: data3.agreeableness,
+          Conscientiousness: data3.conscientiousness,
+          Neuroticism: data3.neuroticism,
+          Openness: data3.openness
+        };
+        setAverages(averageResults);
+        sessionStorage.setItem('averages', JSON.stringify(averageResults));
         setResults(adjustedResults);
         sessionStorage.setItem('results', JSON.stringify(adjustedResults));
 
@@ -111,17 +138,21 @@ const PersonalityPage = () => {
             <Alert severity="warning">Do the assessment to see your results.</Alert> 
           : null
         }
-        <div className="flex flex-col items-center  pt-20 pb-10" >
+        <div className="flex flex-col items-center  pt-20 pb-20" >
             <BasicTabs
               panelcontent1={<Results {...results} />} 
-              panelcontent2={<Results {...results} />} />
+              panelcontent2={<Results {...averages} />} />
         </div>
-        <div className="flex justify-between items-center mb-4">
-          <button onClick={handlePrev} className="px-4 py-2 bg-blue-500 text-white rounded-md"><VscArrowLeft /></button>
+        <div className="flex justify-between items-center mb-4 space-x-4"> 
+          <button 
+            onClick={handlePrev} 
+            className="px-4 py-4 bg-[#00818A] text-white rounded-md hover:bg-[#006B74]"><VscArrowLeft /></button>
           <Div1 {...data[currentIndex]} />
-          <button onClick={handleNext} className="px-4 py-2 bg-blue-500 text-white rounded-md"><VscArrowRight /></button>
+          <button 
+            onClick={handleNext} 
+            className="px-4 py-4 bg-[#00818A] text-white rounded-md hover:bg-[#006B74]"><VscArrowRight /></button>
         </div>
-      </div>
+     </div>
     );
     
     return(<PageLayout content={pageContent} pagename={"Personality"}/>);

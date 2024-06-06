@@ -30,8 +30,8 @@ const HomePage = () => {
   const [name, setName] = useState("Nisal Ravindu");
   
   useEffect(() => {
-    sessionStorage.clear()//--------------------------------
-    let userId="001"//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<   user_id
+    //sessionStorage.clear()//--------------------------------
+    let userId="000"//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<   user_id
     sessionStorage.setItem('user_id', userId);
     sessionStorage.setItem('assessed_id', userId);
 
@@ -93,7 +93,7 @@ const HomePage = () => {
           <div className=" font-bold text-4xl text-center text-[#649DAD] uppercase">
             Welcome!
           </div>
-          <div className="mb-5  font-bold text-3xl text-center text-[#404B69] uppercase">
+          <div className="mb-5  font-bold text-2xl text-center text-[#404B69] uppercase">
             {name}
           </div>
             <div className="w-full flex justify-center px-10 mb-10">
