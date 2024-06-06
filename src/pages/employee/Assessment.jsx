@@ -86,23 +86,23 @@ function AssessmentPage() {
     const progressPercentage = Math.round((answeredQuestions / totalQuestions) * 100);
 
 // Function to navigate to the next page
-const handleNextPage = () => {
-  // Check if all questions on the current page have been answered
-  const startIndex = (currentPage - 1) * questionsPerPage;
-  const endIndex = startIndex + questionsPerPage;
-  const currentPageAnswers = selectedOptions.slice(startIndex, endIndex);
-  
-  // Check if any question on the current page is unanswered (value is 0)
-  //const allAnswered = currentPageAnswers.every(option => option !== 0);
-  let allAnswered = 1
-  if (allAnswered) {
-    setCurrentPage(currentPage + 1);
-    window.scrollTo({ top: 0, behavior: 'smooth' }); // Scroll to the top of the page
+  const handleNextPage = () => {
+    // Check if all questions on the current page have been answered
+    const startIndex = (currentPage - 1) * questionsPerPage;
+    const endIndex = startIndex + questionsPerPage;
+    const currentPageAnswers = selectedOptions.slice(startIndex, endIndex);
+    
+    // Check if any question on the current page is unanswered (value is 0)
+    //const allAnswered = currentPageAnswers.every(option => option !== 0);
+    let allAnswered = 1
+    if (allAnswered) {
+      setCurrentPage(currentPage + 1);
+      window.scrollTo({ top: 0, behavior: 'smooth' }); // Scroll to the top of the page
 
-  } else {
-    alert('Please answer all questions before proceeding to the next page.');
-  }
-};
+    } else {
+      alert('Please answer all questions before proceeding to the next page.');
+    }
+  };
 
 // Function to handle submit click
 const handleSubmit = async () => {
@@ -110,13 +110,14 @@ const handleSubmit = async () => {
  
   // Define the user ID and the answers to send
   const answersData = {
-    user_id: sessionStorage.getItem('user_id'), //sessionStorage.getItem('user_id'),
+    user_id: sessionStorage.getItem('user_id'), 
     assessed_id: sessionStorage.getItem('assessed_id'),
     answers: selectedOptions
   };
 
-  // Send the data to the backend using fetch
+  
   try {
+    // Send the data to the backend using fetch
     const response = await fetch('http://localhost:8000/submit_assessment/', {
       method: 'POST',
       headers: {
@@ -126,17 +127,66 @@ const handleSubmit = async () => {
     });
     const data = await response.json();
     setResults(data);
-    console.log(data);
+    console.log(data); 
+
+    //add to admin notifications
+    fetch(`${server}/add_admin_notification`, {
+      method: 'POST',
+      headers: {
+          'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        userID: answersData.assessed_id,
+        ntype: 'assess_complete'
+    })
+
+      })
+    .then(response => response.json())
+    .then(data => console.log(data))
+    .catch(error => console.error('Error:', error));
     
+    // Add to the notification dictionary for their supervisor
+    if (answersData.user_id==answersData.assessed_id){
+      fetch(`${server}/add_supervisor_notification`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            userID: answersData.user_id,
+            ntype: 'sef_assess_done'
+        })
+        })
+      .then(response => response.json())
+      .then(data => console.log(data))
+      .catch(error => console.error('Error:', error));
+
+      window.location.href = "/employee_Personality";    
+    }  
+    // Add to the notification dictionary for the employee
+    else{
+      fetch(`${server}/add_employee_notification`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            userID: answersData.user_id,
+            superviseeID: answersData.assessed_id,
+            ntype: 'supervisor_assess_done'
+        })
+        })
+      .then(response => response.json())
+      .then(data => console.log(data))
+      .catch(error => console.error('Error:', error));
+
+      window.location.href = "/";
+    }
+
   } catch (error) {
     console.error('Error submitting assessment:', error);
-  }
-  if (answersData.user_id==answersData.assessed_id){
-    window.location.href = "/employee_Personality";
-  }
-  else
-    window.location.href = "/";
-};
+  }  
+  };
 
 
   // Determine if the current page is the last page

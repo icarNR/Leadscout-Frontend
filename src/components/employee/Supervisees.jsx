@@ -20,7 +20,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import { Margin } from '@mui/icons-material';
 import RecButton from '../common/Button.jsx';
 import Alert from '@mui/material/Alert';
-
+import image1 from '../../assets/OIG4.n6XXUv.jpeg';
 
 // function generate(element) {
 //   return [0, 1, 2].map((value) =>
@@ -57,9 +57,9 @@ const StyledAvatar = styled(Avatar)(({ theme }) => ({
     const [group, setGroup] = useState([]);
     const [showAlert, setShowAlert] = useState(true);
 
-    const toggleAlert = () => {
-      setShowAlert(!showAlert);
-    };
+    // const toggleAlert = () => {
+    //   setShowAlert(!showAlert);
+    // };
 
     useEffect(() => {
       // Try to get the supervisees list from the session storage
@@ -83,7 +83,7 @@ const StyledAvatar = styled(Avatar)(({ theme }) => ({
 
     return (
       <Box sx={{ flexGrow: 1, maxWidth: 500 }}>
-        <Demo sx={{ background: 'white', borderRadius: '8px', border: '1px solid gray' }}>
+        <Demo sx={{ background: 'white', borderRadius: '8px', border: '1px solid white' }}>
           {group && group.length > 0 ? (
             <List dense={dense}>
               {group.map(item => {
@@ -123,9 +123,10 @@ const StyledAvatar = styled(Avatar)(({ theme }) => ({
               })}
             </List>
           ) : (
-            <Typography variant="h6" component="div">
-              // Display an image or message if no supervisees
-            </Typography>
+            <div class="overflow-hidden w-full h-[240px]">
+              <img src={image1} alt="Image" class="object-contain w-full h-full" />
+            </div>
+
           )}
         </Demo>
       </Box>

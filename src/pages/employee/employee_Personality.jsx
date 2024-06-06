@@ -10,10 +10,11 @@ import axios from 'axios'; // Make sure to install this package
 import Alert from '@mui/material/Alert';
 
 const data = [
-  { imageSrc: image1, bodyText1: 'In literary theory, a text is any object that can be "read", whether this object is a work of literature, a street sign, an arrangement of buildings on a city block, or styles of clothing. It is a set of signs that is available to be reconstructed by a reader if sufficient interpretants are available.', bodyText2: 'Body text 3' },
-  { imageSrc: 'image2.jpg', bodyText1: 'Body text 2', bodyText2: 'Body text 2'  },
-  { imageSrc: 'image3.jpg', bodyText1: 'Body text 3', bodyText2: 'Body text 1'  },
-  // Add more data as needed
+  { imageSrc: image1, bodyText1: '...', bodyText2: '...' },
+  { imageSrc: 'image2.jpg', bodyText1: '...', bodyText2: '...'  },
+  { imageSrc: 'image3.jpg', bodyText1: '...', bodyText2: '...'  },
+  { imageSrc: 'image3.jpg', bodyText1: '...', bodyText2: '...'  },
+  { imageSrc: 'image3.jpg', bodyText1: '...', bodyText2: '...'  },
 ];
 
 
@@ -44,7 +45,8 @@ const PersonalityPage = () => {
     Openness: 0
   });
 
-  const [dualAssessment,setdualAssessment] = useState(true);
+  const [selfAssessment,setselfAssessment] = useState(true);
+  const [supervisorAssessment,setsupervisorAssessment] = useState(true);
 
   useEffect(() => {
     const userId = sessionStorage.getItem('user_id'); 
@@ -52,15 +54,17 @@ const PersonalityPage = () => {
 
     //if (!storedResults) {
       Promise.all([
-        fetch(`http://localhost:8000/api/dual_assessment/${userId}`),
+        fetch(`http://localhost:8000/api/assessment_status/${userId}`),
         fetch(`http://localhost:8000/send_results/${userId}`)
       ])
       .then(async ([res1, res2]) => {
         const data1 = await res1.json();
         const data2 = await res2.json();
     
-        setdualAssessment(data1.dual_assessment);
-        sessionStorage.setItem('dual_assessment',data1.dual_assessment);
+        setselfAssessment(data1.self_assessment);
+        //sessionStorage.setItem('self_assessment',data1.self_assessment);
+        setsupervisorAssessment(data1.supervisor_assessment);
+        //sessionStorage.setItem('supervisor_assessment',data1.supervisor_assessment);
         //set results
         const adjustedResults = {
           Extraversion: data2.extraversion,
@@ -97,18 +101,26 @@ const PersonalityPage = () => {
     };
     
     const pageContent = (
-      <div className={`flex flex-col h-full p-10 space-y-10`}> 
-      {dualAssessment ? null: <Alert severity="info">Current result is based on self assessmet.</Alert> }
-      <div className={'flex flex-col  items-center'}  >
-          <BasicTabs
-            panelcontent1={<Results {...results} />} 
-            panelcontent2={<Results {...results} />} />
-      </div>
-      <div className="flex justify-between items-center mb-4">
-        <button onClick={handlePrev} className="px-4 py-2 bg-blue-500 text-white rounded-md"><VscArrowLeft /></button>
-        <Div1 {...data[currentIndex]} />
-        <button onClick={handleNext} className="px-4 py-2 bg-blue-500 text-white rounded-md"><VscArrowRight /></button>
-      </div>
+      <div className="flex flex-col h-full"> {/* Increased space-y from 10 to 20 */}
+        {
+          supervisorAssessment && !selfAssessment ? 
+            <Alert severity="info">Current result is based on supervisor assessment.</Alert> 
+          : !supervisorAssessment && selfAssessment ? 
+            <Alert severity="info">Current result is based on self assessment.</Alert> 
+          : !supervisorAssessment && !selfAssessment ? 
+            <Alert severity="warning">Do the assessment to see your results.</Alert> 
+          : null
+        }
+        <div className="flex flex-col items-center  pt-20 pb-10" >
+            <BasicTabs
+              panelcontent1={<Results {...results} />} 
+              panelcontent2={<Results {...results} />} />
+        </div>
+        <div className="flex justify-between items-center mb-4">
+          <button onClick={handlePrev} className="px-4 py-2 bg-blue-500 text-white rounded-md"><VscArrowLeft /></button>
+          <Div1 {...data[currentIndex]} />
+          <button onClick={handleNext} className="px-4 py-2 bg-blue-500 text-white rounded-md"><VscArrowRight /></button>
+        </div>
       </div>
     );
     

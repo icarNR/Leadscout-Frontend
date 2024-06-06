@@ -21,14 +21,16 @@ const WelcomeText = styled(Typography)(({ theme }) => ({
 }));
 
 
-const HomePage = ({ name }) => {
+const HomePage = () => {
   const [buttonText, setButtonText] = useState('Attempt');
   const [buttonColor, setButtonColor] = useState('primary');
   const [requested, setRequested] = useState(null);
   const [attempts, setAttempts] = useState(1);
   const [allowed, setAllowed] = useState(false);
+  const [name, setName] = useState("Nisal Ravindu");
   
   useEffect(() => {
+    sessionStorage.clear()//--------------------------------
     let userId="001"//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<   user_id
     sessionStorage.setItem('user_id', userId);
     sessionStorage.setItem('assessed_id', userId);
@@ -57,33 +59,43 @@ const HomePage = ({ name }) => {
         // Navigate to the assessment page
         window.location.href = "/Assessment";}
     else if(requested==false){
-        // Set the `requested` flag to `true` for the current user and send notifications 
+        // Set the `requested` flag to `true` for the current user 
         fetch(`${server}/api/users/${sessionStorage.getItem('user_id')}/request`, { method: 'POST' })
         .then(() => {
           setButtonText('Requested'); 
           setButtonColor('secondary'); 
         });
     
-        // Add the username to the notification dictionary for their supervisor
-        // fetch(`${server}/api/supervisors/${supervisorId}/notifications`, {
-        //   method: 'POST',
-        //   headers: { 'Content-Type': 'application/json' },
-        //   body: JSON.stringify({ userId: userId })
-        // });
-            }
-        
+        // Add to the notification dictionary for their supervisor
+        fetch(`${server}/add_supervisor_notification`, {
+          method: 'POST',
+          headers: {
+              'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+              userID: sessionStorage.getItem('user_id'),
+              ntype: 'assess_req'
+          })
+          })
+        .then(response => response.json())
+        .then(data => console.log(data))
+        .catch(error => console.error('Error:', error));    
+        }
     }
 
   const pageContent=(
   <div className={`flex  flex-col lg:flex-row lg:h-full `}>    
         {/* Left Part */}
         <div className="flex flex-col items-center flex-grow h-full lg:h-full ">
-          <div style={{marginBottom: 55, marginTop:60}}>
-          <Avatar sx={{ bgcolor: deepOrange[500], width: 100, height: 100 }}>N</Avatar>
+          <div style={{marginBottom: 35, marginTop:60}}>
+          <Avatar sx={{ bgcolor: '#DBEDF3', width: 100, height: 100 ,border: '7px solid #649DAD'}}>N</Avatar>
           </div>
-          <div class="mb-8 font-roboto font-bold text-4xl text-center">
-            Welcome {name}
-            </div>
+          <div className=" font-bold text-4xl text-center text-[#649DAD] uppercase">
+            Welcome!
+          </div>
+          <div className="mb-5  font-bold text-3xl text-center text-[#404B69] uppercase">
+            {name}
+          </div>
             <div className="w-full flex justify-center px-10 mb-10">
               <InteractiveList className="min-h-"/>
             </div>
@@ -92,10 +104,10 @@ const HomePage = ({ name }) => {
         {/* Right Part */}
         <div className="bg-cover bg-center flex flex-col items-center justify-center flex-grow gap-7 h-screen lg:h-full" style={{ backgroundImage: `url(${image1})`}}>
             <div>
-              <div variant="body1" className="text-3xl font-bold text-center">
+              <div variant="body1" className="text-3xl font-bold text-[#404B69] text-center">
                 BE HONEST!
               </div>
-              <Typography className="text-center">
+              <Typography className="text-center text-[#404B69] ">
                 We Can Help You Through Improvements
               </Typography>
             </div>
