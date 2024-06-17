@@ -10,6 +10,7 @@ import Avatar from '@mui/material/Avatar';
 import { deepOrange, deepPurple } from '@mui/material/colors';
 import PageLayout from '../../layouts/EPLayout';
 import image1 from '../../assets/employee_home.jpeg'; // Adjust the file extension based on the actual image type
+//import { userStore } from '../../store.jsx'// Path to your store
 
 const server = 'http://localhost:8000';
 
@@ -30,11 +31,11 @@ const HomePage = () => {
   const [name, setName] = useState("Nisal Ravindu");
   
   useEffect(() => {
-    //sessionStorage.clear()//--------------------------------
+    sessionStorage.clear()//--------------------------------
     let userId="000"//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<   user_id
     sessionStorage.setItem('user_id', userId);
     sessionStorage.setItem('assessed_id', userId);
-
+    
     // Fetch the number of attempts, requeested and allowed for the current user
     fetch(`${server}/api/users/${userId}/attempts`)
     .then(response => response.json())
@@ -46,10 +47,14 @@ const HomePage = () => {
         setButtonColor('secondary');
        }
        setRequested(data.requested)
+       sessionStorage.setItem('requested', requested);
        setAttempts(data.attempts)
+       sessionStorage.setItem('attempts', attempts);
        setAllowed(data.allowed)
+       sessionStorage.setItem('allowed', allowed);
     })
     .catch(error => console.error('Error:', error));
+  
   }, []);  // The empty array means this useEffect will run once when the component mounts
 
   const handleButtonClick = () => {
@@ -96,8 +101,8 @@ const HomePage = () => {
           <div className="mb-5  font-bold text-2xl text-center text-[#404B69] uppercase">
             {name}
           </div>
-            <div className="w-full flex justify-center px-10 mb-10">
-              <InteractiveList className="min-h-"/>
+            <div className="w-full flex justify-center items-center px-10 mb-10 flex-grow">
+              <InteractiveList className=""/>
             </div>
         </div>
 

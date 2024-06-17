@@ -41,7 +41,7 @@ import image1 from '../../assets/OIG4.n6XXUv.jpeg';
 
 const Demo = styled('div')(({ theme }) => ({
   backgroundColor: theme.palette.background.paper,
-  maxHeight: '242px', // Adjust this value as needed
+  maxHeight: '244px', // Adjust this value as needed
   overflowY: 'auto', // Enable vertical scrolling
    
 }));
@@ -83,7 +83,7 @@ const StyledAvatar = styled(Avatar)(({ theme }) => ({
 
     return (
       <Box sx={{ flexGrow: 1, maxWidth: 500 }}>
-        <Demo sx={{ background: 'white', borderRadius: '8px', border: '1px solid white' }}>
+        <Demo sx={{ background: 'white', borderRadius: '8px', border: `2px solid ${group && group.length > 0 ? '#E4E4E7' : 'white'}` }}>
           {group && group.length > 0 ? (
             <List dense={dense}>
               {group.map(item => {
@@ -123,7 +123,7 @@ const StyledAvatar = styled(Avatar)(({ theme }) => ({
               })}
             </List>
           ) : (
-            <div class="overflow-hidden w-full h-[240px]">
+            <div class="overflow-hidden w-full h-[235px]">
               <img src={image1} alt="Image" class="object-contain w-full h-full" />
             </div>
 

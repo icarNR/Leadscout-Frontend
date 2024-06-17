@@ -3,12 +3,34 @@ import QuestionComponent from '../../components/employee/questionInput.jsx';
 import CustomButton from '../../components/common/Button.jsx';
 import PageLayout from '../../layouts/ELayout.jsx';
 const server = 'http://localhost:8000';
+import { useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
 
 function AssessmentPage() {
+  const [attempts, setAttempts] = useState(parseInt(sessionStorage.getItem('attempts'), 10));
+  const [allowed, setAllowed] = useState(JSON.parse(sessionStorage.getItem('allowed')));
+
   // Total number of questions
   const totalQuestions = 44;
   // Questions per page
   const questionsPerPage = 11;
+
+  const navigate = useNavigate();
+
+  useEffect(() => {
+ 
+    if (!(allowed || attempts==0)){
+      navigate('/'); // Redirect to the desired page
+    }
+    else{
+      fetch(`${server}/api/users/${sessionStorage.getItem('user_id')}/attempts`)
+        .then(response => response.json())
+        .then(data => {
+          console.log(data)
+          setAttempts(data.attempts);
+          setAllowed(data.allowed);
+        })}
+      }, [attempts,allowed]);
  
 // Array of all questions
   const allQuestions = [
