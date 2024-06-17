@@ -2,11 +2,13 @@ import React, { useState } from 'react';
 import QuestionComponent from '../../components/employee/questionInput.jsx';
 import CustomButton from '../../components/common/Button.jsx';
 import PageLayout from '../../layouts/ELayout.jsx';
-const server = 'http://localhost:8000';
 import { useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
 
 function AssessmentPage() {
+  
+  const server = import.meta.env.VITE_REACT_APP_SERVER_URL;
+
   const [attempts, setAttempts] = useState(parseInt(sessionStorage.getItem('attempts'), 10));
   const [allowed, setAllowed] = useState(JSON.parse(sessionStorage.getItem('allowed')));
 
@@ -19,7 +21,7 @@ function AssessmentPage() {
 
   useEffect(() => {
  
-    if (!(allowed || attempts==0)){
+    if (!(allowed)){
       navigate('/'); // Redirect to the desired page
     }
     else{

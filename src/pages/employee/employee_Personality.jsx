@@ -37,6 +37,9 @@ const Div1 = ({ imageSrc, bodyText1, bodyText2 }) => (
 
 
 const PersonalityPage = () => {
+
+const server = import.meta.env.VITE_REACT_APP_SERVER_URL;
+
   
 const [results, setResults] = useState({
     Extraversion: 0,
@@ -70,9 +73,9 @@ const [results, setResults] = useState({
       setResults(storedResults); }
 
       Promise.all([
-        fetch(`http://localhost:8000/api/assessment_status/${userId}`),
-        fetch(`http://localhost:8000/send_results/${userId}`),
-        fetch(`http://localhost:8000/send_average_results`)
+        fetch(`${server}/api/assessment_status/${userId}`),
+        fetch(`${server}/send_results/${userId}`),
+        fetch(`${server}/send_average_results`)
       ])
       .then(async ([res1, res2, res3]) => {
         const data1 = await res1.json();

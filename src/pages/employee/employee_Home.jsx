@@ -12,8 +12,6 @@ import PageLayout from '../../layouts/EPLayout';
 import image1 from '../../assets/employee_home.jpeg'; // Adjust the file extension based on the actual image type
 //import { userStore } from '../../store.jsx'// Path to your store
 
-const server = 'http://localhost:8000';
-
 const WelcomeText = styled(Typography)(({ theme }) => ({
   marginBottom: theme.spacing(2),
   font: 'Roboto',
@@ -23,6 +21,10 @@ const WelcomeText = styled(Typography)(({ theme }) => ({
 
 
 const HomePage = () => {
+
+  const server = import.meta.env.VITE_REACT_APP_SERVER_URL;
+
+
   const [buttonText, setButtonText] = useState('Attempt');
   const [buttonColor, setButtonColor] = useState('primary');
   const [requested, setRequested] = useState(null);
@@ -30,8 +32,9 @@ const HomePage = () => {
   const [allowed, setAllowed] = useState(false);
   const [name, setName] = useState("Nisal Ravindu");
   
+  
   useEffect(() => {
-    sessionStorage.clear()//--------------------------------
+    //sessionStorage.clear()//--------------------------------
     let userId="000"//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<   user_id
     sessionStorage.setItem('user_id', userId);
     sessionStorage.setItem('assessed_id', userId);
@@ -47,11 +50,11 @@ const HomePage = () => {
         setButtonColor('secondary');
        }
        setRequested(data.requested)
-       sessionStorage.setItem('requested', requested);
+       sessionStorage.setItem('requested', data.requested);
        setAttempts(data.attempts)
-       sessionStorage.setItem('attempts', attempts);
+       sessionStorage.setItem('attempts', data.attempts);
        setAllowed(data.allowed)
-       sessionStorage.setItem('allowed', allowed);
+       sessionStorage.setItem('allowed', data.allowed);
     })
     .catch(error => console.error('Error:', error));
   

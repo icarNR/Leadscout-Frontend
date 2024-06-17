@@ -52,6 +52,9 @@ const StyledAvatar = styled(Avatar)(({ theme }) => ({
   }));
 
   export default function InteractiveList() {
+
+    const server = import.meta.env.VITE_REACT_APP_SERVER_URL;
+
     const [dense, setDense] = React.useState(false);
     const [secondary, setSecondary] = React.useState(false); 
     const [group, setGroup] = useState([]);
@@ -70,7 +73,7 @@ const StyledAvatar = styled(Avatar)(({ theme }) => ({
         setGroup(JSON.parse(storedGroup));
       else{
         //If the supervisees list is not in the session storage, fetch it from the database
-        fetch(`http://localhost:8000/get_users/${userID}`)
+        fetch(`${server}/get_users/${userID}`)
           .then(response => response.json())
           .then(data => {
             // Save the supervisees list in the session storage for future use
