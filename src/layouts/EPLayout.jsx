@@ -13,7 +13,7 @@ import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import AssessmentPage from "../pages/employee/Assesment";
+import AssessmentPage from "../pages/employee/Assessment";
 import ClippedDrawer from "../components/employee/employee_sideNavbar";
 
 const icons = [<GoHome />, <PiMaskHappy />, <HiOutlineBellAlert />];

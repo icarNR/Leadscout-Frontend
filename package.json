@@ -17,10 +17,16 @@
     "@mui/styled-engine-sc": "^6.0.0-alpha.18",
     "@mui/x-data-grid": "^7.6.1",
     "axios": "^1.6.8",
+    "cross-env": "^7.0.3",
+    "hammerjs": "^2.0.8",
+    "mobx": "^6.12.4",
+    "mobx-react": "^9.1.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-draggable": "^4.4.6",
     "react-icons": "^5.2.0",
     "react-router-dom": "^6.23.0",
+    "react-swipeable": "^7.0.1",
     "styled-components": "^6.1.9"
   },
   "devDependencies": {
