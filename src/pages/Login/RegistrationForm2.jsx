@@ -3,13 +3,13 @@ import '../../style/RegistrationForm2.css';
 import LeftPart from '../../components/Registration/left-part';
 import RightPart from '../../components/Registration/right-part2';
 
-const RegistrationForm2 = () => {
+const RegistrationForm2 = ({ formData }) => {
     return (
         <div className="registration-page">
             <LeftPart />
             <div className="right-part">
                 
-             <RightPart />   
+             <RightPart formData={formData} />   
             </div>
         </div>
     );

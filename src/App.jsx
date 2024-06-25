@@ -9,7 +9,9 @@ import LoginForm from './pages/Login/LoginForm.jsx';
 import RegistrationForm from './pages/Login/RegistrationForm.jsx'
 import RegistrationForm2 from './pages/Login/RegistrationForm2.jsx'
 import Notification from './pages/notification/Notification.jsx'
-
+import Otp_verify from './pages/Login/Otp_verify.jsx'
+import Otp from './pages/Login/Otp.jsx'
+import React, { useState } from 'react';
 import { createTheme } from '@mui/material';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
@@ -29,24 +31,29 @@ export const theme = createTheme({
 });
 
 function App(){
+  const [formData, setFormData] = useState({});
+
   return (
     <BrowserRouter>
       <div>
         <Routes>
           <Route path="/" element={<LoginForm />} />
           <Route path="/LoginForm" element={<LoginForm />} />
-          <Route path="/RegistrationForm" element={<RegistrationForm />} />
-          <Route path="/RegistrationForm2" element={<RegistrationForm2 />} />
+          <Route path="/RegistrationForm" element={<RegistrationForm setFormData={setFormData} />} />
+          <Route path="/RegistrationForm2" element={<RegistrationForm2 formData={formData} />} />
           <Route path="/Notification" element={<Notification />} />
-          <Route  path="/employee_Personality" element={<PersonalityPage />} /> 
+          <Route path="/employee_Personality" element={<PersonalityPage />} />
           <Route path="/Assessment" element={<AssessmentPage />} />
           <Route path="/employee_Home" element={<HomePage />} />
+          <Route path="/Otp_verify" element={<Otp_verify />} />
+          <Route path="/Otp" element={<Otp />} />
+          
         </Routes>
-      </div> 
+      </div>
     </BrowserRouter>
   );
 
-  //return <Results Openness={75} Consciousness={80} Extraversion={65} Agreeableness={90} Neuroticism={50} />
+  
 
 }
 

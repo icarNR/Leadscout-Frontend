@@ -1,50 +1,73 @@
+
+
+
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
-import Button from '../../components/common/Button';
-import axios from 'axios'; // Import axios
+import { Link, useNavigate } from 'react-router-dom';
+import axios from 'axios';
 import sms from '../../assets/icons/sms.png';
 import lockIcon from '../../assets/icons/lockIcon.svg';
+import Button from '../common/Button';
 
-function RightPart() {
+function LoginForm() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [emailError, setEmailError] = useState('');
-    const [passwordError, setPasswordError] = useState('');
-    const [error, setError] = useState('');
+    const [rememberMe, setRememberMe] = useState(false);
+    const [errors, setErrors] = useState({});
+    const navigate = useNavigate();
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-
-        setEmailError('');
-        setPasswordError('');
-        setError('');
-
-        // Simple email validation
-        if (!email.includes('@')) {
-            setEmailError('Invalid email address');
-            return;
+    const validate = () => {
+        let tempErrors = {};
+        if (!email) {
+            tempErrors.email = "Email is required";
+        } else if (!/\S+@\S+\.\S+/.test(email)) {
+            tempErrors.email = "Email address is invalid";
         }
 
-        // Simple password length validation
-        if (password.length < 6) {
-            setPasswordError('Password must be at least 6 characters long');
-            return;
+        if (!password) {
+            tempErrors.password = "Password is required";
+        } else if (password.length < 6) {
+            tempErrors.password = "Password must be at least 6 characters";
         }
 
+        setErrors(tempErrors);
+        return Object.keys(tempErrors).length === 0;
+    };
 
+    const handleLogin = async () => {
+        if (validate()) {
+            try {
+                const response = await axios.post('http://127.0.0.1:800/login_token',
+                    new URLSearchParams({ username: email, password: password }),
+                    { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } });
+                    
+                const { access_token, refresh_token, token_type, role } = response.data;
 
-        try {
-            const response = await axios.post('http://localhost:8000/login', { email, password });
-            console.log(response.data); // Handle successful response
-        } catch (error) {
-            console.error('Error:', error.response.data); // Handle error response
+                localStorage.setItem('access_token', access_token);
+                localStorage.setItem('refresh_token', refresh_token);
+                localStorage.setItem('token_type', token_type);
+
+                if (rememberMe) {
+                    localStorage.setItem('email', email);
+                } else {
+                    localStorage.removeItem('email');
+                }
+
+                if (role === 'admin') {
+                    navigate('/Assessment');
+                } else {
+                    navigate('/employee_Home');
+                }
+            } catch (error) {
+                console.error('Error:', error.response ? error.response.data : error.message);
+                setErrors({ general: 'Failed to login. Please check your credentials.' });
+            }
         }
     };
 
     return (
-        <div className="form-container">
-            <h2 className="text-4xl font-medium">Welcome</h2>
-            <p className="text-gray-600">Login with email</p>
+        <div className="form-container p-8 bg-white rounded-lg shadow-md">
+            <h2 className="text-4xl font-medium mb-2">Welcome</h2>
+            <p className="text-gray-600 mb-6">Login with email</p>
             <div className="input-container flex items-center mb-4">
                 <img src={sms} alt="Email" className="w-6 h-6 mr-2" />
                 <input
@@ -52,10 +75,10 @@ function RightPart() {
                     placeholder="Enter email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    className={`w-full border ${emailError ? 'border-red-500' : 'border-gray-300'} rounded px-3 py-2 focus:outline-none focus:ring-1 focus:ring-blue-500`}
+                    className={`w-full border ${errors.email ? 'border-red-500' : 'border-gray-300'} rounded px-3 py-2 focus:outline-none focus:ring-1 focus:ring-blue-500`}
                 />
-                {emailError && <p className="text-red-500">{emailError}</p>}
             </div>
+            {errors.email && <p className="text-red-500 text-sm mb-4">{errors.email}</p>}
             <div className="input-container flex items-center mb-4">
                 <img src={lockIcon} alt="Password" className="w-6 h-6 mr-2" />
                 <input
@@ -63,16 +86,31 @@ function RightPart() {
                     placeholder="Password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    className={`w-full border ${passwordError ? 'border-red-500' : 'border-gray-300'} rounded px-3 py-2 focus:outline-none focus:ring-1 focus:ring-blue-500`}
+                    className={`w-full border ${errors.password ? 'border-red-500' : 'border-gray-300'} rounded px-3 py-2 focus:outline-none focus:ring-1 focus:ring-blue-500`}
                 />
-                {passwordError && <p className="text-red-500">{passwordError}</p>}
             </div>
-            <Button text="Login" onClick={handleSubmit} />
-            <p className="text-sm mt-4">
+            {errors.password && <p className="text-red-500 text-sm mb-4">{errors.password}</p>}
+            {errors.general && <p className="text-red-500 text-sm mb-4">{errors.general}</p>}
+            <div className="flex items-center mb-4">
+                <input
+                    type="checkbox"
+                    checked={rememberMe}
+                    onChange={() => setRememberMe(!rememberMe)}
+                    className="mr-2"
+                />
+                <label className="text-gray-700">Remember Me</label>
+            </div>
+            <div className="flex justify-center">
+                <Button onClick={handleLogin} text="Login" className="w-full py-2 mb-4" />
+            </div>
+            <div className="text-sm mt-4 text-center">
+                <Link to="/otp" className="text-blue-500 underline">Forgot Password?</Link>
+            </div>
+            <p className="text-sm mt-4 text-center">
                 Don't have an account? <Link to="/RegistrationForm" className="text-blue-500 underline">Register now</Link>
             </p>
         </div>
     );
 }
 
-export default RightPart;
+export default LoginForm;
