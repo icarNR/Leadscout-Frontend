@@ -41,7 +41,7 @@ export default function BasicTabs({ panelcontent1, panelcontent2 }) {
   };
 
   return (
-    <div className="flex flex-col overflow-hidden items-center" >
+    <div className="flex flex-col overflow-hidden items-center  w-full " >
       <div className={`flex border bg-gray-200 items-center border rounded-[5px]`}>     
         <button
           onClick={() => handleChange(0)}
@@ -54,9 +54,9 @@ export default function BasicTabs({ panelcontent1, panelcontent2 }) {
             Others 
         </button>
       </div>
-      <div className="w-[410px]"> 
-        {value === 0 && <div className="p-3">{panelcontent1}</div>}
-        {value === 1 && <div className="p-3">{panelcontent2}</div>}
+      <div className="w-full sm:w-[480px] "> 
+        {value === 0 && <div className="p-3 w-full items-center justify-center ">{panelcontent1}</div>}
+        {value === 1 && <div className="p-3 w-full items-center justify-center ">{panelcontent2}</div>}
       </div>
     </div>
   );

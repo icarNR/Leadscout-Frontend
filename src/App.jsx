@@ -5,6 +5,7 @@ import BasicTabs from './components/common/tab.jsx';
 import PersonalityPage from './pages/employee/employee_Personality.jsx';
 import AssessmentPage from './pages/employee/Assessment.jsx';
 import HomePage from './pages/employee/employee_Home.jsx';
+import TwoFingerSwipeTest from './pages/employee/test.jsx';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
 
@@ -17,6 +18,7 @@ function App(){
           <Route  path="/employee_Personality" element={<PersonalityPage />} /> 
           <Route path="/Assessment" element={<AssessmentPage />} />
           <Route path="/employee_Home" element={<HomePage />} />
+          <Route path="/test" element={<TwoFingerSwipeTest />} />
         </Routes>
       </div> 
     </BrowserRouter>

@@ -22,15 +22,6 @@ import { Typography } from "@mui/material";
 const drawerWidth = '128px';
 const icons = [<GoHome />, <PiMaskHappy />, <HiOutlineBellAlert />];
 
-
-ResponsiveDrawer.propTypes = {
-  /**
-   * Injected by the documentation to work in an iframe.
-   * Remove this when copying and pasting into your project.
-   */
-  window: PropTypes.func,
-};
-
 const drawerStyles = {
   backgroundColor: "#DBEDF3",
   color: "#404B69",
@@ -38,7 +29,7 @@ const drawerStyles = {
 
 export default function ResponsiveDrawer(props){
 
-  const { window } = props;
+
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const [isClosing, setIsClosing] = React.useState(false);
   const [selectedIndex, setSelectedIndex] = React.useState(null);
@@ -67,34 +58,31 @@ export default function ResponsiveDrawer(props){
   
   const drawer = (
     <div>
-    <Toolbar />
-    <Toolbar />
-    <Box sx={{ overflow: 'auto' }}>  
-      <List> 
-        {links.map((link, index)=> (
-          <Link to={link.linkName}>
-            <ListItem key={link.text} disablePadding>
+      <Toolbar />
+      <Toolbar />
+      <Box sx={{ overflow: 'auto' }}>
+        <List>
+          {links.map((link, index) => (
+            <Link to={link.linkName} key={link.text}>
+              <ListItem disablePadding>
                 <ListItemButton
                   sx={{
                     display: 'flex',
                     flexDirection: 'column',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    padding: '15px', // Add padding for spacing
+                    padding: '15px',
                     color: selectedIndex === index ? '#00818A' : '#404B69',
                   }}
                   onClick={(event) => handleListItemClick(event, index)}
-                 // onMouseEnter={(e) => e.currentTarget.childNodes[0].style.color = '#f00'}
-                  // onMouseLeave={(e) => e.currentTarget.childNodes[0].style.color = 'inherit'}
                 >
                   <ListItemIcon
                     sx={{
-                      color: "#404B69",
+                      color: selectedIndex === index ? '#00818A' : '#404B69',
                       mb: 1,
                       alignSelf: 'center',
                       justifyContent: 'center',
-                      fontSize: '25px', // Increase icon size
-                      color: selectedIndex === index ? '#00818A' : '#404B69',
+                      fontSize: '25px',
                     }}
                   >
                     {icons[index]}
@@ -104,20 +92,20 @@ export default function ResponsiveDrawer(props){
                       textAlign: 'center',
                       alignSelf: 'center',
                       fontSize: '14px',
-                      color: selectedIndex === index ? '#00818A' : '#404B69',}}
-                  >{link.text}</Typography>
+                      color: selectedIndex === index ? '#00818A' : '#404B69',
+                    }}
+                  >
+                    {link.text}
+                  </Typography>
                 </ListItemButton>
-            </ListItem>
-          </Link>
-          
-        ))}
-      </List>  
-    </Box>
+              </ListItem>
+            </Link>
+          ))}
+        </List>
+      </Box>
     </div>
   );
   
-
-  const container = window !== undefined ? () => window().document.body : undefined;
 
   return (
     <Box sx={{ display: 'flex' }}>
@@ -131,15 +119,14 @@ export default function ResponsiveDrawer(props){
               display: { md: 'none' },
               fontSize:30,
               position: 'fixed',
-              top: 135,
-              left: 45,
+              top: 100,
+              left: 30,
               zIndex: 100, // Ensure it's above other elements
             }}       >
               <div className="bg-white rounded-lg shadow-lg p-2"><IoMenu /></div>
     </IconButton>
 
       <Drawer
-      container={container}
       variant="temporary"
       open={mobileOpen}
       onTransitionEnd={handleDrawerTransitionEnd}
@@ -159,7 +146,6 @@ export default function ResponsiveDrawer(props){
       sx={{
         '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth ,...drawerStyles},
       }}
-      open
       className="hidden sm:flex"
     >
       {drawer}

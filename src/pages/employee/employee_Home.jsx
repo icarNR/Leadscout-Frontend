@@ -25,38 +25,58 @@ const HomePage = () => {
   const server = import.meta.env.VITE_REACT_APP_SERVER_URL;
 
 
-  const [buttonText, setButtonText] = useState('Attempt');
+  const [buttonText, setButtonText] = useState('   ');
   const [buttonColor, setButtonColor] = useState('primary');
   const [requested, setRequested] = useState(null);
   const [attempts, setAttempts] = useState(1);
   const [allowed, setAllowed] = useState(false);
   const [name, setName] = useState("Nisal Ravindu");
   
+  useEffect(() => {
+    //console.log(JSON.parse(sessionStorage.getItem('requested')))
+    console.log(requested)
+    if (requested && !allowed){ //check id already requested and if its allowed
+      // Change button text and color
+      setButtonText('Requested');
+      setButtonColor('secondary');
+     }
+    else if(requested==false){
+      setButtonText('Attempt');
+      setButtonColor('primary');
+    }
+  },[allowed, requested]); 
   
   useEffect(() => {
     //sessionStorage.clear()//--------------------------------
-    let userId="000"//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<   user_id
+    let userId="001"//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<   user_id
     sessionStorage.setItem('user_id', userId);
     sessionStorage.setItem('assessed_id', userId);
-    
-    // Fetch the number of attempts, requeested and allowed for the current user
+
+    if(sessionStorage.getItem('requested')){
+      console.log(' sesh is here')
+      setRequested(JSON.parse(sessionStorage.getItem('requested')));
+      setAllowed(JSON.parse(sessionStorage.getItem('allowed')));
+      console.log(JSON.parse(sessionStorage.getItem('requested')))
+      //console.log(JSON.parse(sessionStorage.getItem('allowed')))
+
+      // console.log(requested)
+    }
+      // Fetch the number of attempts, requeested and allowed for the current user
     fetch(`${server}/api/users/${userId}/attempts`)
     .then(response => response.json())
     .then(data => {
-      console.log(data)
-      if (data.requested && !data.allowed){ //check id already requested and if its allowed
-        // Change button text and color
-        setButtonText('Requested');
-        setButtonColor('secondary');
-       }
-       setRequested(data.requested)
-       sessionStorage.setItem('requested', data.requested);
-       setAttempts(data.attempts)
-       sessionStorage.setItem('attempts', data.attempts);
-       setAllowed(data.allowed)
-       sessionStorage.setItem('allowed', data.allowed);
+        setRequested(data.requested)
+        setAttempts(data.attempts)
+        setAllowed(data.allowed)  
+        sessionStorage.setItem('requested', data.requested);
+        sessionStorage.setItem('attempts', data.attempts);
+        sessionStorage.setItem('allowed', data.allowed); 
+        console.log("fetched")
+        //console.log(data.requested)
+
     })
     .catch(error => console.error('Error:', error));
+    
   
   }, []);  // The empty array means this useEffect will run once when the component mounts
 
@@ -70,8 +90,8 @@ const HomePage = () => {
         // Set the `requested` flag to `true` for the current user 
         fetch(`${server}/api/users/${sessionStorage.getItem('user_id')}/request`, { method: 'POST' })
         .then(() => {
-          setButtonText('Requested'); 
-          setButtonColor('secondary'); 
+          setRequested(true)
+          sessionStorage.setItem('requested', true);
         });
     
         // Add to the notification dictionary for their supervisor
@@ -120,7 +140,7 @@ const HomePage = () => {
               </Typography>
             </div>
             <div>
-                <CustomButton color={buttonColor} text= {buttonText} onClick={handleButtonClick}>Button</CustomButton>
+                <CustomButton color={buttonColor} text= {buttonText} onClick={handleButtonClick}></CustomButton>
             </div>
         </div>
     </div>

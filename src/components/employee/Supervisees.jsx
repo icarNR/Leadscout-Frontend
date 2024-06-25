@@ -39,12 +39,13 @@ import image1 from '../../assets/OIG4.n6XXUv.jpeg';
 //   );
 // }
 
-const Demo = styled('div')(({ theme }) => ({
-  backgroundColor: theme.palette.background.paper,
-  maxHeight: '244px', // Adjust this value as needed
-  overflowY: 'auto', // Enable vertical scrolling
-   
-}));
+const getInitials = (fullName) => {
+  const names = fullName.split(' ');
+  const lastName = names.pop();
+  const initials = names.map(name => name.charAt(0).toUpperCase()).join(' ');
+  return `${initials} ${lastName}`;
+};
+
 
 const StyledAvatar = styled(Avatar)(({ theme }) => ({
     width: theme.spacing(7),
@@ -58,7 +59,6 @@ const StyledAvatar = styled(Avatar)(({ theme }) => ({
     const [dense, setDense] = React.useState(false);
     const [secondary, setSecondary] = React.useState(false); 
     const [group, setGroup] = useState([]);
-    const [showAlert, setShowAlert] = useState(true);
 
     // const toggleAlert = () => {
     //   setShowAlert(!showAlert);
@@ -85,53 +85,44 @@ const StyledAvatar = styled(Avatar)(({ theme }) => ({
     }, []);
 
     return (
-      <Box sx={{ flexGrow: 1, maxWidth: 500 }}>
-        <Demo sx={{ background: 'white', borderRadius: '8px', border: `2px solid ${group && group.length > 0 ? '#E4E4E7' : 'white'}` }}>
-          {group && group.length > 0 ? (
-            <List dense={dense}>
-              {group.map(item => {
-                const handleAssessClick = () => {
-                  sessionStorage.setItem('assessed_id', item.user_id);
-                  console.log("Assessing " + item.user_id);
-                  window.location.href = "/Assessment";
-                  console.log(item.observed)
-                };
-  
-                return (
-                  <ListItem
-                    key={item.user_id}
-                    // secondaryAction={
-                    //   !item.observed && (
-                    //     <Alert severity="success" sx={{ my: 'auto' }}>
-                    //       Assessed
-                    //     </Alert>
-                    //   )
-                    // }
+      <Box className={`min-w-[300px] sm:flex-grow sm:max-w-[500px] bg-white rounded-lg max-h-[216px] overflow-y-auto p-[7px]  ${group && group.length > 0 ? 'border-2 border-gray-100 shadow-inner' : 'border-2 border-white'}`}>       
+           {group && group.length > 0 ? (
+            <div style={{ display: 'flex', flexDirection: 'column' }}>
+            {group.map(item => {
+              
+              const handleAssessClick = () => {
+                sessionStorage.setItem('assessed_id', item.user_id);
+                console.log("Assessing " + item.user_id);
+                window.location.href = "/Assessment";
+                console.log(item.observed);
+              };
+              return (
+                <div key={item.user_id} style={{ display: 'flex', alignItems: 'center', padding: '5px 10px'}}>
+                  <div style={{ marginRight: '20px' }}>
+                  <Avatar alt={getInitials(item.name)} src={item.image} />
+                  </div>
+                  <div style={{ display: 'flex', flexDirection: 'row', marginLeft: '20px'}}>
+                  <div className="  w-[50px]"style={{ marginRight: '30px', overflowX: 'hidden'}}>{item.user_id}</div>
+                  <div className="hidden sm:block  md:w-[150px] w-[130px]"style={{overflowX: 'hidden',whiteSpace: 'nowrap' }}>{getInitials(item.name)}</div>
+                  </div>
+                  <button 
+                    style={{ marginLeft: 'auto', backgroundColor: 'teal', color:'white', padding: '5px 20px', borderRadius: '5px'}} 
+                    onClick={handleAssessClick}
                   >
-                    <ListItemAvatar sx={{ paddingRight: '8px' }}>
-                      <Avatar alt={item.name} src={item.image} />
-                    </ListItemAvatar>
-                    <ListItemText
-                      sx={{ marginLeft: '20px' }}
-                      primary={item.user_id}
-                      secondary={secondary ? 'Secondary text' : null}
-                    />
-                    <ListItemText
-                      primary={item.name}
-                      secondary={secondary ? 'Secondary text' : null}
-                    />
-                    <RecButton text="Assess" onClick={handleAssessClick} />
-                  </ListItem>
-                );
-              })}
-            </List>
+                    Assess
+                  </button>
+                </div>
+              );
+            })}
+          </div>
+          
           ) : (
-            <div class="overflow-hidden w-full h-[235px]">
+            <div class="overflow-hidden w-full h-[196px]">
               <img src={image1} alt="Image" class="object-contain w-full h-full" />
             </div>
 
           )}
-        </Demo>
+ 
       </Box>
     );
   }

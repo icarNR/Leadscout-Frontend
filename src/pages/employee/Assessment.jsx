@@ -11,17 +11,18 @@ function AssessmentPage() {
 
   const [attempts, setAttempts] = useState(parseInt(sessionStorage.getItem('attempts'), 10));
   const [allowed, setAllowed] = useState(JSON.parse(sessionStorage.getItem('allowed')));
-
+  const user_id= sessionStorage.getItem('user_id'); 
+  const assessed_id=sessionStorage.getItem('assessed_id');
   // Total number of questions
   const totalQuestions = 44;
   // Questions per page
   const questionsPerPage = 11;
-
+  
   const navigate = useNavigate();
 
   useEffect(() => {
  
-    if (!(allowed)){
+    if (user_id==assessed_id && !(attempts == 0 || allowed)){
       navigate('/'); // Redirect to the desired page
     }
     else{
@@ -33,54 +34,64 @@ function AssessmentPage() {
           setAllowed(data.allowed);
         })}
       }, [attempts,allowed]);
- 
+
+//definig pronoun
+let pronoun;
+if (user_id == assessed_id) {
+  pronoun = 'You';
+} else {
+  pronoun = 'They';
+}
+  
 // Array of all questions
+
   const allQuestions = [
-  "You are talkative",
-  "You tend to find fault with others",
-  "You do a thorough job",
-  "You are depressed, blue",
-  "You are original, come up with new ideas",
-  "You are reserved",
-  "You are helpful and unselfish with others",
-  "You can be somewhat careless",
-  "You are relaxed, handle stress well",
-  "You are curious about many different things",
-  "You are full of energy",
-  "You start quarrels with others",
-  "You are a reliable worker",
-  "You can be tense",
-  "You are ingenious, a deep thinker",
-  "You generate a lot of enthusiasm",
-  "You have a forgiving nature",
-  "You tend to be disorganized",
-  "You worry a lot",
-  "You have an active imagination",
-  "You tend to be quiet",
-  "You are generally trusting",
-  "You tend to be lazy",
-  "You are emotionally stable, not easily upset",
-  "You are inventive",
-  "You have an assertive personality",
-  "You can be cold and aloof",
-  "You persevere until the task is finished",
-  "You can be moody",
-  "You value artistic, aesthetic experiences",
-  "You are sometimes shy, inhibited",
-  "You are considerate and kind to almost everyone",
-  "You do things efficiently",
-  "You remain calm in tense situations",
-  "You prefer work that is routine",
-  "You are outgoing, sociable",
-  "You are sometimes rude to others",
-  "You make plans and follow through with them",
-  "You get nervous easily",
-  "You like to reflect, play with ideas",
-  "You have few artistic interests",
-  "You like to cooperate with others",
-  "You are easily distracted",
-  "You are sophisticated in art, music, or literature"
-];
+    `${pronoun} are talkative`,
+    `${pronoun} tend to find fault with others`,
+    `${pronoun} do a thorough job`,
+    `${pronoun} are depressed, blue`,
+    `${pronoun} are original, come up with new ideas`,
+    `${pronoun} are reserved`,
+    `${pronoun} are helpful and unselfish with others`,
+    `${pronoun} can be somewhat careless`,
+    `${pronoun} are relaxed, handle stress well`,
+    `${pronoun} are curious about many different things`,
+    `${pronoun} are full of energy`,
+    `${pronoun} start quarrels with others`,
+    `${pronoun} are a reliable worker`,
+    `${pronoun} can be tense`,
+    `${pronoun} are ingenious, a deep thinker`,
+    `${pronoun} generate a lot of enthusiasm`,
+    `${pronoun} have a forgiving nature`,
+    `${pronoun} tend to be disorganized`,
+    `${pronoun} worry a lot`,
+    `${pronoun} have an active imagination`,
+    `${pronoun} tend to be quiet`,
+    `${pronoun} are generally trusting`,
+    `${pronoun} tend to be lazy`,
+    `${pronoun} are emotionally stable, not easily upset`,
+    `${pronoun} are inventive`,
+    `${pronoun} have an assertive personality`,
+    `${pronoun} can be cold and aloof`,
+    `${pronoun} persevere until the task is finished`,
+    `${pronoun} can be moody`,
+    `${pronoun} value artistic, aesthetic experiences`,
+    `${pronoun} are sometimes shy, inhibited`,
+    `${pronoun} are considerate and kind to almost everyone`,
+    `${pronoun} do things efficiently`,
+    `${pronoun} remain calm in tense situations`,
+    `${pronoun} prefer work that is routine`,
+    `${pronoun} are outgoing, sociable`,
+    `${pronoun} are sometimes rude to others`,
+    `${pronoun} make plans and follow through with them`,
+    `${pronoun} get nervous easily`,
+    `${pronoun} like to reflect, play with ideas`,
+    `${pronoun} have few artistic interests`,
+    `${pronoun} like to cooperate with others`,
+    `${pronoun} are easily distracted`,
+    `${pronoun} are sophisticated in art, music, or literature`
+  ];
+  
   const [results, setResults] = useState({
     Extraversion: 0,
     Agreeableness: 0,
@@ -134,23 +145,21 @@ const handleSubmit = async () => {
  
   // Define the user ID and the answers to send
   const answersData = {
-    user_id: sessionStorage.getItem('user_id'), 
-    assessed_id: sessionStorage.getItem('assessed_id'),
+    user_id: user_id, 
+    assessed_id: assessed_id,
     answers: selectedOptions
   };
-
-  
   try {
     // Send the data to the backend using fetch
-    const response = await fetch('http://localhost:8000/submit_assessment/', {
+    fetch(`${server}/submit_assessment/`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify(answersData)
-    });
-    const data = await response.json();
-    setResults(data);
+    })
+    .then(response => response.json())
+    .then(data => setResults(data))
     console.log(data); 
 
     //add to admin notifications
@@ -169,7 +178,7 @@ const handleSubmit = async () => {
     .then(data => console.log(data))
     .catch(error => console.error('Error:', error));
     
-    // Add to the notification dictionary for their supervisor
+    // Add to the notification their supervisor
     if (answersData.user_id==answersData.assessed_id){
       fetch(`${server}/add_supervisor_notification`, {
         method: 'POST',
