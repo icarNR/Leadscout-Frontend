@@ -19,7 +19,8 @@ import FolderIcon from '@mui/icons-material/Folder';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { Margin } from '@mui/icons-material';
 import RecButton from '../common/Button.jsx';
-
+import Alert from '@mui/material/Alert';
+import image1 from '../../assets/OIG4.n6XXUv.jpeg';
 
 // function generate(element) {
 //   return [0, 1, 2].map((value) =>
@@ -38,12 +39,13 @@ import RecButton from '../common/Button.jsx';
 //   );
 // }
 
-const Demo = styled('div')(({ theme }) => ({
-  backgroundColor: theme.palette.background.paper,
-  maxHeight: '242px', // Adjust this value as needed
-  overflowY: 'auto', // Enable vertical scrolling
-   
-}));
+const getInitials = (fullName) => {
+  const names = fullName.split(' ');
+  const lastName = names.pop();
+  const initials = names.map(name => name.charAt(0).toUpperCase()).join(' ');
+  return `${initials} ${lastName}`;
+};
+
 
 const StyledAvatar = styled(Avatar)(({ theme }) => ({
     width: theme.spacing(7),
@@ -51,20 +53,27 @@ const StyledAvatar = styled(Avatar)(({ theme }) => ({
   }));
 
   export default function InteractiveList() {
+
+    const server = import.meta.env.VITE_REACT_APP_SERVER_URL;
+
     const [dense, setDense] = React.useState(false);
-    const [secondary, setSecondary] = React.useState(false);
-    
+    const [secondary, setSecondary] = React.useState(false); 
     const [group, setGroup] = useState([]);
-    
+
+    // const toggleAlert = () => {
+    //   setShowAlert(!showAlert);
+    // };
+
     useEffect(() => {
       // Try to get the supervisees list from the session storage
       const storedGroup = sessionStorage.getItem('supervisees');
       const userID = sessionStorage.getItem('user_id');
       // If the supervisees list is in the session storage, use it
-      if (storedGroup) {
+      if (storedGroup) 
         setGroup(JSON.parse(storedGroup));
+      else{
         //If the supervisees list is not in the session storage, fetch it from the database
-        fetch(`http://localhost:8000/get_users/${userID}`)
+        fetch(`${server}/get_users/${userID}`)
           .then(response => response.json())
           .then(data => {
             // Save the supervisees list in the session storage for future use
@@ -72,49 +81,48 @@ const StyledAvatar = styled(Avatar)(({ theme }) => ({
             setGroup(data);
           })
           .catch(error => console.error('Error fetching data: ', error));
-      }
+  }
     }, []);
 
     return (
-      <Box sx={{ flexGrow: 1, maxWidth: 500 }}>
-        <Demo sx={{background: 'white', borderRadius: '8px', border: '1px solid gray'}}>
-          {group && group.length > 0 ? (
-            <List dense={dense}>
-              {group.map(item => {
-                const handleAssessClick = () => {
-                  // Action to perform when the button is clicked
-                  sessionStorage.setItem('assessed_id', item.user_id)
-                  console.log("Assessing "+ item.user_id)
-                  window.location.href = "/Assesment";
-                };
-  
-                return (
-                  <ListItem key={item.user_id}>
-                    <ListItemAvatar sx={{ paddingRight: '8px' }}>
-                      <Avatar alt={item.name} src={item.image} />
-                    </ListItemAvatar>
-                    
-                    <ListItemText
-                      sx={{ marginLeft: '20px' }}
-                      primary={item.user_id}
-                      secondary={secondary ? 'Secondary text' : null}
-                    />
-  
-                    <ListItemText
-                      primary={item.name}
-                      secondary={secondary ? 'Secondary text' : null}
-                    />
-                    <RecButton text="Assess" onClick={handleAssessClick} />
-                  </ListItem>
-                );
-              })}
-            </List>
+      <Box className={`min-w-[300px] sm:flex-grow sm:max-w-[500px] bg-white rounded-lg max-h-[216px] overflow-y-auto p-[7px]  ${group && group.length > 0 ? 'border-2 border-gray-100 shadow-inner' : 'border-2 border-white'}`}>       
+           {group && group.length > 0 ? (
+            <div style={{ display: 'flex', flexDirection: 'column' }}>
+            {group.map(item => {
+              
+              const handleAssessClick = () => {
+                sessionStorage.setItem('assessed_id', item.user_id);
+                console.log("Assessing " + item.user_id);
+                window.location.href = "/Assessment";
+                console.log(item.observed);
+              };
+              return (
+                <div key={item.user_id} style={{ display: 'flex', alignItems: 'center', padding: '5px 10px'}}>
+                  <div style={{ marginRight: '20px' }}>
+                  <Avatar alt={getInitials(item.name)} src={item.image} />
+                  </div>
+                  <div style={{ display: 'flex', flexDirection: 'row', marginLeft: '20px'}}>
+                  <div className="  w-[50px]"style={{ marginRight: '30px', overflowX: 'hidden'}}>{item.user_id}</div>
+                  <div className="hidden sm:block  md:w-[150px] w-[130px]"style={{overflowX: 'hidden',whiteSpace: 'nowrap' }}>{getInitials(item.name)}</div>
+                  </div>
+                  <button 
+                    style={{ marginLeft: 'auto', backgroundColor: 'teal', color:'white', padding: '5px 20px', borderRadius: '5px'}} 
+                    onClick={handleAssessClick}
+                  >
+                    Assess
+                  </button>
+                </div>
+              );
+            })}
+          </div>
+          
           ) : (
-            <Typography variant="h6" component="div">
-              //display an image
-            </Typography>
+            <div class="overflow-hidden w-full h-[196px]">
+              <img src={image1} alt="Image" class="object-contain w-full h-full" />
+            </div>
+
           )}
-        </Demo>
+ 
       </Box>
     );
   }

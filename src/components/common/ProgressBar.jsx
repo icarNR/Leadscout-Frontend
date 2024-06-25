@@ -6,9 +6,23 @@ import CircularProgress, {
 } from '@mui/material/CircularProgress';
 import LinearProgress, { linearProgressClasses } from '@mui/material/LinearProgress';
 import Typography from '@mui/material/Typography';
-import { theme } from '../../App';
 import {ThemeProvider } from '@mui/material/styles';
+import { createTheme } from '@mui/material/styles';
 
+//styleOverrides
+const theme = createTheme({
+  typography: {
+    fontSize: 12, // Adjust as needed
+  },
+  palette: {
+    primary: {
+      main: '#71EFD8',
+      light: '#757ce8',
+      dark: '#002884',
+      contrastText: '#fff',
+    }
+  }
+});
 const BorderLinearProgress = styled(LinearProgress)(({ theme, colorr}) => ({
   height: 10,
   borderRadius: 5,
