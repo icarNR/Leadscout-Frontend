@@ -12,6 +12,12 @@ import Avatar from '@mui/material/Avatar';
 import logo from '../../assets/Group 20.png';
 import CustomizedProgressBars from '../common/ProgressBar'; // Import the CustomizedProgressBars component
 
+const appbarStyles = {
+  backgroundColor: "#404B69",
+  color: "#00818A"
+};
+
+
 export default function MenuAppBar({percentage}) {
   const [anchorEl, setAnchorEl] = React.useState(null);
 
@@ -24,9 +30,9 @@ export default function MenuAppBar({percentage}) {
   };
 
   return (
-    <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="static">
-        <Box sx={{ display: 'flex', flexDirection: 'column' , paddingTop: '12px', paddingBottom: '12px' }}>
+    <Box sx={{ flexGrow: 1}}>
+      <AppBar position="static" sx={{...appbarStyles}}>
+        <Box sx={{ display: 'flex', flexDirection: 'column' , paddingTop: '12px', paddingBottom: '12px' , }}>
           <Toolbar sx={{ display:'flex', justifyContent: 'space-between' }}>
             <Box sx={{ display: 'flex', alignItems: 'center', width: { xs: '100px', sm: '180px' }, flexShrink: { xs: 1, sm: 0 } }}>
               <img
@@ -95,7 +101,7 @@ export function MenuAppBarWithoutProgressBar() {
 
   return (
     <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="static">
+      <AppBar position="static" sx={{...appbarStyles}}>
         <Toolbar sx={{ justifyContent: 'space-between',paddingTop: '15px', paddingBottom: '15px'  }}>
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
           <img

@@ -13,8 +13,8 @@ import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import AssessmentPage from "../pages/employee/Assesment";
-import ClippedDrawer from "../components/employee/employee_sideNavbar";
+import AssessmentPage from "../pages/employee/Assessment";
+import ResponsiveDrawer from "../components/employee/employee_sideNavbar";
 
 const icons = [<GoHome />, <PiMaskHappy />, <HiOutlineBellAlert />];
 
@@ -29,7 +29,7 @@ const PageLayout = ({content,pagename,percentage}) => {
       <div style={{ display: 'flex', flex: 1, overflow: 'hidden' }}>
         {/* Fixed side navbar */}
         <div style={{ width: '140px', height: 'calc(100vh)', position: 'fixed', top: '100px', left: 0, zIndex:90 ,overflow: 'hidden' }}>
-          <ClippedDrawer/>
+          <ResponsiveDrawer/>
         </div>
         <CssBaseline/>
         {/* Content */}
