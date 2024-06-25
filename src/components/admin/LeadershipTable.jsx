@@ -1,28 +1,58 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { DataGrid } from "@mui/x-data-grid";
 import axios from "axios";
+import Profile from "./profile"; // Import the Profile component
 import "./LeadershipTable.css";
+import SearchContext from "./SearchContext";
 
-const LeadershipTable = ({ selectedCriteria }) => {
+const LeadershipTable = ({ selectedCriteria, departmentValue }) => {
   const [leadershipData, setLeadershipData] = useState([]);
+  const [selectedProfile, setSelectedProfile] = useState(null); // State to hold selected profile data
+  const { searchTerm } = useContext(SearchContext);
 
   useEffect(() => {
     async function fetchLeadershipData() {
-      let apiUrl = `http://127.0.0.1:8000/src/component/admin/LeadershipTable/`;
-      // Check if selectedCriteria is empty
-      console.log("Selected criteria:", selectedCriteria);
-      if (selectedCriteria) {
-        // Construct the API URL dynamically based on the selected criteria
-        apiUrl += `?skill=${selectedCriteria.join(",")}`;
+      try {
+        const params = {
+          department: departmentValue,
+          session_data: JSON.stringify(Object.fromEntries(selectedCriteria)),
+        };
+        const response = await axios.get(
+          "http://127.0.0.1:8000/src/component/admin/LeadershipTable/",
+          { params }
+        );
+        const dataWithId = response.data.map((item, index) => ({
+          ...item,
+          id: item.id || index,
+        }));
+        setLeadershipData(dataWithId);
+      } catch (error) {
+        console.error("Error fetching leadership data:", error);
       }
-
-      const response = await axios.get(apiUrl);
-      console.log("Leadership data:", response.data);
-      setLeadershipData(response.data);
     }
 
     fetchLeadershipData();
-  }, [selectedCriteria]);
+  }, [selectedCriteria, departmentValue]);
+
+  const filteredData = leadershipData.filter(
+    (item) =>
+      item.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      item.id.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+  const getRowClassName = (params) => {
+    return params.row.observed && params.row.allowed_assess
+      ? "black-row"
+      : "red-row";
+  };
+
+  const handleRowClick = (params) => {
+    setSelectedProfile(params.row); // Set the selected profile data
+  };
+
+  const closeProfile = () => {
+    setSelectedProfile(null); // Close the profile modal
+  };
 
   const columns = [
     {
@@ -37,22 +67,32 @@ const LeadershipTable = ({ selectedCriteria }) => {
         />
       ),
     },
-    { field: "name", headerName: "Name", width: 300 },
-    { field: "id", headerName: "ID", width: 200 },
-    { field: "currentPosition", headerName: "Current Position", width: 300 },
-    { field: "potential", headerName: "Potential", width: 150 },
-    { field: "competency", headerName: "Competency", width: 150 },
+    { field: "name", headerName: "Name", width: 250 },
+    { field: "id", headerName: "ID", width: 100 },
+    { field: "currentPosition", headerName: "Current Position", width: 250 },
+    { field: "potential", headerName: "Potential", width: 100 },
+    { field: "competency", headerName: "Competency", width: 100 },
   ];
 
   return (
-    <div style={{ height: 750 }}>
+    <div style={{ height: 500, position: "relative" }}>
       <DataGrid
-        rows={leadershipData}
+        rows={filteredData}
         columns={columns}
         pagination
         pageSize={10}
         rowsPerPageOptions={[5, 10, 20]}
+        getRowClassName={getRowClassName}
+        onRowClick={handleRowClick} // Add onRowClick handler
       />
+      {selectedProfile && (
+        <div className="profile-modal">
+          <button className="close-modal-btn" onClick={closeProfile}>
+            &times;
+          </button>
+          <Profile profileData={selectedProfile} />
+        </div>
+      )}
     </div>
   );
 };
