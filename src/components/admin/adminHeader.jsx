@@ -6,21 +6,25 @@ import IconButton from "@mui/material/IconButton";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import Avatar from "@mui/material/Avatar";
+import Select from "@mui/material/Select";
+import FormControl from "@mui/material/FormControl";
+import InputAdornment from '@mui/material/InputAdornment';
 import logo from "../../assets/Group 20.png";
+import SearchContext from "./SearchContext";
 import { styled, alpha } from "@mui/material/styles";
 import InputBase from "@mui/material/InputBase";
 import SearchIcon from "@mui/icons-material/Search";
-import SearchContext from "./SearchContext";
+import FilterAltIcon from '@mui/icons-material/FilterAlt';
+import SortIcon from '@mui/icons-material/Sort';
 
 const appbarStyles = {
   backgroundColor: "#404B69",
-  color: "#00818A"
+  color: "#00818A",
 };
-
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
-  borderRadius: "17px",
+  borderRadius: "3px",
   backgroundColor: theme.palette.common.white,
   "&:hover": {
     backgroundColor: alpha(theme.palette.common.white, 0.94),
@@ -28,7 +32,7 @@ const Search = styled("div")(({ theme }) => ({
   marginRight: theme.spacing(2),
   marginLeft: 0,
   width: "100%",
-  height: "38px",
+  height: "45px",
   [theme.breakpoints.up("sm")]: {
     marginLeft: theme.spacing(3),
     width: "auto",
@@ -48,11 +52,19 @@ const SearchIconWrapper = styled("div")(({ theme }) => ({
 
 const StyledInputBase = styled(InputBase)(({ theme }) => ({
   color: "inherit",
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
+  height: "100%",
   "& .MuiInputBase-input": {
     padding: theme.spacing(1, 1, 1, 0),
     paddingLeft: `calc(1em + ${theme.spacing(4)})`,
     transition: theme.transitions.create("width"),
     width: "100%",
+    height: "100%",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
     textAlign: "center",
     [theme.breakpoints.up("md")]: {
       width: "50ch",
@@ -64,7 +76,41 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   },
 }));
 
-export function MenuAppBarWithoutProgressBar({ percentage, onSearch }) {
+const Selection = styled(FormControl)(({ theme }) => ({
+  backgroundColor: theme.palette.common.white,
+  borderRadius: "3px",
+  border: "1px solid #ced4da",
+  height: "45px",
+  display: "flex",
+  alignItems: "center",
+  padding: "4px",
+  "& .MuiSelect-select": {
+    display: "flex",
+    alignItems: "center",
+    paddingLeft: "0",
+  },
+  "&:hover": {
+    backgroundColor: alpha(theme.palette.common.white, 0.94),
+  },
+  "&.Mui-focused": {
+    backgroundColor: alpha(theme.palette.common.white, 0.94),
+  },
+  width: "200px",
+}));
+
+const VerticalDivider = styled("div")(({ theme }) => ({
+  height: "28px",
+  width: "1px",
+  backgroundColor: "#00818A",
+  margin: "0 10px 0 0",
+}));
+
+const sort = [ 
+  'Potential',
+  'Competency',
+];
+
+export function MenuAppBarWithoutProgressBar({ percentage, onSearch, departmentValue, setDepartmentValue, departments = [] }) {
   const { searchTerm, setSearchTerm } = useContext(SearchContext);
   const [inputValue, setInputValue] = useState(searchTerm);
   const searchInputRef = useRef(null);
@@ -94,9 +140,13 @@ export function MenuAppBarWithoutProgressBar({ percentage, onSearch }) {
     setAnchorEl(null);
   };
 
+  const handleDepartmentChange = (event) => {
+    setDepartmentValue(event.target.value);
+  };
+
   return (
     <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="static" sx={{...appbarStyles}}>
+      <AppBar position="static" sx={{ ...appbarStyles }}>
         <Box
           sx={{
             display: "flex",
@@ -145,6 +195,82 @@ export function MenuAppBarWithoutProgressBar({ percentage, onSearch }) {
                     onChange={handleChange}
                   />
                 </Search>
+              </Box>
+              <Box sx={{ display: "flex", alignItems: "center", marginLeft: 3 }}>
+                <Selection
+                  variant="standard"
+                >
+                  <Select
+                    labelId="sort-by-label"
+                    id="sort-by"
+                    value={departmentValue}
+                    onChange={handleDepartmentChange}
+                    displayEmpty
+                    disableUnderline
+                    label="Sort"
+                    startAdornment={
+                      <>
+                        <InputAdornment position="start">
+                          <SortIcon />
+                        </InputAdornment>
+                        <VerticalDivider />
+                      </>
+                    }
+                    sx={{
+                      "& .MuiSelect-select": {
+                        padding: "10px 14px",
+                      },
+                    }}
+                  >
+                    <MenuItem value="">
+                      <em>Sort By</em>
+                    </MenuItem>
+                    {departments.length > 0 &&
+                      sort.map((department) => (
+                        <MenuItem key={department} value={department}>
+                          {department}
+                        </MenuItem>
+                      ))}
+                  </Select>
+                </Selection>
+              </Box>
+              <Box sx={{ display: "flex", alignItems: "center", marginLeft: 3 }}>
+                <Selection
+                  variant="standard"
+                >
+                  <Select
+                    labelId="department-select-label"
+                    id="department-select"
+                    value={departmentValue}
+                    onChange={handleDepartmentChange}
+                    displayEmpty
+                    disableUnderline
+                    label="Department"
+                    startAdornment={
+                      <>
+                        <InputAdornment position="start">
+                          <FilterAltIcon />
+                        </InputAdornment>
+                        <VerticalDivider />
+                      </>
+                    }
+                    sx={{
+                      "& .MuiSelect-select": {
+                        padding: "10px 14px",
+                      },
+                    }}
+                  >
+                    <MenuItem value="">
+                      <em>All Departments</em>
+                    </MenuItem>
+                    {departments.length > 0 &&
+                      departments.map((department) => (
+                        <MenuItem key={department} value={department}>
+                          {department}
+                        </MenuItem>
+                      ))}
+                  </Select>
+                </Selection>
               </Box>
             </Box>
             <IconButton

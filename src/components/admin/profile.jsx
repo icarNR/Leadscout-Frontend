@@ -45,7 +45,7 @@ const Profile = ({ profileData }) => {
     picture,
     name,
     id,
-    currentPosition,
+    position,
     openness,
     conscientiousness,
     extraversion,
@@ -56,7 +56,7 @@ const Profile = ({ profileData }) => {
     picture: "",
     name: "Unknown",
     id: "N/A",
-    currentPosition: "N/A",
+    position: "N/A",
     openness: 0,
     conscientiousness: 0,
     extraversion: 0,
@@ -76,7 +76,7 @@ const Profile = ({ profileData }) => {
         <div className="profile-info">
           <h2>{name}</h2>
           <p>{id}</p>
-          <p className="position">{currentPosition}</p>
+          <p className="position">{position}</p>
         </div>
       </div>
       <div className="button-group">

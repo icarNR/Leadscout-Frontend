@@ -16,12 +16,14 @@ import TextField from "@mui/material/TextField";
 import axios from "axios";
 import "./Criteria.css";
 
+const server = "http://127.0.0.1:8000"
+
 const CustomButton = styled(Button)(({ theme }) => ({
   borderRadius: 8,
   backgroundColor: theme.palette.primary.main,
-  width: 300,
+  width: 330,
   color: theme.palette.primary.contrastText,
-  margin: "0 4px",
+  margin: "0 5px",
   "&:hover": {
     backgroundColor: theme.palette.primary.dark,
   },
@@ -33,10 +35,11 @@ export default function Criteria({ onCriteriaChange }) {
   const [isEditing, setIsEditing] = useState(false);
   const [skillsFromStorage, setSkillsFromStorage] = useState([]);
 
+
   useEffect(() => {
     const fetchSkills = async () => {
       try {
-        const response = await axios.get("http://127.0.0.1:8000/skills");
+        const response = await axios.get( `${server}/skills`);
         const skills = response.data.map((skill) => ({
           checked: false,
           Status: skill,
@@ -218,6 +221,7 @@ export default function Criteria({ onCriteriaChange }) {
                           onChange={(event) => handleInputChange(event, index)}
                           variant="outlined"
                           size="small"
+                          width="75px"
                           sx={{ backgroundColor: "#ffffff" }}
                           inputProps={{
                             inputMode: "numeric",
@@ -233,11 +237,11 @@ export default function Criteria({ onCriteriaChange }) {
               </TableBody>
             </Table>
             <br />
-            <Stack direction="column" spacing={2}>
+            <Stack direction="column" spacing={2} alignItems="flex-end">
               <Button
                 variant="contained"
                 onClick={handleEditClick}
-                sx={{ backgroundColor: "#007791" }}
+                sx={{ backgroundColor: "#007791", width: "100px" }}
               >
                 {isEditing ? "Save" : "Edit"}
               </Button>
@@ -249,11 +253,11 @@ export default function Criteria({ onCriteriaChange }) {
         <Stack direction="column" spacing={2}>
           <CustomButton
             onClick={() => setShowQuickCriteria(true)}
-            sx={{ backgroundColor: "#007791" }}
+            sx={{ backgroundColor: "#007791" ,width: "400px"}}
           >
             Quick Criteria
           </CustomButton>
-          <CustomButton sx={{ backgroundColor: "#007791" }}>
+          <CustomButton sx={{ backgroundColor: "#007791",width: "400px" }}>
             Browse Criteria
           </CustomButton>
         </Stack>
