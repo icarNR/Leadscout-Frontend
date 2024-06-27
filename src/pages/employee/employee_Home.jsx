@@ -40,7 +40,7 @@ const HomePage = () => {
       setButtonText('Requested');
       setButtonColor('secondary');
      }
-    else if(requested==false){
+    else if(requested==false || allowed){
       setButtonText('Attempt');
       setButtonColor('primary');
     }
