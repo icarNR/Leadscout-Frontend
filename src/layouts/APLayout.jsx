@@ -3,7 +3,7 @@ import { MenuAppBarWithoutProgressBar } from "../components/admin/adminHeader";
 import CssBaseline from "@mui/material/CssBaseline";
 import ClippedDrawer from "../components/admin/adminSideNavbar";
 
-const PageLayout = ({ content }) => {
+const PageLayout = ({ content, departmentValue, setDepartmentValue, departments }) => {
   return (
     <div
       style={{
@@ -25,7 +25,11 @@ const PageLayout = ({ content }) => {
           zIndex: 100,
         }}
       >
-        <MenuAppBarWithoutProgressBar />
+        <MenuAppBarWithoutProgressBar
+          departmentValue={departmentValue}
+          setDepartmentValue={setDepartmentValue}
+          departments={departments}
+        />
       </div>
 
       <div style={{ display: "flex", flex: 1, overflow: "hidden" }}>

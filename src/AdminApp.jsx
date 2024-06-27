@@ -15,7 +15,7 @@ export const theme = createTheme({
   },
 });
 
-function App() {
+function AdminApp() {
   return (
     <BrowserRouter>
       <div>
@@ -31,4 +31,4 @@ function App() {
   );
 }
 
-export default App;
+export default AdminApp;

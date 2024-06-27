@@ -2,12 +2,15 @@
   width: 40px;
   height: 40px;
   object-fit: cover;
+  
 }
 
 .MuiDataGrid-row:hover {
   cursor: pointer;
 }
-
+#root{
+  margin-left: 100px;
+}
 .MuiDataGrid-columnHeader {
   color: rgb(22, 169, 219);
 }
@@ -16,13 +19,6 @@
   color: rgb(24, 161, 225);
 }
 
-.black-row {
-  color: black;
-}
-
-.red-row {
-  color: red;
-}
 
 .profile-modal {
   position: fixed;
