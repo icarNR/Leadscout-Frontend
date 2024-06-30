@@ -23,7 +23,7 @@ function AssessmentPage() {
   useEffect(() => {
  
     if (user_id==assessed_id && !(attempts == 0 || allowed)){
-      navigate('/'); // Redirect to the desired page
+      navigate('/employee_home'); // Redirect to the desired page
     }
     else{
       fetch(`${server}/api/users/${sessionStorage.getItem('user_id')}/attempts`)
