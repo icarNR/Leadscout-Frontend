@@ -20,45 +20,30 @@ function QuestionComponent({ questionIndex, questionText, onChange }) {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  // Define the threshold width where you want to increase the margin
-  const thresholdWidth = 800;
-
-  // Calculate the margin based on the window width
-  const margin = windowWidth > thresholdWidth ? '30px' : '10px';
-
   return (
-    <div style={{ marginBottom: '10px', width:'100%', margin: '0 auto', display: 'flex', flexDirection: 'column', alignItems: 'center',marginTop: '100px' }}>
-    <div style={{ marginBottom: '25px', width: '100%',textAlign: 'center' }}>
-       <span style={{ fontSize: '25px' }}>{questionText}</span>
-    </div>
-      <div style={{ display: 'flex', justifyContent: 'center',alignItems:'center', width: '100%'}}>
-        <span >Disagree</span>
+    <div className="mb-2 w-full mx-auto flex flex-col items-center mt-24 ">
+      <div className="mb-6 w-full text-center">
+        <span className="text-2xl">{questionText}</span>
+      </div>
+      <div className="flex justify-center items-center w-full ">
+        <span>Disagree</span>
         {[1, 2, 3, 4, 5].map(option => (
-          <label key={option} style={{ display: 'flex', alignItems: 'center', marginRight: margin , marginLeft: margin }}>
+          <label key={option} className="flex items-center mx-2 md:mx-8">
             <input
               type="radio"
               name={`question-${questionIndex}`}
               value={option}
               onChange={() => handleOptionChange(option)}
-              style={{ display: 'none' }}
+              className="hidden"
             />
-            <span style={{  
-              width: '40px', 
-              height: '40px', 
-              borderRadius: '90%', 
-              border: '2px solid #00818A', 
-              cursor: 'pointer', 
-              backgroundColor: selectedOption === option ? '#71EFD8' : 'transparent', 
-              borderColor: selectedOption === option ? '#71EFD8' : '#00818A',
-              transition: 'background-color 0.3s ease', 
-              transform: selectedOption === option ? 'scale(1.1)' : 'scale(1)' 
-            }}></span>
+            <span className={`w-8 h-8 md:w-10 md:h-10 rounded-full border-2 cursor-pointer transition-transform duration-300 ${selectedOption === option ? 'bg-teal-300 border-teal-300 scale-110' : 'border-teal-600'}`}></span>
           </label>
         ))}
         <span>Agree</span>
       </div>
     </div>
   );
+  
 }
 
 export default QuestionComponent;

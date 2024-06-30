@@ -30,11 +30,10 @@ export default function MenuAppBar({percentage}) {
   };
 
   return (
-    <Box sx={{ flexGrow: 1}}>
       <AppBar position="static" sx={{...appbarStyles}}>
         <Box sx={{ display: 'flex', flexDirection: 'column' , paddingTop: '12px', paddingBottom: '12px' , }}>
           <Toolbar sx={{ display:'flex', justifyContent: 'space-between' }}>
-            <Box sx={{ display: 'flex', alignItems: 'center', width: { xs: '100px', sm: '180px' }, flexShrink: { xs: 1, sm: 0 } }}>
+            <Box sx={{ display: 'flex', alignItems: 'center', width: { xs: '180px', sm: '180px' }, flexShrink: { xs: 1, sm: 1 } }}>
               <img
                 src={logo}
                 alt="LeadScoutLogo"
@@ -77,14 +76,13 @@ export default function MenuAppBar({percentage}) {
               </Menu>
             </Box>
           </Toolbar>
-          <Box className="w-full fixed top-16"> 
-             <div className="w-full max-w-md md:max-w-lg lg:max-w-xl mx-auto">
-              <CustomizedProgressBars progress={percentage} />
-             </div>
+          <Box className="w-full fixed top-16 flex justify-center"> 
+            <div className="w-full max-w-md md:max-w-lg lg:max-w-xl pl-[20px] sm:pl-0 sm:ml-[150px]">
+               <CustomizedProgressBars progress={percentage} txtcolor={'#71EFD8'} />
+            </div>
           </Box>
         </Box>
       </AppBar>
-    </Box>
   );
 }
 
@@ -100,7 +98,6 @@ export function MenuAppBarWithoutProgressBar() {
   };
 
   return (
-    <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static" sx={{...appbarStyles}}>
         <Toolbar sx={{ justifyContent: 'space-between',paddingTop: '15px', paddingBottom: '15px'  }}>
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
@@ -147,6 +144,5 @@ export function MenuAppBarWithoutProgressBar() {
           </div>
         </Toolbar>
       </AppBar>
-    </Box>
   );
 }
