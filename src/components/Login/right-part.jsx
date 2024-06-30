@@ -47,7 +47,7 @@ function LoginForm() {
                 localStorage.setItem('token_type', token_type);
 
                 if (rememberMe) {
-                    localStorage.setItem('email', email);
+                    localStorage.setItem('email', email,'access_token',access_token,'refresh_token',refresh_token,'token_type',token_type);
                 } else {
                     localStorage.removeItem('email');
                 }
