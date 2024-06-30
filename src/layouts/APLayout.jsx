@@ -1,7 +1,7 @@
 import React from "react";
-import { MenuAppBarWithoutProgressBar } from "../components/admin/adminHeader";
+import { MenuAppBarWithoutProgressBar } from "../components/admin/adminHeader.jsx";
 import CssBaseline from "@mui/material/CssBaseline";
-import ClippedDrawer from "../components/admin/adminSideNavbar";
+import ClippedDrawer from "../components/admin/adminSideNavbar.jsx";
 
 const PageLayout = ({ content, departmentValue, setDepartmentValue, departments }) => {
   return (

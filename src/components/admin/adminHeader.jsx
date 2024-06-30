@@ -10,7 +10,8 @@ import Select from "@mui/material/Select";
 import FormControl from "@mui/material/FormControl";
 import InputAdornment from '@mui/material/InputAdornment';
 import logo from "../../assets/Group 20.png";
-import SearchContext from "./SearchContext";
+import SearchContext from "./SearchContext.jsx";
+
 import { styled, alpha } from "@mui/material/styles";
 import InputBase from "@mui/material/InputBase";
 import SearchIcon from "@mui/icons-material/Search";
@@ -76,6 +77,7 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   },
 }));
 
+
 const Selection = styled(FormControl)(({ theme }) => ({
   backgroundColor: theme.palette.common.white,
   borderRadius: "3px",
@@ -105,7 +107,7 @@ const VerticalDivider = styled("div")(({ theme }) => ({
   margin: "0 10px 0 0",
 }));
 
-const sort = [ 
+const sortOptions = [ 
   'Potential',
   'Competency',
 ];
@@ -114,13 +116,15 @@ export function MenuAppBarWithoutProgressBar({ percentage, onSearch, departmentV
   const { searchTerm, setSearchTerm } = useContext(SearchContext);
   const [inputValue, setInputValue] = useState(searchTerm);
   const searchInputRef = useRef(null);
-  const [anchorEl, setAnchorEl] = React.useState(null);
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [sortValue, setSortValue] = useState(""); // State for sorting
 
   useEffect(() => {
     if (searchInputRef.current) {
       searchInputRef.current.focus();
     }
   }, []);
+
 
   useEffect(() => {
     setInputValue(searchTerm);
@@ -139,6 +143,13 @@ export function MenuAppBarWithoutProgressBar({ percentage, onSearch, departmentV
   const handleClose = () => {
     setAnchorEl(null);
   };
+
+
+  const handleSortChange = (event) => {
+    const value = event.target.value;
+    setSortValue(value);
+  };
+
 
   const handleDepartmentChange = (event) => {
     setDepartmentValue(event.target.value);
@@ -171,7 +182,7 @@ export function MenuAppBarWithoutProgressBar({ percentage, onSearch, departmentV
                   marginRight: "16px",
                   width: "100%",
                   objectFit: "contain",
-                }} // Adjust width and margin as needed
+                }}
               />
             </Box>
             <Box
@@ -197,14 +208,13 @@ export function MenuAppBarWithoutProgressBar({ percentage, onSearch, departmentV
                 </Search>
               </Box>
               <Box sx={{ display: "flex", alignItems: "center", marginLeft: 3 }}>
-                <Selection
-                  variant="standard"
-                >
+                <Selection variant="standard">
                   <Select
                     labelId="sort-by-label"
                     id="sort-by"
-                    value={departmentValue}
-                    onChange={handleDepartmentChange}
+                    value={sortValue}
+                    onChange={handleSortChange}
+
                     displayEmpty
                     disableUnderline
                     label="Sort"
@@ -225,19 +235,20 @@ export function MenuAppBarWithoutProgressBar({ percentage, onSearch, departmentV
                     <MenuItem value="">
                       <em>Sort By</em>
                     </MenuItem>
-                    {departments.length > 0 &&
-                      sort.map((department) => (
-                        <MenuItem key={department} value={department}>
-                          {department}
-                        </MenuItem>
-                      ))}
+
+                    {sortOptions.map((option) => (
+                      <MenuItem key={option} value={option}>
+                        {option}
+                      </MenuItem>
+                    ))}
+
                   </Select>
                 </Selection>
               </Box>
               <Box sx={{ display: "flex", alignItems: "center", marginLeft: 3 }}>
-                <Selection
-                  variant="standard"
-                >
+
+                <Selection variant="standard">
+
                   <Select
                     labelId="department-select-label"
                     id="department-select"
@@ -263,12 +274,13 @@ export function MenuAppBarWithoutProgressBar({ percentage, onSearch, departmentV
                     <MenuItem value="">
                       <em>All Departments</em>
                     </MenuItem>
-                    {departments.length > 0 &&
-                      departments.map((department) => (
-                        <MenuItem key={department} value={department}>
-                          {department}
-                        </MenuItem>
-                      ))}
+
+                    {departments.map((department) => (
+                      <MenuItem key={department} value={department}>
+                        {department}
+                      </MenuItem>
+                    ))}
+
                   </Select>
                 </Selection>
               </Box>
