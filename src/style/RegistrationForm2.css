@@ -1,0 +1,67 @@
+.registration-page {
+    display: flex;
+    height: 100vh;
+}
+.left-part {
+    width: 1737px;
+    height: 1024px;
+    flex-shrink: 0;
+}
+.right-part {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+
+}
+
+.input-container {
+    width: 422px;
+    height: 45px;
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+    border-radius: 8px;
+    border: 1px solid #009EE2;
+    padding-left: 10px;
+
+}
+
+.form-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+}
+
+h2 {
+    width: 358px;
+    height: 63.636px;
+    flex-shrink: 0;
+    margin: 0;
+    font-family: Inter;
+    font-size: 74px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 48px;
+    text-align: center;
+
+}
+
+.form-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+}
+
+input {
+    flex: 1;
+    padding: 10px;
+    font-size: 16px;
+    border: none;
+    outline: none;
+}

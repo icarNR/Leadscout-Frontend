@@ -7,6 +7,7 @@ import Criteria from "../../components/admin/Criteria.jsx";
 import PageLayout from "../../layouts/APLayout.jsx";
 import "./Dashboard.css";
 
+
 const server = "http://127.0.0.1:8000"
 
 function Dashboard() {
