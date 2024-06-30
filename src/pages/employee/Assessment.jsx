@@ -160,7 +160,6 @@ const handleSubmit = async () => {
     })
     .then(response => response.json())
     .then(data => setResults(data))
-    console.log(data); 
 
     //add to admin notifications
     fetch(`${server}/add_admin_notification`, {

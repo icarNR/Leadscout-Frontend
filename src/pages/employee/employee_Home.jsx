@@ -36,15 +36,14 @@ const HomePage = () => {
       setButtonText('Requested');
       setButtonColor('secondary');
      }
-    else{
-      console.log(" fFuckme")
+    else if(requested==false || allowed){
       setButtonText('Attempt');
       console.log(buttonText)
       setButtonColor('primary');
       console.log(buttonColor)
     }
   },[allowed, requested]); 
-  
+
   useEffect(() => {
     sessionStorage.clear()//--------------------------------
     let userId="001"//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<   user_id
