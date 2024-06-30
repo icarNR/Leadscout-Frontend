@@ -1,0 +1,47 @@
+.MuiDataGrid-cell img {
+  width: 40px;
+  height: 40px;
+  object-fit: cover;
+  
+}
+
+.MuiDataGrid-row:hover {
+  cursor: pointer;
+}
+#root{
+  margin-left: 100px;
+}
+.MuiDataGrid-columnHeader {
+  color: rgb(22, 169, 219);
+}
+
+.MuiDataGrid-cell:nth-child(7) {
+  color: rgb(24, 161, 225);
+}
+
+
+.profile-modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 80%; /* Adjust this value to make it slightly smaller than the table */
+  max-width: 1000px; /* Maximum width for larger screens */
+  height: 90%; /* Adjust this value to control the height */
+  background-color: white;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  padding: 60px;
+  z-index: 1000; /* Make sure it appears above other content */
+  border-radius: 8px;
+}
+
+.close-modal-btn {
+  color: gray;
+  position: absolute;
+  top: 40px;
+  right: 40px;
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+}

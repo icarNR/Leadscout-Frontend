@@ -24,14 +24,15 @@ const HomePage = () => {
 
   const server = import.meta.env.VITE_REACT_APP_SERVER_URL;
 
-
   const [buttonText, setButtonText] = useState('   ');
   const [buttonColor, setButtonColor] = useState('primary');
   const [requested, setRequested] = useState(null);
   const [attempts, setAttempts] = useState(1);
   const [allowed, setAllowed] = useState(false);
   const [name, setName] = useState("Nisal Ravindu");
-  
+
+  const accessToken = sessionStorage.getItem('access_token');
+
   useEffect(() => {
     //console.log(JSON.parse(sessionStorage.getItem('requested')))
     console.log(requested)
@@ -58,20 +59,27 @@ const HomePage = () => {
       setAllowed(JSON.parse(sessionStorage.getItem('allowed')));
       console.log(JSON.parse(sessionStorage.getItem('requested')))
       //console.log(JSON.parse(sessionStorage.getItem('allowed')))
-
       // console.log(requested)
     }
+    
       // Fetch the number of attempts, requeested and allowed for the current user
-    fetch(`${server}/api/users/${userId}/attempts`)
+    fetch(`${server}/api/users/${userId}/attempts`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${accessToken}`
+        }
+      })
     .then(response => response.json())
     .then(data => {
+        if(data){
         setRequested(data.requested)
         setAttempts(data.attempts)
         setAllowed(data.allowed)  
         sessionStorage.setItem('requested', data.requested);
         sessionStorage.setItem('attempts', data.attempts);
         sessionStorage.setItem('allowed', data.allowed); 
-        console.log("fetched")
+        console.log("fetched")}
         //console.log(data.requested)
 
     })
