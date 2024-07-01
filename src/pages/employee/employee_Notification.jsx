@@ -66,10 +66,12 @@ const Notification = () => {
   const pageContent = (
     <div className="flex flex-col h-full p-10">
       <div className="flex justify-between items-center mb-4">
-        <button onClick={handlePrev} className="px-4 py-2 bg-blue-500 text-white rounded-md">
+        <button onClick={handlePrev} className="px-4 py-2" style={{ backgroundColor: '#00818A', color: 'white', borderRadius: '0.375rem' }}>
+          Prev
           <VscArrowLeft />
         </button>
-        <button onClick={handleNext} className="px-4 py-2 bg-blue-500 text-white rounded-md">
+        <button onClick={handleNext} className="px-4 py-2"style={{backgroundColor: '#00818A', color: 'white', borderRadius: '0.375rem' }}>
+          Next
           <VscArrowRight />
         </button>
       </div>

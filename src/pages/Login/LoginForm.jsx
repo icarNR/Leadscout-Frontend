@@ -1,16 +1,14 @@
 
 import React from 'react';
-import   '../../style/LoginForm.css';
 import LeftPart from '../../components/Login/left-part'; 
 import RightPart from '../../components/Login/right-part';
 
 function LoginForm() {
   return (
-    <div className="login-page">
+    <div className="flex h-screen flex-col md:flex-row">
       <LeftPart />
-      <div className="right-part">
       <RightPart />
-        </div>
+        
       </div>
 
   );

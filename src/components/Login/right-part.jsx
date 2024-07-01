@@ -63,7 +63,7 @@ function LoginForm() {
     };
 
     return (
-        <div className="form-container p-8 bg-white rounded-lg shadow-md">
+        <div className="flex flex-col items-center justify-center w-full md:w-1/2 p-8">
             <h2 className="text-4xl font-medium mb-2">Welcome</h2>
             <p className="text-gray-600 mb-6">Login with email</p>
             <div className="input-container flex items-center mb-4">

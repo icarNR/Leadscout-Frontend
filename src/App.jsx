@@ -5,11 +5,7 @@ import BasicTabs from './components/common/tab.jsx';
 import PersonalityPage from './pages/employee/employee_Personality.jsx';
 import AssessmentPage from './pages/employee/Assessment.jsx';
 import HomePage from './pages/employee/employee_Home.jsx';
-<<<<<<< HEAD
 import Notification from './pages/employee/employee_Notification.jsx';
-=======
-
->>>>>>> 0dc49f8850b6abf6392b7d079b6cbb5b309c13eb
 import LoginForm from './pages/Login/LoginForm.jsx';
 import RegistrationForm from './pages/Login/RegistrationForm.jsx'
 import RegistrationForm2 from './pages/Login/RegistrationForm2.jsx'
