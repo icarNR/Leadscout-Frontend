@@ -25,12 +25,13 @@ const HomePage = () => {
   const [attempts, setAttempts] = useState(1);
   const [allowed, setAllowed] = useState(false);
   const [name, setName] = useState("Nisal Ravindu");
-
+  
   const accessToken = sessionStorage.getItem('access_token');
-
+  const userId = sessionStorage.getItem('user_id');
+  
+  
   useEffect(() => {
-    //console.log(JSON.parse(sessionStorage.getItem('requested')))
-    console.log(" guckme")
+    console.log(JSON.parse(localStorage.getItem('allowed_assess')))
     if (requested && !allowed){ //check id already requested and if its allowed
       // Change button text and color
       setButtonText('Requested');
@@ -38,22 +39,20 @@ const HomePage = () => {
      }
     else if(requested==false || allowed){
       setButtonText('Attempt');
-      console.log(buttonText)
       setButtonColor('primary');
-      console.log(buttonColor)
     }
   },[allowed, requested]); 
 
-  useEffect(() => {
-    sessionStorage.clear()//--------------------------------
-    let userId="001"//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<   user_id
-    sessionStorage.setItem('user_id', userId);
-    sessionStorage.setItem('assessed_id', userId);
 
-    if(sessionStorage.getItem('requested')){
+  useEffect(() => {
+    //sessionStorage.clear()//--------------------------------
+    sessionStorage.setItem('user_id', userId);
+    sessionStorage.setItem('assessed_id', userId);    
+
+    if(localStorage.getItem('requested')){
       console.log(' sesh is here')
-      setRequested(JSON.parse(sessionStorage.getItem('requested')));
-      setAllowed(JSON.parse(sessionStorage.getItem('allowed')));
+      setRequested(JSON.parse(localStorage.getItem('requested')));
+      setAllowed(JSON.parse(localStorage.getItem('allowed_assess')));
     }
     
       // Fetch the number of attempts, requeested and allowed for the current user
@@ -71,22 +70,14 @@ const HomePage = () => {
         setAttempts(data.attempts)
         setAllowed(data.allowed)  
         if (data.requested !== undefined) {
-          sessionStorage.setItem('requested', data.requested);
-        }
+          sessionStorage.setItem('requested', data.requested);}
         if (data.attempts !== undefined) {
-            sessionStorage.setItem('attempts', data.attempts);
-        }
+            sessionStorage.setItem('attempts', data.attempts);}
         if (data.allowed !== undefined) {
-            sessionStorage.setItem('allowed', data.allowed);
-        }
-        
+            sessionStorage.setItem('allowed', data.allowed);}
         console.log("fetched")}
-        //console.log(data.requested)
-
     })
     .catch(error => console.error('Error:', error));
-    
-  
   }, []);  // The empty array means this useEffect will run once when the component mounts
 
   const handleButtonClick = () => {
@@ -97,10 +88,10 @@ const HomePage = () => {
         window.location.href = "/Assessment";}
     else if(requested==false){
         // Set the `requested` flag to `true` for the current user 
-        fetch(`${server}/api/users/${sessionStorage.getItem('user_id')}/request`, { method: 'POST' })
+        fetch(`${server}/api/users/${userId}/request`, { method: 'POST' })
         .then(() => {
           setRequested(true)
-          sessionStorage.setItem('requested', true);
+          localStorage.setItem('requested', true);
         });
     
         // Add to the notification dictionary for their supervisor
@@ -110,7 +101,7 @@ const HomePage = () => {
               'Content-Type': 'application/json'
           },
           body: JSON.stringify({
-              userID: sessionStorage.getItem('user_id'),
+              userID: localStorage.getItem('user_id'),
               ntype: 'assess_req'
           })
           })

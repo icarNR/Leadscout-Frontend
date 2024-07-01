@@ -66,7 +66,7 @@ const StyledAvatar = styled(Avatar)(({ theme }) => ({
 
     useEffect(() => {
       // Try to get the supervisees list from the session storage
-      const storedGroup = sessionStorage.getItem('supervisees');
+      const storedGroup = localStorage.getItem('supervisees');
       const userID = sessionStorage.getItem('user_id');
       // If the supervisees list is in the session storage, use it
       if (storedGroup) 
@@ -77,7 +77,7 @@ const StyledAvatar = styled(Avatar)(({ theme }) => ({
           .then(response => response.json())
           .then(data => {
             // Save the supervisees list in the session storage for future use
-            sessionStorage.setItem('supervisees', JSON.stringify(data));
+            localStorage.setItem('supervisees', JSON.stringify(data));
             setGroup(data);
           })
           .catch(error => console.error('Error fetching data: ', error));

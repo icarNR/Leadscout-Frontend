@@ -59,11 +59,13 @@ const [results, setResults] = useState({
 
   const [selfAssessment,setselfAssessment] = useState(true);
   const [supervisorAssessment,setsupervisorAssessment] = useState(true);
+  const [currentIndex, setCurrentIndex] = useState(0);
+  
+  const userId = sessionStorage.getItem('user_id'); 
+  const storedResults = JSON.parse(sessionStorage.getItem('results'));
+  const storedAverages = JSON.parse(sessionStorage.getItem('averages'));
 
   useEffect(() => {
-    const userId = sessionStorage.getItem('user_id'); 
-    const storedResults = JSON.parse(sessionStorage.getItem('results'));
-    const storedAverages = JSON.parse(sessionStorage.getItem('averages'));
 
     if(storedResults && storedAverages){
       console.log("storedResults");
@@ -72,8 +74,8 @@ const [results, setResults] = useState({
       console.log(storedAverages);
       setAverages(storedAverages);
       setResults(storedResults); }
+
     console.log("fetching");
-    
     Promise.all([
         fetch(`${server}/api/assessment_status/${userId}`),
         fetch(`${server}/send_results/${userId}`),
@@ -118,11 +120,10 @@ const [results, setResults] = useState({
         console.error('Error fetching data: ', error);
       });
 
-
   }, []);
   
 
-    const [currentIndex, setCurrentIndex] = useState(0);
+
     const handlePrev = () => {
       setCurrentIndex(prevIndex => (prevIndex > 0 ? prevIndex - 1 : 0));
     };
@@ -162,13 +163,15 @@ const [results, setResults] = useState({
         <div  {...handlers} className="flex flex-row items-center justify-center  mb-4 space-x-4 flex-1"> 
           <button 
             onClick={handlePrev} 
-            className="sm:block px-4 py-4 bg-[#00818A] text-white rounded-md hover:bg-[#006B74]"><VscArrowLeft /></button>
+            className="sm:block px-4 py-4 bg-[#00818A] text-white rounded-md hover:bg-[#006B74]"><VscArrowLeft />
+          </button>
          
             <Div1 {...data[currentIndex]} />
        
           <button 
             onClick={handleNext} 
-            className="sm:block px-4 py-4 bg-[#00818A] text-white rounded-md hover:bg-[#006B74]"><VscArrowRight /></button>
+            className="sm:block px-4 py-4 bg-[#00818A] text-white rounded-md hover:bg-[#006B74]"><VscArrowRight />
+          </button>
         </div>
      </div>
     );

@@ -7,9 +7,7 @@ function RegistrationForm({ setFormData }) {
   return (
     <div className="registration-page">
       <LeftPart />
-      <div className="right-part">
-        <RightPart setFormData={setFormData} />
-      </div>
+      
     </div>
   );
 }
