@@ -5,12 +5,11 @@ import RightPart from '../../components/Registration/right-part';
 
 function RegistrationForm({ setFormData }) {
   return (
-    <div className="registration-page">
+    <div className="flex h-screen flex-col md:flex-row">
       <LeftPart />
-      <div className="right-part">
-        <RightPart setFormData={setFormData} />
+      <RightPart setFormData={setFormData} />
       </div>
-    </div>
+    
   );
 }
 
