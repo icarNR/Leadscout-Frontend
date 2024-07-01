@@ -1,82 +1,130 @@
 import React, { useState, useEffect, useContext } from "react";
-import { DataGrid } from "@mui/x-data-grid";
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+import Paper from "@mui/material/Paper";
+import TablePagination from "@mui/material/TablePagination";
 import Tooltip from "@mui/material/Tooltip";
 import InfoIcon from "@mui/icons-material/Info";
 import axios from "axios";
-import Profile from "./profile.jsx"; // Import the Profile component
 import "./LeadershipTable.css";
 import SearchContext from "./SearchContext.jsx";
 
-
 const server = "http://127.0.0.1:8000";
-const LeadershipTable = ({ selectedCriteria, departmentValue, sortCriteria }) => {
+
+const LeadershipTable = ({
+  selectedCriteria,
+  departmentValue,
+  sortCriteria,
+  onRowClick,
+}) => {
   const [leadershipData, setLeadershipData] = useState([]);
-  const [selectedProfile, setSelectedProfile] = useState(null); // State to hold selected profile data
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [sortedRows, setSortedRows] = useState([]);
   const { searchTerm } = useContext(SearchContext);
 
   useEffect(() => {
     async function fetchLeadershipData() {
       try {
+        const accessToken = sessionStorage.getItem("access_token");
+
+        // Default parameters if session data is not available
         const params = {
-          department: departmentValue,
-          session_data: JSON.stringify(Object.fromEntries(selectedCriteria)),
+          department: departmentValue || "", // Use default value or empty string
+          session_data: "", // Empty string or default session data behavior
         };
+        const sessionData = sessionStorage.getItem("selectedCriteria");
+        if (sessionData) {
+          const sessionData = JSON.parse(
+            sessionStorage.getItem("selectedCriteria")
+          );
+          params.session_data = JSON.stringify(Object.fromEntries(sessionData));
+        }
+
         const response = await axios.get(
           `${server}/src/component/admin/LeadershipTable/`,
-          { params }
+          {
+            params,
+            headers: {
+              Authorization: `Bearer ${accessToken}`,
+            },
+          }
         );
-        let dataWithId = response.data.map((item, index) => ({
-          ...item,
-          id: item.id || `${index}`, // Ensure every item has an id
-          user_id: item.user_id ? item.user_id.toString() : `${index}`
-        }));
 
-        // Sorting logic based on sortCriteria if it's set
-        if (sortCriteria === "Potential") {
-          dataWithId = dataWithId.sort((a, b) => b.potential - a.potential); // Sort potential descending
-        } else if (sortCriteria === "Competency") {
-          dataWithId = dataWithId.sort((a, b) => b.competency - a.competency); // Sort competency descending
-        }
+        const dataWithId = response.data.map((item, index) => ({
+          ...item,
+          id: item.id || `${index}`,
+          user_id: item.user_id ? item.user_id.toString() : `${index}`,
+        }));
 
         setLeadershipData(dataWithId);
       } catch (error) {
-        console.error("Error fetching or sorting leadership data:", error);
+        console.error("Error fetching leadership data:", error);
+        setLeadershipData([]); // Set empty array in case of error
       }
     }
 
     fetchLeadershipData();
-  }, [selectedCriteria, departmentValue, sortCriteria]);
+  }, [selectedCriteria, departmentValue]);
 
-  const filteredData = leadershipData.filter(
+  useEffect(() => {
+    let sortedData = [...leadershipData];
+    if (sortCriteria === "Potential") {
+      sortedData.sort((a, b) => b.potential - a.potential);
+    } else if (sortCriteria === "Competency") {
+      sortedData.sort((a, b) => b.competency - a.competency);
+    }
+    setSortedRows(sortedData);
+  }, [sortCriteria, leadershipData]);
+
+  const filteredData = sortedRows.filter(
     (item) =>
-      (item.name && item.name.toLowerCase().includes(searchTerm.toLowerCase())) ||
-      (item.user_id && item.user_id.toString().toLowerCase().includes(searchTerm.toLowerCase())) // Ensure user_id is converted to string
+      (item.name &&
+        item.name.toLowerCase().includes(searchTerm.toLowerCase())) ||
+      (item.user_id &&
+        item.user_id
+          .toString()
+          .toLowerCase()
+          .includes(searchTerm.toLowerCase()))
   );
 
-  const handleRowClick = (params) => {
-    setSelectedProfile(params.row); // Set the selected profile data
+  const handleRowClick = (row) => {
+    onRowClick(row); // Call the parent component's handler
   };
 
-  const closeProfile = () => {
-    setSelectedProfile(null); // Close the profile modal
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
   };
 
   const columns = [
     {
       field: "picture",
       headerName: "",
-      width: 100,
       renderCell: (params) => (
         <img
-          src={params.value || "default_image_path"} // Add a default image path
+          src={params.value || "default_image_path"}
           alt={params.row.name}
-          style={{ width: "40px", height: "50px", objectFit: "cover", borderRadius: "50%" }}
+          style={{
+            width: "40px",
+            height: "50px",
+            objectFit: "cover",
+            borderRadius: "50%",
+          }}
         />
       ),
     },
-    { field: "name", headerName: "Name", width: 250 },
-    { field: "user_id", headerName: "ID", width: 100 },
-    { field: "position", headerName: "Position", width: 300 }, // Update field name
+    { field: "name", headerName: "Name" },
+    { field: "user_id", headerName: "ID" },
+    { field: "position", headerName: "Position" },
     {
       field: "potential",
       headerName: (
@@ -87,7 +135,6 @@ const LeadershipTable = ({ selectedCriteria, departmentValue, sortCriteria }) =>
           </Tooltip>
         </div>
       ),
-      width: 200,
       renderCell: (params) => (
         <div
           style={{
@@ -98,31 +145,66 @@ const LeadershipTable = ({ selectedCriteria, departmentValue, sortCriteria }) =>
         </div>
       ),
     },
-    { field: "competency", headerName: "Competency", width: 150 },
+    {
+      field: "competency",
+      headerName: "Competency",
+      renderCell: (params) => (
+        <div style={{ color: "#00818A" }}>{params.value}%</div>
+      ),
+    },
   ];
 
   return (
-    <div style={{ height: 750, position: "relative" }}>
-      <DataGrid
-        rows={filteredData}
-        columns={columns}
-        pagination
-        pageSize={10}
-        rowsPerPageOptions={[5, 10, 20]}
-        onRowClick={handleRowClick} // Add onRowClick handler
+    <Paper style={{ width: "65vw", overflow: "hidden" }}>
+      <TableContainer
+        style={{ maxHeight: "calc(100vh - 240px)", minHeight: "35vw" }}
+      >
+        <Table stickyHeader aria-label="sticky table">
+          <TableHead>
+            <TableRow>
+              {columns.map((column) => (
+                <TableCell style={{ color: "#00818A" }} key={column.field}>
+                  {column.headerName}
+                </TableCell>
+              ))}
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {filteredData
+              .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+              .map((row) => (
+                <TableRow
+                  key={row.id}
+                  style={{ backgroundColor:"#F9F9F9"}}
+                  onClick={() => handleRowClick(row)}
+                  sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                >
+                  {columns.map((column) => (
+                    <TableCell key={column.field}>
+                      {column.renderCell
+                        ? column.renderCell({
+                            row,
+                            value: row[column.field],
+                          })
+                        : row[column.field]}
+                    </TableCell>
+                  ))}
+                </TableRow>
+              ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+      <TablePagination
+        rowsPerPageOptions={[5, 10, 20, 100]}
+        component="div"
+        count={filteredData.length}
+        rowsPerPage={rowsPerPage}
+        page={page}
+        onPageChange={handleChangePage}
+        onRowsPerPageChange={handleChangeRowsPerPage}
       />
-      {selectedProfile && (
-        <div className="profile-modal">
-          <button className="close-modal-btn" onClick={closeProfile}>
-            &times;
-          </button>
-          <Profile profileData={selectedProfile} />
-        </div>
-      )}
-    </div>
+    </Paper>
   );
 };
 
-
 export default LeadershipTable;
-
