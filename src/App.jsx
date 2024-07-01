@@ -2,11 +2,10 @@
 import PersonalityPage from './pages/employee/employee_Personality.jsx';
 import AssessmentPage from './pages/employee/Assessment.jsx';
 import HomePage from './pages/employee/employee_Home.jsx';
-//import Dashboard from "./pages/admin/Dashboard.jsx";
-import LoginForm from './pages/Login/LoginForm.jsx'
+import Notification from './pages/employee/employee_Notification.jsx';
+import LoginForm from './pages/Login/LoginForm.jsx';
 import RegistrationForm from './pages/Login/RegistrationForm.jsx'
 import RegistrationForm2 from './pages/Login/RegistrationForm2.jsx'
-import Notification from './pages/notification/Notification.jsx'
 import Otp_verify from './pages/Login/Otp_verify.jsx'
 import Otp from './pages/Login/Otp.jsx'
 import React, { useState } from 'react';
@@ -30,7 +29,7 @@ function App() {
             <Route path="/RegistrationForm2" element={<RegistrationForm2 formData={formData} />} />
             <Route path="/Otp_verify" element={<Otp_verify />} />
             <Route path="/Otp" element={<Otp />} />
-            <Route path="/Notification"  element={<Notification />} />
+            <Route path="/employee_Notification" element={<Notification />} />
 
             <Route element={<ProtectedRoute allowedRoles={['user']} />}>
               <Route path="/employee_Personality" element={<PersonalityPage />} />
