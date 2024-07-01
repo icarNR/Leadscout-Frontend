@@ -5,20 +5,27 @@ import Grid from "@mui/material/Grid";
 import LeadershipTable from "../../components/admin/LeadershipTable.jsx";
 import Criteria from "../../components/admin/Criteria.jsx";
 import PageLayout from "../../layouts/APLayout.jsx";
+import Profile from "../../components/admin/profile.jsx";
 import "./Dashboard.css";
 
-
-const server = "http://127.0.0.1:8000"
+const server = "http://127.0.0.1:8000";
 
 function Dashboard() {
   const [departmentValue, setDepartmentValue] = useState("");
   const [selectedCriteria, setSelectedCriteria] = useState([]);
   const [departments, setDepartments] = useState([]);
+  const [sortValue, setSortValue] = useState("");
+  const [selectedProfile, setSelectedProfile] = useState(null);
 
   useEffect(() => {
     const fetchDepartments = async () => {
       try {
-        const response = await axios.get(`${server}/departments`);
+        const accessToken = sessionStorage.getItem("access_token");
+        const response = await axios.get(`${server}/departments`, {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        });
         setDepartments(response.data);
       } catch (error) {
         console.error("Error fetching departments:", error);
@@ -32,17 +39,35 @@ function Dashboard() {
     setSelectedCriteria(criteria);
   };
 
+  const handleSortChange = (value) => {
+    setSortValue(value);
+  };
+
+  const handleRowClick = (profile) => {
+    setSelectedProfile(profile);
+  };
+
+  const closeProfile = () => {
+    setSelectedProfile(null);
+  };
+
   const pageContent = (
     <div className="container">
       <Box sx={{ flexGrow: 1 }}>
         <Grid container spacing={2}>
-          <Grid item xs={9}>
-            <LeadershipTable
-              selectedCriteria={selectedCriteria}
-              departmentValue={departmentValue}
-            />
+          <Grid item xs={9.5} style={{ width: "65vw" }}>
+            {selectedProfile ? (
+              <Profile profileData={selectedProfile} onClose={closeProfile} />
+            ) : (
+              <LeadershipTable
+                selectedCriteria={selectedCriteria}
+                departmentValue={departmentValue}
+                sortCriteria={sortValue}
+                onRowClick={handleRowClick}
+              />
+            )}
           </Grid>
-          <Grid item xs={3}>
+          <Grid item xs={2.5} style={{ width: "35vw" }}>
             <Criteria onCriteriaChange={handleCriteriaChange} />
           </Grid>
         </Grid>
@@ -56,6 +81,8 @@ function Dashboard() {
       departmentValue={departmentValue}
       setDepartmentValue={setDepartmentValue}
       departments={departments}
+      sortValue={sortValue}
+      setSortValue={handleSortChange}
     />
   );
 }

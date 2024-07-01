@@ -17,16 +17,16 @@ body {
   align-items: center;
   position: relative;
   text-align: left;
-  margin-left: 25px;
-  margin-top: 20px;
+  margin-left: 5%;
+  margin-top: 4%;
 }
 
 .profile-pic {
-  width: 100px;
-  height: 100px;
+  width: 15%;
+  height: 15%;
   border-radius: 50%;
   position: relative;
-  margin-right: 40px;
+  margin-right: 4%;
 }
 
 .profile-info {
@@ -43,8 +43,45 @@ body {
   color: gray;
 }
 
-.position {
-  color: blue;
+.flex {
+  display: flex;
+}
+
+.flex-col {
+  flex-direction: column;
+}
+
+.overflow-hidden {
+  overflow: hidden;
+}
+
+.items-center {
+  align-items: center;
+}
+
+.w-full {
+  width: 100%;
+}
+
+.border {
+  border: 1px solid #ccc;
+}
+
+.bg-gray-200 {
+  background-color: #e2e2e2;
+}
+.px-2 {
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+}
+
+.py-1 {
+  padding-top: 0.25rem;
+  padding-bottom: 0.25rem;
+}
+
+.bg-white {
+  background-color: white;
 }
 
 .button-group {
@@ -58,12 +95,12 @@ body {
 .profile-body {
   display: flex;
   align-items: center;
-  margin-top: 20px;
+  margin-top: 5%;
 }
 
 .progress-circle {
   position: relative;
-  margin-right: 60px;
+  margin-right: 5%;
 }
 
 .progress-value {
@@ -71,8 +108,8 @@ body {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  font-size: 16px;
-  color: #1dbf73;
+  font-size: 120%;
+  color: rgb(0, 129, 138);
 }
 
 .traits {
@@ -103,4 +140,41 @@ body {
   height: 10px;
   border-radius: 4px;
   transition: width 0.5s ease;
+}
+
+.p-3 {
+  padding: 1rem;
+}
+
+.justify-center {
+  justify-content: center;
+}
+
+.td-close-icon {
+  flex-basis: 30%;
+  text-align: right;
+  cursor: pointer;
+}
+
+.trait-description {
+  padding-left: 5%;
+}
+.trait-description h3 {
+  text-align: left;
+  color: rgb(0, 129, 138);
+}
+
+.trait-description p {
+  text-align: justify;
+  color: rgb(92, 91, 91);
+}
+
+.close-icon {
+  top: 100%;
+  right: 0;
+}
+
+.profile-close-icon {
+  float: right;
+  cursor: pointer;
 }

@@ -10,8 +10,7 @@ import Select from "@mui/material/Select";
 import FormControl from "@mui/material/FormControl";
 import InputAdornment from '@mui/material/InputAdornment';
 import logo from "../../assets/Group 20.png";
-import SearchContext from "./SearchContext.jsx";
-
+import SearchContext from "./SearchContext";
 import { styled, alpha } from "@mui/material/styles";
 import InputBase from "@mui/material/InputBase";
 import SearchIcon from "@mui/icons-material/Search";
@@ -77,7 +76,6 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   },
 }));
 
-
 const Selection = styled(FormControl)(({ theme }) => ({
   backgroundColor: theme.palette.common.white,
   borderRadius: "3px",
@@ -112,12 +110,12 @@ const sortOptions = [
   'Competency',
 ];
 
-export function MenuAppBarWithoutProgressBar({ percentage, onSearch, departmentValue, setDepartmentValue, departments = [] }) {
+export function MenuAppBarWithoutProgressBar({ percentage, onSearch, departmentValue, setDepartmentValue, departments = [], sortCriteria, setSortCriteria }) {
   const { searchTerm, setSearchTerm } = useContext(SearchContext);
   const [inputValue, setInputValue] = useState(searchTerm);
   const searchInputRef = useRef(null);
-  const [anchorEl, setAnchorEl] = useState(null);
-  const [sortValue, setSortValue] = useState(""); // State for sorting
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const [sortValue, setSortValue] = useState(sortCriteria || "");
 
   useEffect(() => {
     if (searchInputRef.current) {
@@ -125,10 +123,13 @@ export function MenuAppBarWithoutProgressBar({ percentage, onSearch, departmentV
     }
   }, []);
 
-
   useEffect(() => {
     setInputValue(searchTerm);
   }, [searchTerm]);
+  
+  useEffect(() => {
+    setSortValue(sortCriteria); // Sync local state with prop value
+  }, [sortCriteria]);
 
   const handleChange = (event) => {
     const value = event.target.value;
@@ -144,16 +145,17 @@ export function MenuAppBarWithoutProgressBar({ percentage, onSearch, departmentV
     setAnchorEl(null);
   };
 
-
-  const handleSortChange = (event) => {
-    const value = event.target.value;
-    setSortValue(value);
-  };
-
-
   const handleDepartmentChange = (event) => {
     setDepartmentValue(event.target.value);
   };
+  
+  const handleSortChange = (event) => {
+  const value = event.target.value;
+  setSortValue(value);
+  setSortCriteria(value);
+};
+
+
 
   return (
     <Box sx={{ flexGrow: 1 }}>
@@ -182,7 +184,7 @@ export function MenuAppBarWithoutProgressBar({ percentage, onSearch, departmentV
                   marginRight: "16px",
                   width: "100%",
                   objectFit: "contain",
-                }}
+                }} // Adjust width and margin as needed
               />
             </Box>
             <Box
@@ -208,16 +210,18 @@ export function MenuAppBarWithoutProgressBar({ percentage, onSearch, departmentV
                 </Search>
               </Box>
               <Box sx={{ display: "flex", alignItems: "center", marginLeft: 3 }}>
-                <Selection variant="standard">
+                <Selection
+                  variant="standard" sx={{ width: "170px"}}
+                >
                   <Select
                     labelId="sort-by-label"
                     id="sort-by"
                     value={sortValue}
-                    onChange={handleSortChange}
-
+                    onChange={handleSortChange} 
                     displayEmpty
                     disableUnderline
                     label="Sort"
+                    inputProps={{ "aria-label": "Select department" }}
                     startAdornment={
                       <>
                         <InputAdornment position="start">
@@ -228,27 +232,25 @@ export function MenuAppBarWithoutProgressBar({ percentage, onSearch, departmentV
                     }
                     sx={{
                       "& .MuiSelect-select": {
-                        padding: "10px 14px",
+                        padding: "7px 3px",
                       },
                     }}
                   >
                     <MenuItem value="">
                       <em>Sort By</em>
                     </MenuItem>
-
                     {sortOptions.map((option) => (
                       <MenuItem key={option} value={option}>
                         {option}
                       </MenuItem>
                     ))}
-
                   </Select>
                 </Selection>
               </Box>
               <Box sx={{ display: "flex", alignItems: "center", marginLeft: 3 }}>
-
-                <Selection variant="standard">
-
+                <Selection
+                  variant="standard"
+                >
                   <Select
                     labelId="department-select-label"
                     id="department-select"
@@ -267,20 +269,19 @@ export function MenuAppBarWithoutProgressBar({ percentage, onSearch, departmentV
                     }
                     sx={{
                       "& .MuiSelect-select": {
-                        padding: "10px 14px",
+                        padding: "7px 0px",
                       },
                     }}
                   >
                     <MenuItem value="">
                       <em>All Departments</em>
                     </MenuItem>
-
-                    {departments.map((department) => (
-                      <MenuItem key={department} value={department}>
-                        {department}
-                      </MenuItem>
-                    ))}
-
+                    {departments.length > 0 &&
+                      departments.map((department) => (
+                        <MenuItem key={department} value={department}>
+                          {department}
+                        </MenuItem>
+                      ))}
                   </Select>
                 </Selection>
               </Box>
