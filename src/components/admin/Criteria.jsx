@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import FormGroup from "@mui/material/FormGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Switch from "@mui/material/Switch";
@@ -12,7 +12,11 @@ import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import Stack from "@mui/material/Stack";
 import Checkbox from "@mui/material/Checkbox";
+import TextField from "@mui/material/TextField";
+import axios from "axios";
 import "./Criteria.css";
+
+const server = "http://127.0.0.1:8000"
 
 const CustomButton = styled(Button)(({ theme }) => ({
   borderRadius: 8,
@@ -25,32 +29,48 @@ const CustomButton = styled(Button)(({ theme }) => ({
   },
 }));
 
-const rows = [
-  { checked: false, Status: "programming", Current: 8 },
-  { checked: false, Status: "communication", Current: 4 },
-  { checked: false, Status: "SQL", Current: 3 },
-  { checked: false, Status: "leadership", Current: 8 },
-];
-
 export default function Criteria({ onCriteriaChange }) {
-  const [showList, setShowList] = useState(false);
+  const [rows, setRows] = useState([]);
   const [showQuickCriteria, setShowQuickCriteria] = useState(false);
-  const [checkedState, setCheckedState] = useState({
-    programming: false,
-    communication: false,
-    SQL: false,
-    leadership: false,
-  });
+  const [isEditing, setIsEditing] = useState(false);
+  const [skillsFromStorage, setSkillsFromStorage] = useState([]);
 
-  const handleToggle = () => {
-    setShowList(!showList);
-  };
+
+  useEffect(() => {
+    const fetchSkills = async () => {
+      try {
+        const response = await axios.get( `${server}/skills`);
+        const skills = response.data.map((skill) => ({
+          checked: false,
+          Status: skill,
+          Current: 0,
+          isEditing: false,
+        }));
+        setRows(skills);
+      } catch (error) {
+        console.error("Error fetching skills:", error);
+      }
+    };
+
+    fetchSkills();
+  }, []);
+
+  useEffect(() => {
+    const storedCriteria = sessionStorage.getItem("selectedCriteria");
+    if (storedCriteria) {
+      setSkillsFromStorage(JSON.parse(storedCriteria));
+    }
+  }, []);
+
+  useEffect(() => {
+    onCriteriaChange(skillsFromStorage);
+  }, [skillsFromStorage, onCriteriaChange]);
 
   const handleCheckboxChange = (event, index) => {
     const { checked } = event.target;
     const updatedRows = [...rows];
     updatedRows[index].checked = checked;
-    setCheckedState({ ...checkedState, [updatedRows[index].Status]: checked });
+    setRows(updatedRows);
   };
 
   const handleDoneClick = () => {
@@ -58,12 +78,32 @@ export default function Criteria({ onCriteriaChange }) {
     const selectedCriteria = rows
       .filter((row) => row.checked)
       .map((row) => row.Status);
-    console.log("Selected criteria:", selectedCriteria);
-    onCriteriaChange(selectedCriteria);
+
+    const criteriaWithDefaults = selectedCriteria.map((skill) => [skill, 0]);
+    sessionStorage.setItem(
+      "selectedCriteria",
+      JSON.stringify(criteriaWithDefaults)
+    );
+    setSkillsFromStorage(criteriaWithDefaults);
+
+    console.log("Selected criteria:", criteriaWithDefaults);
+    onCriteriaChange(criteriaWithDefaults);
   };
 
-  const toggleQuickCriteria = () => {
-    setShowQuickCriteria(!showQuickCriteria);
+  const handleEditClick = () => {
+    setIsEditing(!isEditing);
+  };
+
+  const handleInputChange = (event, index) => {
+    const { value } = event.target;
+    if (!/^\d*$/.test(value)) {
+      return; // Only allow numbers
+    }
+
+    const updatedSkills = [...skillsFromStorage];
+    updatedSkills[index][1] = value !== "" ? Number(value) : 0; // Ensure the value is a number and not empty
+    setSkillsFromStorage(updatedSkills);
+    sessionStorage.setItem("selectedCriteria", JSON.stringify(updatedSkills));
   };
 
   return (
@@ -74,7 +114,7 @@ export default function Criteria({ onCriteriaChange }) {
             <div style={{ display: "flex", justifyContent: "flex-end" }}>
               <Button
                 variant="outlined"
-                onClick={toggleQuickCriteria}
+                onClick={() => setShowQuickCriteria(false)}
                 sx={{ color: "#FFFFFF" }}
               >
                 Cancel
@@ -84,38 +124,50 @@ export default function Criteria({ onCriteriaChange }) {
               Select skill
             </h3>
 
-            <Table
-              aria-label="simple table"
-              component={Paper}
-              sx={{
-                backgroundColor: "#007791",
-                borderRadius: 4,
+            <div
+              style={{
+                maxHeight: "300px",
+                width: "750px",
+                overflowY: "auto",
+                marginBottom: "10px",
+                border: "1px solid #ced4da",
+                borderRadius: "4px",
                 padding: "10px",
-                width: "800px",
+                backgroundColor: "#007791",
               }}
             >
-              <TableBody>
-                {rows.map((row, index) => (
-                  <TableRow key={index}>
-                    <TableCell>
-                      <FormControlLabel
-                        control={
-                          <Checkbox
-                            checked={row.checked}
-                            onChange={(event) =>
-                              handleCheckboxChange(event, index)
-                            }
-                          />
-                        }
-                        label={row.Status}
-                        className="whiteText"
-                      />
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-            <br />
+              <Table
+                aria-label="simple table"
+                component={Paper}
+                sx={{
+                  backgroundColor: "#007791",
+                  borderRadius: 4,
+                  padding: "10px",
+                }}
+              >
+                <TableBody>
+                  {rows.map((row, index) => (
+                    <TableRow key={index}>
+                      <TableCell>
+                        <FormControlLabel
+                          control={
+                            <Checkbox
+                              checked={row.checked}
+                              onChange={(event) =>
+                                handleCheckboxChange(event, index)
+                              }
+                            />
+                          }
+                          label={row.Status}
+                          className="whiteText"
+                        />
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </div>
+
             <div style={{ display: "flex", justifyContent: "flex-end" }}>
               <Button
                 variant="contained"
@@ -130,64 +182,82 @@ export default function Criteria({ onCriteriaChange }) {
       )}
 
       <FormGroup>
-        <div class style={{ display: "flex", alignItems: "center" }}>
+        <div style={{ display: "flex", alignItems: "center" }}>
           <span style={{ color: "black", marginRight: "10px" }}>Criteria</span>
-          <FormControlLabel
-            control={<Switch checked={showList} onChange={handleToggle} />}
-          />
+          <FormControlLabel control={<Switch />} />
         </div>
 
-        {showList && (
-          <Table
-            aria-label="simple table"
-            component={Paper}
-            sx={{ backgroundColor: "#007791" }}
-          >
-            <TableHead>
-              <TableRow>
-                <TableCell></TableCell>
-                <TableCell align="left" className="whiteText">
-                  Skills
-                </TableCell>
-                <TableCell align="left" className="whiteText">
-                  Current
-                </TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {rows.map((row, index) => (
-                <TableRow key={index} sx={{ height: "5px" }}>
-                  <TableCell component="th" scope="row" className="whiteText">
-                    <Checkbox
-                      checked={row.checked}
-                      onChange={(event) => handleCheckboxChange(event, index)}
-                    />
+        {skillsFromStorage.length > 0 && (
+          <>
+            <Table
+              aria-label="simple table"
+              component={Paper}
+              sx={{ backgroundColor: "#007791" }}
+            >
+              <TableHead>
+                <TableRow>
+                  <TableCell align="left" className="whiteText">
+                    Skills
                   </TableCell>
-                  <TableCell
-                    align="left"
-                    className="whiteText" 
-                    sx={{ height: "5px" }}
-                  >
-                    {row.Status}
-                  </TableCell>
-                  <TableCell align="right" className="whiteText">
-                    {row.Current}
+                  <TableCell align="left" className="whiteText">
+                    Current
                   </TableCell>
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
+              </TableHead>
+              <TableBody>
+                {skillsFromStorage.map((skill, index) => (
+                  <TableRow key={index} sx={{ height: "5px" }}>
+                    <TableCell
+                      align="left"
+                      className="whiteText"
+                      sx={{ height: "5px" }}
+                    >
+                      {skill[0]}
+                    </TableCell>
+                    <TableCell align="left" className="whiteText">
+                      {isEditing ? (
+                        <TextField
+                          value={skill[1]}
+                          onChange={(event) => handleInputChange(event, index)}
+                          variant="outlined"
+                          size="small"
+                          width="75px"
+                          sx={{ backgroundColor: "#ffffff" }}
+                          inputProps={{
+                            inputMode: "numeric",
+                            pattern: "[0-9]*",
+                          }} // Restrict input to numbers only
+                        />
+                      ) : (
+                        skill[1]
+                      )}
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+            <br />
+            <Stack direction="column" spacing={2} alignItems="flex-end">
+              <Button
+                variant="contained"
+                onClick={handleEditClick}
+                sx={{ backgroundColor: "#007791", width: "100px" }}
+              >
+                {isEditing ? "Save" : "Edit"}
+              </Button>
+            </Stack>
+          </>
         )}
 
         <br />
         <Stack direction="column" spacing={2}>
           <CustomButton
-            onClick={toggleQuickCriteria}
-            sx={{ backgroundColor: "#007791" }}
+            onClick={() => setShowQuickCriteria(true)}
+            sx={{ backgroundColor: "#007791" ,width: "400px"}}
           >
             Quick Criteria
           </CustomButton>
-          <CustomButton sx={{ backgroundColor: "#007791" }}>
+          <CustomButton sx={{ backgroundColor: "#007791",width: "400px" }}>
             Browse Criteria
           </CustomButton>
         </Stack>

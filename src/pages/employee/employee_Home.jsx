@@ -12,18 +12,12 @@ import PageLayout from '../../layouts/EPLayout';
 import image1 from '../../assets/employee_home.jpeg'; // Adjust the file extension based on the actual image type
 //import { userStore } from '../../store.jsx'// Path to your store
 
-const WelcomeText = styled(Typography)(({ theme }) => ({
-  marginBottom: theme.spacing(2),
-  font: 'Roboto',
-  fontWeight: 'bold',
-  fontSize: 50
-}));
+
 
 
 const HomePage = () => {
 
   const server = import.meta.env.VITE_REACT_APP_SERVER_URL;
-
 
   const [buttonText, setButtonText] = useState('   ');
   const [buttonColor, setButtonColor] = useState('primary');
@@ -31,23 +25,27 @@ const HomePage = () => {
   const [attempts, setAttempts] = useState(1);
   const [allowed, setAllowed] = useState(false);
   const [name, setName] = useState("Nisal Ravindu");
-  
+
+  const accessToken = sessionStorage.getItem('access_token');
+
   useEffect(() => {
     //console.log(JSON.parse(sessionStorage.getItem('requested')))
-    console.log(requested)
+    console.log(" guckme")
     if (requested && !allowed){ //check id already requested and if its allowed
       // Change button text and color
       setButtonText('Requested');
       setButtonColor('secondary');
      }
-    else if(requested==false){
+    else if(requested==false || allowed){
       setButtonText('Attempt');
+      console.log(buttonText)
       setButtonColor('primary');
+      console.log(buttonColor)
     }
   },[allowed, requested]); 
-  
+
   useEffect(() => {
-    //sessionStorage.clear()//--------------------------------
+    sessionStorage.clear()//--------------------------------
     let userId="001"//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<   user_id
     sessionStorage.setItem('user_id', userId);
     sessionStorage.setItem('assessed_id', userId);
@@ -56,22 +54,33 @@ const HomePage = () => {
       console.log(' sesh is here')
       setRequested(JSON.parse(sessionStorage.getItem('requested')));
       setAllowed(JSON.parse(sessionStorage.getItem('allowed')));
-      console.log(JSON.parse(sessionStorage.getItem('requested')))
-      //console.log(JSON.parse(sessionStorage.getItem('allowed')))
-
-      // console.log(requested)
     }
+    
       // Fetch the number of attempts, requeested and allowed for the current user
-    fetch(`${server}/api/users/${userId}/attempts`)
+    fetch(`${server}/api/users/${userId}/attempts`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${accessToken}`
+        }
+      })
     .then(response => response.json())
     .then(data => {
+        if(data){
         setRequested(data.requested)
         setAttempts(data.attempts)
         setAllowed(data.allowed)  
-        sessionStorage.setItem('requested', data.requested);
-        sessionStorage.setItem('attempts', data.attempts);
-        sessionStorage.setItem('allowed', data.allowed); 
-        console.log("fetched")
+        if (data.requested !== undefined) {
+          sessionStorage.setItem('requested', data.requested);
+        }
+        if (data.attempts !== undefined) {
+            sessionStorage.setItem('attempts', data.attempts);
+        }
+        if (data.allowed !== undefined) {
+            sessionStorage.setItem('allowed', data.allowed);
+        }
+        
+        console.log("fetched")}
         //console.log(data.requested)
 
     })

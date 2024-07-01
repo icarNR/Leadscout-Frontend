@@ -1,0 +1,106 @@
+/* Global Styles */
+body {
+  font-family: Arial, sans-serif;
+  display: flex;
+  position: relative;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
+  background-color: #f0f2f5;
+}
+
+/* Profile Card Styles */
+
+.profile-header {
+  display: flex;
+  align-items: center;
+  position: relative;
+  text-align: left;
+  margin-left: 25px;
+  margin-top: 20px;
+}
+
+.profile-pic {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  position: relative;
+  margin-right: 40px;
+}
+
+.profile-info {
+  flex-grow: 1;
+}
+
+.profile-info h2 {
+  margin: 0;
+  font-size: 20px;
+}
+
+.profile-info p {
+  margin: 2px 0;
+  color: gray;
+}
+
+.position {
+  color: blue;
+}
+
+.button-group {
+  display: flex;
+  justify-content: center;
+  margin-top: 5%;
+  margin-bottom: 10%;
+  color: #000;
+}
+
+.profile-body {
+  display: flex;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.progress-circle {
+  position: relative;
+  margin-right: 60px;
+}
+
+.progress-value {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 16px;
+  color: #1dbf73;
+}
+
+.traits {
+  flex-grow: 1;
+}
+
+.trait {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.trait span:first-of-type {
+  flex-basis: 30%;
+  text-transform: capitalize;
+  text-align: left;
+}
+
+.trait-bar {
+  flex-basis: 40%;
+  background-color: #e6e6e6;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.trait-progress {
+  height: 10px;
+  border-radius: 4px;
+  transition: width 0.5s ease;
+}
