@@ -1,14 +1,23 @@
 // Employee_Criteria.jsx
 
 import React, { useState, useEffect } from 'react';
+<<<<<<< HEAD
 import MenuAppBarWithoutProgressBar from "../../components/admin/adminHeader2";
 import ResponsiveDrawer from "../../components/admin/adminSideNavbar";
+=======
+import MenuAppBarWithoutProgressBar from "../../components/Admin/employeeHeader";
+import ClippedDrawer from "../../components/Admin/employee_sideNavbar";
+>>>>>>> 15f71da2bc3a55f243d24e994d734b2a0ab65233
 import CssBaseline from '@mui/material/CssBaseline';
 import Typography from '@mui/material/Typography';
 import Criteria from '../../components/admin/CriteriaSkill';
 import Skills from '../../components/admin/Skills';
 import Recent from '../../components/admin/Recent';
+<<<<<<< HEAD
 import '../../components/admin/tailwind.css';
+=======
+import '../../components/Admin/tailwind.css';
+>>>>>>> 15f71da2bc3a55f243d24e994d734b2a0ab65233
 
 const EmployeeCriteria = () => {
   const [selectedDepartment, setSelectedDepartment] = useState('All');
@@ -47,7 +56,11 @@ const EmployeeCriteria = () => {
 
       <div style={{ display: 'flex', flex: 1, overflow: 'hidden' }}>
         <div style={{ width: '140px', height: 'calc(100vh)', position: 'fixed', top: '60px', left: 0, zIndex: 90, overflow: 'hidden' }}>
+<<<<<<< HEAD
           <ResponsiveDrawer/>
+=======
+          <ClippedDrawer />
+>>>>>>> 15f71da2bc3a55f243d24e994d734b2a0ab65233
         </div>
         <CssBaseline />
         <div className='sm:ml-32 mt-16 flex-1 overflow-y-auto'>
