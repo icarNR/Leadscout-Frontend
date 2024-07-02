@@ -29,7 +29,7 @@ function App() {
       <BrowserRouter>
         <div>
           <Routes>
-            <Route path="/" element={<Authenticate />} />
+            <Route path="/" element={<LoginForm />} />
             <Route path="/LoginForm" element={<LoginForm />} />
             <Route path="/RegistrationForm" element={<RegistrationForm setFormData={setFormData} />} />
             <Route path="/RegistrationForm2" element={<RegistrationForm2 formData={formData} />} />
