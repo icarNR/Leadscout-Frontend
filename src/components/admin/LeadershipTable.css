@@ -8,9 +8,7 @@
 .MuiDataGrid-row:hover {
   cursor: pointer;
 }
-#root{
-  margin-left: 100px;
-}
+
 .MuiDataGrid-columnHeader {
   color: rgb(22, 169, 219);
 }

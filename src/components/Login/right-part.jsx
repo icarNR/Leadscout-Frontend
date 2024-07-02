@@ -51,7 +51,7 @@ function LoginForm() {
                 }
 
                 if (role === 'admin') {
-                    navigate('/Assessment');
+                    navigate('/Dasboard');
                 } else {
                     navigate('/employee_Home');
                 }

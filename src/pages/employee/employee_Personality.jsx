@@ -145,17 +145,17 @@ const [results, setResults] = useState({
     
     
     const pageContent = (
-      <div className="flex flex-col h-full "> {/* Increased space-y from 10 to 20 */}
+      <div className="flex flex-col h-full pt-10"> {/* Increased space-y from 10 to 20 */}
         {
           supervisorAssessment && !selfAssessment ? 
-            <Alert severity="info">Current result is based on supervisor assessment.</Alert> 
+            <Alert severity="info" >Current result is based on supervisor assessment.</Alert> 
           : !supervisorAssessment && selfAssessment ? 
             <Alert severity="info">Current result is based on self assessment.</Alert> 
           : !supervisorAssessment && !selfAssessment ? 
             <Alert severity="warning">Do the assessment to see your results.</Alert> 
           : null
         }
-        <div className="flex flex-col items-center pt-20 pb-20" >
+        <div className="flex flex-col items-center pt-10 pb-20" >
             <BasicTabs
               panelcontent1={<Results {...results} />} 
               panelcontent2={<Results {...averages} />} />

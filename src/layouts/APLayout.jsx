@@ -49,9 +49,8 @@ const PageLayout = ({ content, departmentValue, setDepartmentValue, departments 
         </div>
         <CssBaseline />
         {/* Content */}
-        <div className="sm:ml-32 mt-16 flex-1 overflow-y-auto">
+        <div className='sm:ml-32 mt-16 flex-1 overflow-y-auto' >
           {/* Add your main content here */}
-
           {content}
         </div>
       </div>

@@ -1,4 +1,3 @@
-
 import PersonalityPage from './pages/employee/employee_Personality.jsx';
 import AssessmentPage from './pages/employee/Assessment.jsx';
 import HomePage from './pages/employee/employee_Home.jsx';
@@ -13,7 +12,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import ProtectedRoute from './components/common/ProtectedRoute.jsx' 
 import Authenticate from './pages/Login/test.jsx';
 import { AuthProvider } from './components/common/AuthContext.jsx' 
-
+import Dashboard from './pages/admin/Dashboard.jsx';
 
 function App() {
   const [formData, setFormData] = useState({});
@@ -37,9 +36,9 @@ function App() {
               <Route path="/employee_Home" element={<HomePage />} />
             </Route>
 
-            {/* <Route element={<ProtectedRoute allowedRoles={['admin']} />}>
+            <Route element={<ProtectedRoute allowedRoles={['admin']} />}>
               <Route path="/Dashboard" element={<Dashboard />} />
-            </Route> */}
+            </Route>
           </Routes>
       </BrowserRouter>
     </AuthProvider>

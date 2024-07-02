@@ -3,12 +3,16 @@ import { AuthContext } from '../../components/common/AuthContext.jsx'
 
 const Authenticate = () => {
   const { isAuthenticated, setIsAuthenticated, userRole, setUserRole } = useContext(AuthContext);
-  const email = "pp@gmail.com"
+  const email = "117@gmail.com"
   const server = import.meta.env.VITE_REACT_APP_SERVER_URL;
   
   const toggleAuthentication = () => {
     setIsAuthenticated(!isAuthenticated);
     console.log(isAuthenticated)
+    if(userRole=='user' )
+      window.location.href = "/employee_home";
+    else
+      window.location.href = "/Dashboard";
     };
 
   const changeRole = () => {
@@ -18,8 +22,9 @@ const Authenticate = () => {
   useEffect(() => {
 
     if(isAuthenticated){
-      sessionStorage.setItem('access_token', 'your_access_key_here');
-      let accessToken =sessionStorage.getItem('access_token');
+      localStorage.setItem('access_token', "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJnZWV0aDk4MTJAZ21haWwuY29tIiwicm9sZSI6InVzZXIiLCJ1c2VyX2lkIjoiMDExIiwiZXhwIjoxNzE5OTIwODI1fQ.JgMCkI3VsYrow5ZkvgqnoNGAKer2tGICwZQxXBZltlo");
+      let accessToken =localStorage.getItem('access_token');
+      
       fetch(`${server}/${email}/user`, {
         method: 'GET',
         headers: {
@@ -44,12 +49,13 @@ const Authenticate = () => {
             localStorage.setItem('observed', data.observed);
             localStorage.setItem('allowed_assess', data.allowed_assess);
             localStorage.setItem('department', data.department);
+            sessionStorage.clear();
             console.log("data saved")
           }
         })
         .catch(error => {
           console.error('Error:', error);
-        });
+        });  
       }
   },[isAuthenticated]); 
 

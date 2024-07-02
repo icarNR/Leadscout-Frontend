@@ -3,7 +3,9 @@ import React, { useEffect, useState } from 'react';
 import { DataGrid } from '@mui/x-data-grid';
 import axios from 'axios';
 import { VscArrowLeft, VscArrowRight } from 'react-icons/vsc';
-import PageLayout from '../../layouts/ELayout';
+import PageLayout from '../../layouts/EPLayout';
+
+const server = import.meta.env.VITE_REACT_APP_SERVER_URL;
 
 const columns = [
   { field: 'ntype', headerName: 'Notification Type', width: 160 },
@@ -29,13 +31,13 @@ const Notification = () => {
         if (!token) {
           throw new Error('No token found');
         }
-
-        const response = await axios.get('http://127.0.0.1:800/notifications', {
+    
+        const response = await axios.get(`${server}/notifications`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         });
-
+    
         setNotifications(response.data);
       } catch (error) {
         console.error('Error fetching notifications:', error);

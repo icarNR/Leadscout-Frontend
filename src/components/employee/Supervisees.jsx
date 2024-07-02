@@ -71,9 +71,9 @@ const StyledAvatar = styled(Avatar)(({ theme }) => ({
       // If the supervisees list is in the session storage, use it
       if (storedGroup) 
         setGroup(JSON.parse(storedGroup));
-      else{
+
         //If the supervisees list is not in the session storage, fetch it from the database
-        fetch(`${server}/get_users/${userID}`)
+      fetch(`${server}/get_users/${userID}`)
           .then(response => response.json())
           .then(data => {
             // Save the supervisees list in the session storage for future use
@@ -81,7 +81,7 @@ const StyledAvatar = styled(Avatar)(({ theme }) => ({
             setGroup(data);
           })
           .catch(error => console.error('Error fetching data: ', error));
-  }
+  
     }, []);
 
     return (

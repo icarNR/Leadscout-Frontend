@@ -33,7 +33,7 @@ function Dashboard() {
   };
 
   const pageContent = (
-    <div className="container">
+    <div className="container border">
       <Box sx={{ flexGrow: 1 }}>
         <Grid container spacing={2}>
           <Grid item xs={9}>
