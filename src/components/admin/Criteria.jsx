@@ -16,7 +16,7 @@ import TextField from "@mui/material/TextField";
 import axios from "axios";
 import "./Criteria.css";
 
-const server = "http://127.0.0.1:8000"
+const server = "http://127.0.0.1:8000";
 
 const CustomButton = styled(Button)(({ theme }) => ({
   borderRadius: 8,
@@ -35,11 +35,15 @@ export default function Criteria({ onCriteriaChange }) {
   const [isEditing, setIsEditing] = useState(false);
   const [skillsFromStorage, setSkillsFromStorage] = useState([]);
 
-
   useEffect(() => {
     const fetchSkills = async () => {
       try {
-        const response = await axios.get( `${server}/skills`);
+        const accessToken = sessionStorage.getItem("access_token"); // Retrieve the access token
+        const response = await axios.get(`${server}/skills`, {
+          headers: {
+            Authorization: `Bearer ${accessToken}`, // Include the access token in the request headers
+          },
+        });
         const skills = response.data.map((skill) => ({
           checked: false,
           Status: skill,
@@ -192,7 +196,7 @@ export default function Criteria({ onCriteriaChange }) {
             <Table
               aria-label="simple table"
               component={Paper}
-              sx={{ backgroundColor: "#007791" }}
+              sx={{ backgroundColor: "#007791", width: "100%" }}
             >
               <TableHead>
                 <TableRow>
@@ -221,8 +225,7 @@ export default function Criteria({ onCriteriaChange }) {
                           onChange={(event) => handleInputChange(event, index)}
                           variant="outlined"
                           size="small"
-                          width="75px"
-                          sx={{ backgroundColor: "#ffffff" }}
+                          sx={{ backgroundColor: "#ffffff", width: "100%" }}
                           inputProps={{
                             inputMode: "numeric",
                             pattern: "[0-9]*",
@@ -241,7 +244,7 @@ export default function Criteria({ onCriteriaChange }) {
               <Button
                 variant="contained"
                 onClick={handleEditClick}
-                sx={{ backgroundColor: "#007791", width: "100px" }}
+                sx={{ backgroundColor: "#007791", width: "5vw" }}
               >
                 {isEditing ? "Save" : "Edit"}
               </Button>
@@ -253,11 +256,11 @@ export default function Criteria({ onCriteriaChange }) {
         <Stack direction="column" spacing={2}>
           <CustomButton
             onClick={() => setShowQuickCriteria(true)}
-            sx={{ backgroundColor: "#007791" ,width: "400px"}}
+            sx={{ backgroundColor: "#007791", width: "100%" }}
           >
             Quick Criteria
           </CustomButton>
-          <CustomButton sx={{ backgroundColor: "#007791",width: "400px" }}>
+          <CustomButton sx={{ backgroundColor: "#007791", width: "100%" }}>
             Browse Criteria
           </CustomButton>
         </Stack>

@@ -1,23 +1,28 @@
-.MuiDataGrid-cell img {
+/* General table styling */
+.MuiTable-root img {
   width: 40px;
   height: 40px;
   object-fit: cover;
-  
 }
 
-.MuiDataGrid-row:hover {
-  cursor: pointer;
+.MuiTableCell-root {
+  transition-duration: 0s !important;
 }
 
-.MuiDataGrid-columnHeader {
+.MuiTableCell-head {
+  transition-duration: 0s !important;
   color: rgb(22, 169, 219);
 }
 
-.MuiDataGrid-cell:nth-child(7) {
+.MuiTableRow-root:hover {
+  cursor: pointer;
+}
+
+.MuiTableCell-body:nth-child(7) {
   color: rgb(24, 161, 225);
 }
 
-
+/* Modal styling */
 .profile-modal {
   position: fixed;
   top: 50%;
