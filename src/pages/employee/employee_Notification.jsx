@@ -45,10 +45,12 @@ const NotificationTable = ({ rows }) => (
   <div style={{ height: 600, width: '100%' }}>
     <DataGrid 
       rows={rows} 
-      columns={columns} 
-      pageSize={12} // Limit the number of rows displayed to 12
-      rowsPerPageOptions={[12]} // Only allow 12 rows per page
-      autoHeight
+      columns={columns}
+      pageSiz={rows.length}
+      hideFooterPagination
+      autoPageSize
+     
+      
     />
   </div>
 );
@@ -107,4 +109,6 @@ const Notification = () => {
 };
 
 export default Notification;
+
+
 
