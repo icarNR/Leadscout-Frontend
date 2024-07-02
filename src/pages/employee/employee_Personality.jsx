@@ -93,19 +93,21 @@ const [results, setResults] = useState({
         //sessionStorage.setItem('supervisor_assessment',data1.supervisor_assessment);
         //set results
         const adjustedResults = {
-          Extraversion: data2.extraversion,
-          Agreeableness: data2.agreeableness,
-          Conscientiousness: data2.conscientiousness,
-          Neuroticism: data2.neuroticism,
-          Openness: data2.openness
+          Extraversion: Math.round(data2.extraversion),
+          Agreeableness: Math.round(data2.agreeableness),
+          Conscientiousness: Math.round(data2.conscientiousness),
+          Neuroticism: Math.round(data2.neuroticism),
+          Openness: Math.round(data2.openness)
         };
+        
         const averageResults = {
-          Extraversion: data3.extraversion,
-          Agreeableness: data3.agreeableness,
-          Conscientiousness: data3.conscientiousness,
-          Neuroticism: data3.neuroticism,
-          Openness: data3.openness
+          Extraversion: Math.round(data3.extraversion),
+          Agreeableness: Math.round(data3.agreeableness),
+          Conscientiousness: Math.round(data3.conscientiousness),
+          Neuroticism: Math.round(data3.neuroticism),
+          Openness: Math.round(data3.openness)
         };
+        
         setAverages(averageResults);
         sessionStorage.setItem('averages', JSON.stringify(averageResults));
         setResults(adjustedResults);

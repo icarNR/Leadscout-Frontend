@@ -40,9 +40,9 @@ function LoginForm() {
                     
                 const { access_token, refresh_token, token_type, role } = response.data;
 
-                localStorage.setItem('access_token', access_token);
-                localStorage.setItem('refresh_token', refresh_token);
-                localStorage.setItem('token_type', token_type);
+                sessionStorage.setItem('access_token', access_token);
+                sessionStorage.setItem('refresh_token', refresh_token);
+                sessionStorage.setItem('token_type', token_type);
 
                 if (rememberMe) {
                     localStorage.setItem('email', email,'access_token',access_token,'refresh_token',refresh_token,'token_type',token_type);
