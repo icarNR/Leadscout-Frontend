@@ -1,32 +1,34 @@
-import Results from './components/employee/quizresults.jsx';
 import Layout from './layouts/EPLayout.jsx';
 import CustomizedProgressBars from './components/common/ProgressBar.jsx';
 import BasicTabs from './components/common/tab.jsx';
-import PersonalityPage from './pages/employee/employee_Personality.jsx';
-import AssessmentPage from './pages/employee/Assessment.jsx';
-import HomePage from './pages/employee/employee_Home.jsx';
-import TwoFingerSwipeTest from './pages/employee/test.jsx';
+import { createTheme } from '@mui/material';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import ECriteria from './pages/admin/Employee_Criteria.jsx';
+import Skills from './components/admin/Skills.jsx';
+import Criteria from './components/admin/CriteriaSkill.jsx';
+import MenuAppBarWithoutProgressBar from './components/admin/adminHeader2.jsx';
 
+//styleOverrides
+export const theme = createTheme({
+  palette: {
+    primary: {
+      main: '#00695c',
+      light: '#757ce8',
+      dark: '#002884',
+      contrastText: '#fff',
+    }
+  }
+});
 
-function App(){
-  return (
-    <BrowserRouter>
-      <div>
-        <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route  path="/employee_Personality" element={<PersonalityPage />} /> 
-          <Route path="/Assessment" element={<AssessmentPage />} />
-          <Route path="/employee_Home" element={<HomePage />} />
-          <Route path="/test" element={<TwoFingerSwipeTest />} />
-        </Routes>
-      </div> 
-    </BrowserRouter>
-  );
+const Home = () => <div>Home</div>; // Placeholder Home component
 
-  //return <Results Openness={75} Consciousness={80} Extraversion={65} Agreeableness={90} Neuroticism={50} />
-
-}
-
+const App = () => (
+  <BrowserRouter>
+    <Routes>
+      <Route path="/" element={<Home />} />
+      <Route path="/Ecriteria" element={<ECriteria />} />
+    </Routes>
+  </BrowserRouter>
+);
 
 export default App;
