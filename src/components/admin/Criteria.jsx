@@ -1,197 +1,151 @@
-import React, { useState } from "react";
-import FormGroup from "@mui/material/FormGroup";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Switch from "@mui/material/Switch";
-import Button from "@mui/material/Button";
-import { styled } from "@mui/material/styles";
-import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
-import TableCell from "@mui/material/TableCell";
-import TableHead from "@mui/material/TableHead";
-import TableRow from "@mui/material/TableRow";
-import Paper from "@mui/material/Paper";
-import Stack from "@mui/material/Stack";
-import Checkbox from "@mui/material/Checkbox";
-import "./Criteria.css";
+import React, { useState, useEffect } from 'react';
+import { GrPlug } from 'react-icons/gr';
+import SearchBar from './SearchBar';
 
-const CustomButton = styled(Button)(({ theme }) => ({
-  borderRadius: 8,
-  backgroundColor: theme.palette.primary.main,
-  width: 330,
-  color: theme.palette.primary.contrastText,
-  margin: "0 5px",
-  "&:hover": {
-    backgroundColor: theme.palette.primary.dark,
-  },
-}));
+    
+const Criteria = ({ onSelect, department, searchTerm, sortByUsage }) => {
+    const [criteriaData, setCriteriaData] = useState([]);
+    const [selectedId, setSelectedId] = useState(null);
+    const [plugMessage, setPlugMessage] = useState('');
+    const [sortedCriteria, setSortedCriteria] = useState([]);
+    const [showAllCriteria, setShowAllCriteria] = useState(true);
 
-const rows = [
-  { checked: false, Status: "programming", Current: 8 },
-  { checked: false, Status: "communication", Current: 4 },
-  { checked: false, Status: "SQL", Current: 3 },
-  { checked: false, Status: "leadership", Current: 8 },
-];
+    // useEffect(() => {
+    //     console.log("Selected Department in EmployeeCriteria:", department);
+    //     console.log("Search Value in EmployeeCriteria:", searchTerm);
+    //     console.log("Most Used Clicked in EmployeeCriteria:", sortByUsage);
+    // }, [department, searchTerm, sortByUsage])
 
-export default function Criteria({ onCriteriaChange }) {
-  const [showList, setShowList] = useState(false);
-  const [showQuickCriteria, setShowQuickCriteria] = useState(false);
-  const [checkedState, setCheckedState] = useState({
-    programming: false,
-    communication: false,
-    SQL: false,
-    leadership: false,
-  });
+    useEffect(() => {
+        fetchData();
+    }, [department, showAllCriteria]);
 
-  const handleToggle = () => {
-    setShowList(!showList);
-  };
+    useEffect(() => {
+        if (sortByUsage) {
+            const criteriaUsage = JSON.parse(sessionStorage.getItem('criteriaUsage')) || {};
 
-  const handleCheckboxChange = (event, index) => {
-    const { checked } = event.target;
-    const updatedRows = [...rows];
-    updatedRows[index].checked = checked;
-    setCheckedState({ ...checkedState, [updatedRows[index].Status]: checked });
-  };
+            const sorted = Object.values(criteriaUsage)
+                .sort((a, b) => b.count - a.count)
+                .map(entry => entry.criteria);
 
-  const handleDoneClick = () => {
-    setShowQuickCriteria(!showQuickCriteria);
-    const selectedCriteria = rows
-      .filter((row) => row.checked)
-      .map((row) => row.Status);
-    console.log("Selected criteria:", selectedCriteria);
-    onCriteriaChange(selectedCriteria);
-  };
+            setSortedCriteria(sorted);
+        } else {
+            fetchData();
+        }
+    }, [department, sortByUsage, showAllCriteria]);
 
-  const toggleQuickCriteria = () => {
-    setShowQuickCriteria(!showQuickCriteria);
-  };
+    const fetchData = async () => {
+        try {
+            const url = department && department !== 'All'
+                ? `http://localhost:8000/criteriafilter?department=${department}`
+                : 'http://localhost:8000/criteriafilter';
+            const response = await fetch(url);
+            const data = await response.json();
+            if (Array.isArray(data)) {
+                setCriteriaData(data);
+            } else {
+                console.error('Expected an array but got:', data);
+                setCriteriaData([]);
+            }
+        } catch (error) {
+            console.error('Error fetching data:', error);
+            setCriteriaData([]);
+        }
+    };
 
-  return (
-    <div className="criteria-container">
-      {showQuickCriteria && (
-        <div className="quick-criteria-overlay">
-          <div className="quick-criteria-content">
-            <div style={{ display: "flex", justifyContent: "flex-end" }}>
-              <Button
-                variant="outlined"
-                onClick={toggleQuickCriteria}
-                sx={{ color: "#FFFFFF" }}
-              >
-                Cancel
-              </Button>
+    const handleItemClick = (criteria) => {
+        setSelectedId(criteria.id);
+        onSelect(criteria);
+    };
+
+    const handlePlugClick = (event, criteria) => {
+        event.stopPropagation();
+        setPlugMessage(`Plug in for criteria ID: ${criteria.id}`);
+
+        let criteriaUsage = JSON.parse(sessionStorage.getItem('criteriaUsage')) || {};
+
+        if (criteriaUsage[criteria.id]) {
+            criteriaUsage[criteria.id].count += 1;
+        } else {
+            criteriaUsage[criteria.id] = { count: 1, criteria };
+        }
+
+        sessionStorage.setItem('criteriaUsage', JSON.stringify(criteriaUsage));
+        sessionStorage.setItem('recentCriteria', JSON.stringify(criteria));
+
+        setTimeout(() => setPlugMessage(''), 2000);
+    };
+
+    useEffect(() => {
+        if (searchTerm.trim() === '') {
+            setShowAllCriteria(true);
+        } else {
+            try {
+                const regex = new RegExp(searchTerm.trim(), 'i');
+                const filteredCriteria = criteriaData.filter(criteria => regex.test(criteria.id.trim()));
+                setCriteriaData(filteredCriteria);
+                setShowAllCriteria(false);
+            } catch (e) {
+                console.error("Invalid regex pattern", e);
+                setCriteriaData([]); 
+                setShowAllCriteria(false);
+            }
+        }
+    }, [searchTerm]);
+    
+    const handleShowAllCriteria = () => {
+        setShowAllCriteria(true);
+        fetchData();
+    };
+
+    return (
+        <div style={{ width: '100%', padding: '20px' }}>
+            {plugMessage && <p>{plugMessage}</p>}
+
+            <div style={{ maxHeight: '500px', overflowY: 'auto' }}>
+                <table style={{ width: '100%', borderCollapse: 'separate', borderSpacing: '0 10px' }}>
+                    <thead style={{ position: 'sticky', top: 0, backgroundColor: '#fff', zIndex: 1 }}>
+                        <tr style={{ borderBottom: '2px solid #ddd' }}>
+                            <th style={{ textAlign: 'left', padding: '10px', width: '10%' }}>Id</th>
+                            <th style={{ textAlign: 'left', padding: '10px', width: '50%' }}>Name</th>
+                            <th style={{ textAlign: 'left', padding: '10px', width: '25%' }}>Department</th>
+                            <th style={{ textAlign: 'left', padding: '10px', width: '10%' }}></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {(showAllCriteria ? (sortByUsage ? sortedCriteria : criteriaData) : criteriaData).length > 0 ? (
+                            (showAllCriteria ? (sortByUsage ? sortedCriteria : criteriaData) : criteriaData).map((criteria, index) => (
+                                <tr
+                                    key={index}
+                                    style={criteria.id === selectedId ? { backgroundColor: 'rgb(37, 150, 190)', color: 'white' } : { borderBottom: '1px solid #ddd', backgroundColor: 'rgba(37, 150, 190, 0.1)' }}
+                                    onClick={() => handleItemClick(criteria)}
+                                >
+                                    <td style={{ textAlign: 'left', padding: '20px', borderTopLeftRadius: '10px', borderBottomLeftRadius: '10px' }}>
+                                        {criteria.id}
+                                    </td>
+                                    <td style={{ textAlign: 'left', padding: '20px' }}>{criteria.name}</td>
+                                    <td style={{ textAlign: 'left', padding: '20px' }}>{criteria.department}</td>
+                                    <td style={{ textAlign: 'left', padding: '20px', borderTopRightRadius: '10px', borderBottomRightRadius: '10px', cursor: 'pointer' }}>
+                                        {!sortByUsage && (
+                                            <span onClick={(event) => handlePlugClick(event, criteria)}><GrPlug /></span>
+                                        )}
+                                    </td>
+                                </tr>
+                            ))
+                        ) : (
+                            <tr>
+                                <td colSpan="4" style={{ padding: '8px', textAlign: 'center' }}>No criteria available for the selected department</td>
+                            </tr>
+                        )}
+                    </tbody>
+                </table>
             </div>
-            <h3 style={{ textAlign: "left" }} className="whiteText">
-              Select skill
-            </h3>
 
-            <Table
-              aria-label="simple table"
-              component={Paper}
-              sx={{
-                backgroundColor: "#007791",
-                borderRadius: 4,
-                padding: "10px",
-                width: "800px",
-              }}
-            >
-              <TableBody>
-                {rows.map((row, index) => (
-                  <TableRow key={index}>
-                    <TableCell>
-                      <FormControlLabel
-                        control={
-                          <Checkbox
-                            checked={row.checked}
-                            onChange={(event) =>
-                              handleCheckboxChange(event, index)
-                            }
-                          />
-                        }
-                        label={row.Status}
-                        className="whiteText"
-                      />
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-            <br />
-            <div style={{ display: "flex", justifyContent: "flex-end" }}>
-              <Button
-                variant="contained"
-                onClick={handleDoneClick}
-                sx={{ backgroundColor: "#007791" }}
-              >
-                Done
-              </Button>
-            </div>
-          </div>
+            {!showAllCriteria && (
+                <button onClick={handleShowAllCriteria}>Show All Criteria</button>
+            )}
         </div>
-      )}
+    );
+};
 
-      <FormGroup>
-        <div class style={{ display: "flex", alignItems: "center" }}>
-          <span style={{ color: "black", marginRight: "10px" }}>Criteria</span>
-          <FormControlLabel
-            control={<Switch checked={showList} onChange={handleToggle} />}
-          />
-        </div>
-
-        {showList && (
-          <Table
-            aria-label="simple table"
-            component={Paper}
-            sx={{ backgroundColor: "#007791" }}
-          >
-            <TableHead>
-              <TableRow>
-                <TableCell></TableCell>
-                <TableCell align="left" className="whiteText">
-                  Skills
-                </TableCell>
-                <TableCell align="left" className="whiteText">
-                  Current
-                </TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {rows.map((row, index) => (
-                <TableRow key={index} sx={{ height: "5px" }}>
-                  <TableCell component="th" scope="row" className="whiteText">
-                    <Checkbox
-                      checked={row.checked}
-                      onChange={(event) => handleCheckboxChange(event, index)}
-                    />
-                  </TableCell>
-                  <TableCell
-                    align="left"
-                    className="whiteText" 
-                    sx={{ height: "5px" }}
-                  >
-                    {row.Status}
-                  </TableCell>
-                  <TableCell align="right" className="whiteText">
-                    {row.Current}
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        )}
-
-        <br />
-        <Stack direction="column" spacing={2}>
-          <CustomButton
-            onClick={toggleQuickCriteria}
-            sx={{ backgroundColor: "#007791" }}
-          >
-            Quick Criteria
-          </CustomButton>
-          <CustomButton sx={{ backgroundColor: "#007791" }}>
-            Browse Criteria
-          </CustomButton>
-        </Stack>
-      </FormGroup>
-    </div>
-  );
-}
+export default Criteria;
