@@ -13,16 +13,15 @@ import Otp_verify from './pages/Login/Otp_verify.jsx'
 import Otp from './pages/Login/Otp.jsx'
 import React, { useState } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import ProtectedRoute from './components/common/ProtectedRoute.jsx' 
-import Authenticate from './pages/Login/test.jsx';
-import { AuthProvider } from './components/common/AuthContext.jsx' 
+
+
 
 
 
 
 function App() {
   const [formData, setFormData] = useState({});
-  //let session_key =JSON.parse(sessionStorage.getItem('requested'));
+  
    
   return (
     <AuthProvider>
@@ -37,15 +36,10 @@ function App() {
             <Route path="/Otp" element={<Otp />} />
             <Route path="/employee_Notification" element={<Notification />} />
 
-            <Route element={<ProtectedRoute allowedRoles={['user']} />}>
-              <Route path="/employee_Personality" element={<PersonalityPage />} />
-              <Route path="/Assessment" element={<AssessmentPage />} />
-              <Route path="/employee_Home" element={<HomePage />} />
-            </Route>
-
-            {/* <Route element={<ProtectedRoute allowedRoles={['admin']} />}>
-              <Route path="/Dashboard" element={<Dashboard />} />
-            </Route> */}
+            <Route path="/employee_Personality" element={<PersonalityPage />} />
+            <Route path="/Assessment" element={<AssessmentPage />} />
+            <Route path="/employee_Home" element={<HomePage />} />
+        
           </Routes>
         </div>
       </BrowserRouter>
