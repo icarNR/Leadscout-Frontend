@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { useNavigate } from 'react-router-dom';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -20,6 +21,8 @@ const appbarStyles = {
 
 export default function MenuAppBar({percentage}) {
   const [anchorEl, setAnchorEl] = React.useState(null);
+  const navigate = useNavigate();
+
 
   const handleMenu = (event) => {
     setAnchorEl(event.currentTarget);
@@ -28,6 +31,18 @@ export default function MenuAppBar({percentage}) {
   const handleClose = () => {
     setAnchorEl(null);
   };
+
+  const handleLogout = () => {
+    // Clear tokens from localStorage
+    localStorage.removeItem('access_token');
+    localStorage.removeItem('refresh_token');
+    localStorage.removeItem('token_type');
+    
+    // Redirect to login page
+    navigate('/LoginForm');
+  };
+
+  
 
   return (
     <Box sx={{ flexGrow: 1}}>
@@ -74,6 +89,7 @@ export default function MenuAppBar({percentage}) {
               >
                 <MenuItem onClick={handleClose}>Profile</MenuItem>
                 <MenuItem onClick={handleClose}>My account</MenuItem>
+                <MenuItem onClick={handleLogout}>Logout</MenuItem>
               </Menu>
             </Box>
           </Toolbar>
@@ -98,6 +114,16 @@ export function MenuAppBarWithoutProgressBar() {
   const handleClose = () => {
     setAnchorEl(null);
   };
+
+  const handleLogout = () => {
+    // Clear tokens from localStorage
+    localStorage.removeItem('access_token');
+    localStorage.removeItem('refresh_token');
+    localStorage.removeItem('token_type');
+    
+    // Redirect to login page
+    navigate('/LoginForm');
+  }
 
   return (
     <Box sx={{ flexGrow: 1 }}>
@@ -143,6 +169,7 @@ export function MenuAppBarWithoutProgressBar() {
             >
               <MenuItem onClick={handleClose}>Profile</MenuItem>
               <MenuItem onClick={handleClose}>My account</MenuItem>
+              <MenuItem onClick={handleLogout}>Logout</MenuItem>
             </Menu>
           </div>
         </Toolbar>
