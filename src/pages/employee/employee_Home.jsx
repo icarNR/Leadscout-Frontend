@@ -1,8 +1,4 @@
 import { useState, useEffect } from 'react';
-import { styled } from '@mui/material/styles';
-import Box from '@mui/material/Box';
-import Paper from '@mui/material/Paper';
-import Grid from '@mui/material/Grid';
 import InteractiveList from '../../components/employee/Supervisees';
 import CustomButton from '../../components/common/Button';
 import Typography from '@mui/material/Typography';
@@ -21,16 +17,19 @@ const HomePage = () => {
 
   const [buttonText, setButtonText] = useState('   ');
   const [buttonColor, setButtonColor] = useState('primary');
+
   const [requested, setRequested] = useState(null);
   const [attempts, setAttempts] = useState(1);
   const [allowed, setAllowed] = useState(false);
   const [name, setName] = useState("Nisal Ravindu");
-
-  const accessToken = sessionStorage.getItem('access_token');
-
+  
+  const accessToken = localStorage.getItem('access_token');
+  const userId = localStorage.getItem('user_id');
+  
+  
   useEffect(() => {
-    //console.log(JSON.parse(sessionStorage.getItem('requested')))
-    console.log(" guckme")
+    console.log(`local Allowed :${JSON.parse(localStorage.getItem('allowed_assess'))}`)
+    console.log(`local Requested :${JSON.parse(localStorage.getItem('requested'))}`)
     if (requested && !allowed){ //check id already requested and if its allowed
       // Change button text and color
       setButtonText('Requested');
@@ -38,22 +37,39 @@ const HomePage = () => {
      }
     else if(requested==false || allowed){
       setButtonText('Attempt');
-      console.log(buttonText)
       setButtonColor('primary');
-      console.log(buttonColor)
     }
   },[allowed, requested]); 
 
+
   useEffect(() => {
     sessionStorage.clear()//--------------------------------
-    let userId="001"//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<   user_id
-    sessionStorage.setItem('user_id', userId);
-    sessionStorage.setItem('assessed_id', userId);
+    sessionStorage.setItem('assessed_id', userId);    
+    //--------------------------------------------------------
+    fetch(`${server}/protected-route`, {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${accessToken}`
+      }
+    })
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      return response.json();
+    })
+    .then(data => {
+      console.log('Protected Data:', data);
+    })
+    .catch(error => {
+      console.error('Error:', error);
+    });
 
-    if(sessionStorage.getItem('requested')){
+    //----------------------------------------------
+    if(localStorage.getItem('requested')){
       console.log(' sesh is here')
-      setRequested(JSON.parse(sessionStorage.getItem('requested')));
-      setAllowed(JSON.parse(sessionStorage.getItem('allowed')));
+      setRequested(JSON.parse(localStorage.getItem('requested')));
+      setAllowed(JSON.parse(localStorage.getItem('allowed_assess')));
     }
     
       // Fetch the number of attempts, requeested and allowed for the current user
@@ -70,23 +86,16 @@ const HomePage = () => {
         setRequested(data.requested)
         setAttempts(data.attempts)
         setAllowed(data.allowed)  
-        if (data.requested !== undefined) {
-          sessionStorage.setItem('requested', data.requested);
-        }
-        if (data.attempts !== undefined) {
-            sessionStorage.setItem('attempts', data.attempts);
-        }
-        if (data.allowed !== undefined) {
-            sessionStorage.setItem('allowed', data.allowed);
-        }
-        
-        console.log("fetched")}
-        //console.log(data.requested)
+          console.log(`fetched Requested :${data.requested}`)
+          localStorage.setItem('requested', data.requested);
+    
+          localStorage.setItem('attempts', data.attempts);
 
+          console.log(`fetched Allowed :${data.allowed}`)
+          localStorage.setItem('allowed', data.allowed);
+        }
     })
     .catch(error => console.error('Error:', error));
-    
-  
   }, []);  // The empty array means this useEffect will run once when the component mounts
 
   const handleButtonClick = () => {
@@ -97,10 +106,10 @@ const HomePage = () => {
         window.location.href = "/Assessment";}
     else if(requested==false){
         // Set the `requested` flag to `true` for the current user 
-        fetch(`${server}/api/users/${sessionStorage.getItem('user_id')}/request`, { method: 'POST' })
+        fetch(`${server}/api/users/${userId}/request`, { method: 'POST' })
         .then(() => {
           setRequested(true)
-          sessionStorage.setItem('requested', true);
+          localStorage.setItem('requested', true);
         });
     
         // Add to the notification dictionary for their supervisor
@@ -110,7 +119,7 @@ const HomePage = () => {
               'Content-Type': 'application/json'
           },
           body: JSON.stringify({
-              userID: sessionStorage.getItem('user_id'),
+              userID: localStorage.getItem('user_id'),
               ntype: 'assess_req'
           })
           })
