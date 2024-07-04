@@ -94,7 +94,7 @@ export default function MenuAppBar({percentage}) {
           </Toolbar>
           <Box className="w-full fixed top-16 flex justify-center"> 
             <div className="w-full max-w-md md:max-w-lg lg:max-w-xl pl-[20px] sm:pl-0 sm:ml-[150px]">
-               <CustomizedProgressBars progress={percentage} txtcolor={'#71EFD8'} />
+              <CustomizedProgressBars progress={percentage} txtcolor={'#71EFD8'} />
             </div>
           </Box>
         </Box>
@@ -104,6 +104,7 @@ export default function MenuAppBar({percentage}) {
 
 export function MenuAppBarWithoutProgressBar() {
   const [anchorEl, setAnchorEl] = React.useState(null);
+  const navigate = useNavigate();
 
   const handleMenu = (event) => {
     setAnchorEl(event.currentTarget);

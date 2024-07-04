@@ -59,8 +59,9 @@ import Notification from './pages/employee/employee_Notification.jsx';
 import LoginForm from './pages/Login/LoginForm.jsx';
 import RegistrationForm from './pages/Login/RegistrationForm.jsx'
 import RegistrationForm2 from './pages/Login/RegistrationForm2.jsx'
-import Otp_verify from './pages/Login/Otp_verify.jsx'
-import Otp from './pages/Login/Otp.jsx'
+import Otp_verify from './pages/Login/Otp_verify.jsx' 
+import RequestPasswordReset from './pages/Login/RequestPasswordReset.jsx'
+import ResetPassword from './pages/Login/ResetPassword.jsx';
 import React, { useState } from 'react';
 import { createTheme } from '@mui/material';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
@@ -81,8 +82,10 @@ function App(){
           <Route path="/employee_Notification" element={<Notification />} />
           <Route path="/Assessment" element={<AssessmentPage />} />
           <Route path="/employee_Home" element={<HomePage />} />
-          <Route path="/Otp_verify" element={<Otp_verify />} />
-          <Route path="/Otp" element={<Otp />} />
+          <Route path="/Otp_verify" element={<Otp_verify formData={formData} />} />
+          <Route path= "/RequestPasswordReset" element={<RequestPasswordReset />} />
+          <Route path="/ResetPassword" element={<ResetPassword />} />
+          
           
         </Routes>
       </div>

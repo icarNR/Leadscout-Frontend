@@ -102,7 +102,7 @@ function LoginForm() {
                 <Button onClick={handleLogin} text="Login" className="w-full py-2 mb-4" />
             </div>
             <div className="text-sm mt-4 text-center">
-                <Link to="/otp" className="text-blue-500 underline">Forgot Password?</Link>
+                <Link to="/RequestPasswordReset" className="text-blue-500 underline">Forgot Password?</Link>
             </div>
             <p className="text-sm mt-4 text-center">
                 Don't have an account? <Link to="/RegistrationForm" className="text-blue-500 underline">Register now</Link>

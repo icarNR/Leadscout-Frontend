@@ -23,12 +23,46 @@ function RightPart({ setFormData }) {
     return Object.keys(tempErrors).length === 0;
   };
 
-  const handleNext = () => {
+  // const handleNext = () => {
+  //   if (validate()) {
+  //     setFormData({ name, email });
+  //     navigate('/RegistrationForm2');
+  //   }
+  // };
+
+
+  const handleNext = async () => {
     if (validate()) {
-      setFormData({ name, email });
-      navigate('/RegistrationForm2');
+      try {
+        const response = await fetch('http://127.0.0.1:800/sign_up1', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            name: name,
+            email: email,
+          }),
+        });
+  
+        if (response.ok) {
+          const data = await response.json();
+          if (data.status === "success") {
+            setFormData({ name, email });
+            navigate('/Otp_verify');
+          } else {
+            alert(data.message); // Display error message from the backend
+          }
+        } else {
+          alert("Failed to send OTP"); // Handle failed request
+        }
+      } catch (error) {
+        console.error("Error:", error);
+        alert("An error occurred while sending OTP");
+      }
     }
   };
+  
 
   return (
     <div className="flex flex-col items-center justify-center w-full md:w-1/2 p-8">
