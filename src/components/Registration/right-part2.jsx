@@ -28,7 +28,7 @@ const handleRegister = async () => {
     
     if (validate()) {
         try {
-            const response = await fetch('http://127.0.0.1:800/sign_up1', {
+            const response = await fetch('http://127.0.0.1:800/set-password-and-sign-up', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
