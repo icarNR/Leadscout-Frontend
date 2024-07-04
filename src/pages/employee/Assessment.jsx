@@ -9,9 +9,9 @@ function AssessmentPage() {
   
   const server = import.meta.env.VITE_REACT_APP_SERVER_URL;
 
-  const [attempts, setAttempts] = useState(parseInt(sessionStorage.getItem('attempts'), 10));
-  const [allowed, setAllowed] = useState(JSON.parse(sessionStorage.getItem('allowed')));
-  const user_id= sessionStorage.getItem('user_id'); 
+  const [attempts, setAttempts] = useState(parseInt(localStorage.getItem('attempts'), 10));
+  const [allowed, setAllowed] = useState(JSON.parse(localStorage.getItem('allowed')));
+  const user_id= localStorage.getItem('user_id'); 
   const assessed_id=sessionStorage.getItem('assessed_id');
   // Total number of questions
   const totalQuestions = 44;
@@ -26,7 +26,7 @@ function AssessmentPage() {
       navigate('/employee_home'); // Redirect to the desired page
     }
     else{
-      fetch(`${server}/api/users/${sessionStorage.getItem('user_id')}/attempts`)
+      fetch(`${server}/api/users/${user_id}/attempts`)
         .then(response => response.json())
         .then(data => {
           console.log(data)
@@ -92,13 +92,7 @@ if (user_id == assessed_id) {
     `${pronoun} are sophisticated in art, music, or literature`
   ];
   
-  const [results, setResults] = useState({
-    Extraversion: 0,
-    Agreeableness: 0,
-    Conscientiousness: 0,
-    Neuroticism: 0,
-    Openness: 0
-  });
+
   // State for current page
   const [currentPage, setCurrentPage] = useState(1);
   // State to keep track of selected options for each question
@@ -159,7 +153,10 @@ const handleSubmit = async () => {
       body: JSON.stringify(answersData)
     })
     .then(response => response.json())
-    .then(data => setResults(data))
+    .then(data =>
+      sessionStorage.setItem('results', JSON.stringify(data))
+
+      )
 
     //add to admin notifications
     fetch(`${server}/add_admin_notification`, {
@@ -192,7 +189,8 @@ const handleSubmit = async () => {
       .then(response => response.json())
       .then(data => console.log(data))
       .catch(error => console.error('Error:', error));
-
+      
+      sessionStorage.setItem('assessed_id', userId);    
       window.location.href = "/employee_Personality";    
     }  
     // Add to the notification dictionary for the employee
@@ -211,8 +209,9 @@ const handleSubmit = async () => {
       .then(response => response.json())
       .then(data => console.log(data))
       .catch(error => console.error('Error:', error));
-
-      window.location.href = "/";
+      
+      sessionStorage.setItem('assessed_id', userId);    
+      ///window.location.href = "/employee_home";
     }
 
   } catch (error) {

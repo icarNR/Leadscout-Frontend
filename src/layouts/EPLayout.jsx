@@ -18,7 +18,7 @@ import ClippedDrawer from "../components/employee/employee_sideNavbar";
 
 const icons = [<GoHome />, <PiMaskHappy />, <HiOutlineBellAlert />];
 
-const PageLayout = ({content,pagename,percentage}) => {
+const PageLayout = ({content,pagename}) => {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh',overflowY: 'Hidden' }}>
       {/* Fixed header */}
