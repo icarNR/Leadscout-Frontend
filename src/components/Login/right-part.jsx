@@ -40,9 +40,9 @@ function LoginForm() {
                     
                 const { access_token, refresh_token, token_type, role } = response.data;
 
-                sessionStorage.setItem('access_token', access_token);
-                sessionStorage.setItem('refresh_token', refresh_token);
-                sessionStorage.setItem('token_type', token_type);
+                localStorage.setItem('access_token', access_token);
+                localStorage.setItem('refresh_token', refresh_token);
+                localStorage.setItem('token_type', token_type);
 
                 if (rememberMe) {
                     localStorage.setItem('email', email,'access_token',access_token,'refresh_token',refresh_token,'token_type',token_type);
@@ -102,7 +102,7 @@ function LoginForm() {
                 <Button onClick={handleLogin} text="Login" className="w-full py-2 mb-4" />
             </div>
             <div className="text-sm mt-4 text-center">
-                <Link to="/otp" className="text-blue-500 underline">Forgot Password?</Link>
+                <Link to="/RequestPasswordReset" className="text-blue-500 underline">Forgot Password?</Link>
             </div>
             <p className="text-sm mt-4 text-center">
                 Don't have an account? <Link to="/RegistrationForm" className="text-blue-500 underline">Register now</Link>
