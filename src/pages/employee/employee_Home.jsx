@@ -29,19 +29,14 @@ const HomePage = () => {
   const navigate = useNavigate();
 
   
-  
+  // Change button text and color
   useEffect(() => {
-    console.log(`local Allowed :${JSON.parse(localStorage.getItem('allowed_assess'))}`)
-    console.log(`local Requested :${JSON.parse(localStorage.getItem('requested'))}`)
-    if (requested && !allowed){ //check id already requested and if its allowed
-      // Change button text and color
+    if (requested && !allowed){ 
       setButtonText('Requested');
-      setButtonColor('secondary');
-     }
+      setButtonColor('secondary');}
     else if(requested==false || allowed){
       setButtonText('Attempt');
-      setButtonColor('primary');
-    }
+      setButtonColor('primary');}
   },[allowed, requested]); 
 
 
@@ -66,14 +61,8 @@ const HomePage = () => {
     .catch(error => {
       console.error('Error:', error);
     });
-
     //----------------------------------------------
-    if(localStorage.getItem('requested')){
-      console.log(' sesh is here')
-      setRequested(JSON.parse(localStorage.getItem('requested')));
-      setAllowed(JSON.parse(localStorage.getItem('allowed_assess')));
-    }
-    
+
     // Fetch the number of attempts, requeested and allowed for the current user
     fetch(`${server}/api/users/${userId}/attempts`, {
         method: 'GET',
@@ -97,14 +86,10 @@ const HomePage = () => {
         console.log(`fetched Name :${data.name}`)
         console.log(`fetched Id :${data.user_id}`)
         console.log(`fetched Allowed :${data.allowed}`)
-        
-        //localStorage.setItem('requested', data.requested);
-        //localStorage.setItem('attempts', data.attempts);
-        //localStorage.setItem('allowed', data.allowed);
         }
     })
     .catch(error => console.error('Error:', error));
-  }, []);  // The empty array means this useEffect will run once when the component mounts
+  }, []);  
 
   const handleButtonClick = () => {
  //change this-----------------------------------------------------------------------
@@ -113,17 +98,22 @@ const HomePage = () => {
       
     if(requested==false){
         // Set the `requested` flag to `true` for the current user 
-        fetch(`${server}/api/users/${userId}/request`, { method: 'POST' })
+        fetch(`${server}/api/users/${userId}/request`, { 
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${accessToken}`
+          } })
         .then(() => {
           setRequested(true)
-          //localStorage.setItem('requested', true);
         });
     
         // Add to the notification dictionary for their supervisor
         fetch(`${server}/add_supervisor_notification`, {
           method: 'POST',
           headers: {
-              'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${accessToken}`
           },
           body: JSON.stringify({
               userID: userId,

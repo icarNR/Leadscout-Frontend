@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import CircularProgress from "@mui/material/CircularProgress";
 import { styled } from "@mui/system";
-//import "./profile.css";
+import "./profile.css";
 import CloseIcon from "@mui/icons-material/Close";
 import Grid from "@mui/material/Grid";
 

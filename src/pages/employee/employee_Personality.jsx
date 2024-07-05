@@ -5,10 +5,11 @@ import Results from '../../components/employee/quizresults';
 import { Typography } from '@mui/material';
 import { VscArrowLeft } from "react-icons/vsc";
 import { VscArrowRight } from "react-icons/vsc";
-import image1 from '../../assets/Scene-1-16-1024x575.jpg'; // Adjust the file extension based on the actual image type
-import axios from 'axios'; // Make sure to install this package
+import image1 from '../../assets/Scene-1-16-1024x575.jpg'; 
+import axios from 'axios'; 
 import Alert from '@mui/material/Alert';
 import { useSwipeable } from 'react-swipeable';
+
 const data = [
   { imageSrc: image1, bodyText1: '...', bodyText2: '...' },
   { imageSrc: 'image2.jpg', bodyText1: '...', bodyText2: '...'  },
@@ -39,8 +40,14 @@ const Div1 = ({ imageSrc, bodyText1, bodyText2 }) => (
 
 const PersonalityPage = () => {
 
-const server = import.meta.env.VITE_REACT_APP_SERVER_URL;
+const accessToken = localStorage.getItem('access_token');
 
+const server = import.meta.env.VITE_REACT_APP_SERVER_URL;
+const [selfAssessment,setselfAssessment] = useState(true);
+const [supervisorAssessment,setsupervisorAssessment] = useState(true);
+const [currentIndex, setCuvrrentIndex] = useState(0);
+
+const [userId, setUserId] = useState("001");//------------------------
   
 const [results, setResults] = useState({
     Extraversion: 0,
@@ -57,29 +64,27 @@ const [results, setResults] = useState({
     Openness: 0
   });
 
-  const [selfAssessment,setselfAssessment] = useState(true);
-  const [supervisorAssessment,setsupervisorAssessment] = useState(true);
-  const [currentIndex, setCurrentIndex] = useState(0);
-  
-  const userId = localStorage.getItem('user_id'); 
-  const storedResults = JSON.parse(sessionStorage.getItem('results'));
-  const storedAverages = JSON.parse(sessionStorage.getItem('averages'));
-
   useEffect(() => {
-
-    if(storedResults && storedAverages){
-      console.log("storedResults");
-
-      console.log(storedResults);
-      console.log(storedAverages);
-      setAverages(storedAverages);
-      setResults(storedResults); }
-
     console.log("fetching");
     Promise.all([
-        fetch(`${server}/api/assessment_status/${userId}`),
-        fetch(`${server}/send_results/${userId}`),
-        fetch(`${server}/send_average_results`)
+        fetch(`${server}/api/assessment_status/${userId}`,{
+          method: 'GET',
+          headers: {
+            'Authorization': `Bearer ${accessToken}`
+          }
+        }),
+        fetch(`${server}/send_results/${userId}`,{
+          method: 'GET',
+          headers: {
+            'Authorization': `Bearer ${accessToken}`
+          }
+        }),
+        fetch(`${server}/send_average_results`,{
+          method: 'GET',
+          headers: {
+            'Authorization': `Bearer ${accessToken}`
+          }
+        })
       ])
       .then(async ([res1, res2, res3]) => {
         console.log("fetched");
@@ -87,8 +92,6 @@ const [results, setResults] = useState({
         const data2 = await res2.json();
         const data3 = await res3.json();
         
-
-    
         setselfAssessment(data1.self_assessment);
         //sessionStorage.setItem('self_assessment',data1.self_assessment);
         setsupervisorAssessment(data1.supervisor_assessment);

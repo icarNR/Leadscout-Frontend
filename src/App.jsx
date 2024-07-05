@@ -33,7 +33,6 @@ function App() {
             <Route path="/RegistrationForm" element={<RegistrationForm setFormData={setFormData} />} />
             <Route path="/RegistrationForm2" element={<RegistrationForm2 formData={formData} />} />
             <Route path="/Otp_verify" element={<Otp_verify formData={formData} />} />
-            <Route path="/Otp" element={<Otp />} />
             <Route path="/employee_Notification" element={<Notification />} />
             <Route path= "/RequestPasswordReset" element={<RequestPasswordReset />} />
             <Route path="/ResetPassword" element={<ResetPassword />} />

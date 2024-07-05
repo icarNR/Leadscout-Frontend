@@ -22,7 +22,7 @@ const Authenticate = () => {
   useEffect(() => {
 
     if(isAuthenticated){
-      localStorage.setItem('access_token', "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJnZWV0aDk4MTJAZ21haWwuY29tIiwicm9sZSI6InVzZXIiLCJ1c2VyX2lkIjoiMDExIiwiZXhwIjoxNzE5OTIwODI1fQ.JgMCkI3VsYrow5ZkvgqnoNGAKer2tGICwZQxXBZltlo");
+      localStorage.setItem('access_token', "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJnZWV0aDk4MTJAZ21haWwuY29tIiwicm9sZSI6InVzZXIiLCJ1c2VyX2lkIjoiMDExIiwiZXhwIjoxNzIwMTcxOTIyfQ.t9yLEsWBYViz-hz6N4mdfRS8aGcLamtcgINN7dh-EJU");
       let accessToken =localStorage.getItem('access_token');
       
       fetch(`${server}/${email}/user`, {
