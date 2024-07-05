@@ -1,8 +1,4 @@
 import { useState, useEffect } from 'react';
-import { styled } from '@mui/material/styles';
-import Box from '@mui/material/Box';
-import Paper from '@mui/material/Paper';
-import Grid from '@mui/material/Grid';
 import InteractiveList from '../../components/employee/Supervisees';
 import CustomButton from '../../components/common/Button';
 import Typography from '@mui/material/Typography';
@@ -11,13 +7,7 @@ import { deepOrange, deepPurple } from '@mui/material/colors';
 import PageLayout from '../../layouts/EPLayout';
 import image1 from '../../assets/employee_home.jpeg'; // Adjust the file extension based on the actual image type
 //import { userStore } from '../../store.jsx'// Path to your store
-
-const WelcomeText = styled(Typography)(({ theme }) => ({
-  marginBottom: theme.spacing(2),
-  font: 'Roboto',
-  fontWeight: 'bold',
-  fontSize: 50
-}));
+import { useNavigate } from 'react-router-dom';
 
 
 const HomePage = () => {
@@ -26,43 +16,54 @@ const HomePage = () => {
 
   const [buttonText, setButtonText] = useState('   ');
   const [buttonColor, setButtonColor] = useState('primary');
+
   const [requested, setRequested] = useState(null);
   const [attempts, setAttempts] = useState(1);
   const [allowed, setAllowed] = useState(false);
-  const [name, setName] = useState("Nisal Ravindu");
+  const [assessedId, setAssessedId] = useState("");
 
-  const accessToken = sessionStorage.getItem('access_token');
-
-  useEffect(() => {
-    //console.log(JSON.parse(sessionStorage.getItem('requested')))
-    console.log(requested)
-    if (requested && !allowed){ //check id already requested and if its allowed
-      // Change button text and color
-      setButtonText('Requested');
-      setButtonColor('secondary');
-     }
-    else if(requested==false){
-      setButtonText('Attempt');
-      setButtonColor('primary');
-    }
-  },[allowed, requested]); 
+  const [name, setName] = useState("");
+  const [userId, setUserId] = useState("001");//------------------------
   
-  useEffect(() => {
-    //sessionStorage.clear()//--------------------------------
-    let userId="001"//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<   user_id
-    sessionStorage.setItem('user_id', userId);
-    sessionStorage.setItem('assessed_id', userId);
+  const accessToken = localStorage.getItem('access_token');
+  const navigate = useNavigate();
 
-    if(sessionStorage.getItem('requested')){
-      console.log(' sesh is here')
-      setRequested(JSON.parse(sessionStorage.getItem('requested')));
-      setAllowed(JSON.parse(sessionStorage.getItem('allowed')));
-      console.log(JSON.parse(sessionStorage.getItem('requested')))
-      //console.log(JSON.parse(sessionStorage.getItem('allowed')))
-      // console.log(requested)
-    }
-    
-      // Fetch the number of attempts, requeested and allowed for the current user
+  
+  // Change button text and color
+  useEffect(() => {
+    if (requested && !allowed){ 
+      setButtonText('Requested');
+      setButtonColor('secondary');}
+    else if(requested==false || allowed){
+      setButtonText('Attempt');
+      setButtonColor('primary');}
+  },[allowed, requested]); 
+
+
+  useEffect(() => {
+    sessionStorage.clear()//--------------------------------
+    //--------------------------------------------------------
+    fetch(`${server}/protected-route`, {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${accessToken}`
+      }
+    })
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      return response.json();
+    })
+    .then(data => {
+      console.log('Protected Data:', data);
+    })
+    .catch(error => {
+      console.error('Error:', error);
+    });
+    //----------------------------------------------
+
+    // Fetch the number of attempts, requeested and allowed for the current user
     fetch(`${server}/api/users/${userId}/attempts`, {
         method: 'GET',
         headers: {
@@ -75,41 +76,47 @@ const HomePage = () => {
         if(data){
         setRequested(data.requested)
         setAttempts(data.attempts)
-        setAllowed(data.allowed)  
-        sessionStorage.setItem('requested', data.requested);
-        sessionStorage.setItem('attempts', data.attempts);
-        sessionStorage.setItem('allowed', data.allowed); 
-        console.log("fetched")}
-        //console.log(data.requested)
+        setAllowed(data.allowed)
+        setName(data.name)
+        setUserId(data.user_id) 
+        setAssessedId(data.user_id)
+        sessionStorage.setItem('assessed_id', userId);//---------------------------     
 
+        console.log(`fetched Requested :${data.requested}`)
+        console.log(`fetched Name :${data.name}`)
+        console.log(`fetched Id :${data.user_id}`)
+        console.log(`fetched Allowed :${data.allowed}`)
+        }
     })
     .catch(error => console.error('Error:', error));
-    
-  
-  }, []);  // The empty array means this useEffect will run once when the component mounts
+  }, []);  
 
   const handleButtonClick = () => {
-    console.log(attempts)
-    console.log(requested)
-    if (attempts == 0 || allowed) { //change this-----------------------------------------------------------------------
+ //change this-----------------------------------------------------------------------
         // Navigate to the assessment page
-        window.location.href = "/Assessment";}
-    else if(requested==false){
+        navigate('/Assessment', { state: { assessedId, userId } });
+      
+    if(requested==false){
         // Set the `requested` flag to `true` for the current user 
-        fetch(`${server}/api/users/${sessionStorage.getItem('user_id')}/request`, { method: 'POST' })
+        fetch(`${server}/api/users/${userId}/request`, { 
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${accessToken}`
+          } })
         .then(() => {
           setRequested(true)
-          sessionStorage.setItem('requested', true);
         });
     
         // Add to the notification dictionary for their supervisor
         fetch(`${server}/add_supervisor_notification`, {
           method: 'POST',
           headers: {
-              'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${accessToken}`
           },
           body: JSON.stringify({
-              userID: sessionStorage.getItem('user_id'),
+              userID: userId,
               ntype: 'assess_req'
           })
           })

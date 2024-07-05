@@ -30,7 +30,7 @@ export default function ResponsiveDrawer(props){
   const [selectedIndex, setSelectedIndex] = React.useState(null);
   
   const links = [
-    { text: 'Employees', linkName: '/' },
+    { text: 'Employees', linkName: '/Dashboard' },
     { text: 'Skill Manage', linkName: '/' },
     { text: 'Criteria Manage', linkName: '/' },
     { text: 'Notifications', linkName: '/' }

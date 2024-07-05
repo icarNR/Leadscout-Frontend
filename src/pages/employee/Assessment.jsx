@@ -2,42 +2,44 @@ import React, { useState } from 'react';
 import QuestionComponent from '../../components/employee/questionInput.jsx';
 import CustomButton from '../../components/common/Button.jsx';
 import PageLayout from '../../layouts/ELayout.jsx';
-import { useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
+
 
 function AssessmentPage() {
   
   const server = import.meta.env.VITE_REACT_APP_SERVER_URL;
+  const location = useLocation();
+  const { assessedId, userId } = location.state || {};
 
-  const [attempts, setAttempts] = useState(parseInt(sessionStorage.getItem('attempts'), 10));
-  const [allowed, setAllowed] = useState(JSON.parse(sessionStorage.getItem('allowed')));
-  const user_id= sessionStorage.getItem('user_id'); 
-  const assessed_id=sessionStorage.getItem('assessed_id');
+  //const [attempts, setAttempts] = useState(parseInt(localStorage.getItem('attempts'), 10));
+  //const [allowed, setAllowed] = useState(JSON.parse(localStorage.getItem('allowed')));
+  //const user_id= localStorage.getItem('user_id'); 
+  //const assessed_id=sessionStorage.getItem('assessed_id');
   // Total number of questions
   const totalQuestions = 44;
   // Questions per page
   const questionsPerPage = 11;
   
-  const navigate = useNavigate();
 
   useEffect(() => {
  
-    if (user_id==assessed_id && !(attempts == 0 || allowed)){
-      navigate('/'); // Redirect to the desired page
+    if (!assessedId) {
+      window.location.href = "/employee_home";    
     }
-    else{
-      fetch(`${server}/api/users/${sessionStorage.getItem('user_id')}/attempts`)
-        .then(response => response.json())
-        .then(data => {
-          console.log(data)
-          setAttempts(data.attempts);
-          setAllowed(data.allowed);
-        })}
-      }, [attempts,allowed]);
+    // else{
+    //   fetch(`${server}/api/users/${user_id}/attempts`)
+    //     .then(response => response.json())
+    //     .then(data => {
+    //       console.log(data)
+    //       setAttempts(data.attempts);
+    //       setAllowed(data.allowed);
+    //     })}
+   }, []);
 
 //definig pronoun
 let pronoun;
-if (user_id == assessed_id) {
+if (userId == assessedId) {
   pronoun = 'You';
 } else {
   pronoun = 'They';
@@ -92,13 +94,7 @@ if (user_id == assessed_id) {
     `${pronoun} are sophisticated in art, music, or literature`
   ];
   
-  const [results, setResults] = useState({
-    Extraversion: 0,
-    Agreeableness: 0,
-    Conscientiousness: 0,
-    Neuroticism: 0,
-    Openness: 0
-  });
+
   // State for current page
   const [currentPage, setCurrentPage] = useState(1);
   // State to keep track of selected options for each question
@@ -145,8 +141,8 @@ const handleSubmit = async () => {
  
   // Define the user ID and the answers to send
   const answersData = {
-    user_id: user_id, 
-    assessed_id: assessed_id,
+    user_id: userId, 
+    assessed_id: assessedId,
     answers: selectedOptions
   };
   try {
@@ -159,8 +155,10 @@ const handleSubmit = async () => {
       body: JSON.stringify(answersData)
     })
     .then(response => response.json())
-    .then(data => setResults(data))
-    console.log(data); 
+    .then(data =>
+      sessionStorage.setItem('results', JSON.stringify(data))
+
+      )
 
     //add to admin notifications
     fetch(`${server}/add_admin_notification`, {
@@ -193,8 +191,9 @@ const handleSubmit = async () => {
       .then(response => response.json())
       .then(data => console.log(data))
       .catch(error => console.error('Error:', error));
-
-      window.location.href = "/employee_Personality";    
+      
+      //sessionStorage.setItem('assessed_id', userId);    
+      //window.location.href = "/employee_Personality";   ----------------------------------------- 
     }  
     // Add to the notification dictionary for the employee
     else{
@@ -212,8 +211,9 @@ const handleSubmit = async () => {
       .then(response => response.json())
       .then(data => console.log(data))
       .catch(error => console.error('Error:', error));
-
-      window.location.href = "/";
+      
+      //sessionStorage.setItem('assessed_id', userId);    
+      ///window.location.href = "/employee_home";
     }
 
   } catch (error) {

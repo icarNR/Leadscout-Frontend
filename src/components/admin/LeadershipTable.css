@@ -9,9 +9,9 @@
   transition-duration: 0s !important;
 }
 
-.MuiTableCell-head {
-  transition-duration: 0s !important;
-  color: rgb(22, 169, 219);
+
+.MuiDataGrid-columnHeader { 
+ color: rgb(22, 169, 219);
 }
 
 .MuiTableRow-root:hover {
