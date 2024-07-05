@@ -1,7 +1,7 @@
 // Employee_Criteria.jsx
 
 import React, { useState, useEffect } from 'react';
-import MenuAppBarWithoutProgressBar from "../../components/Admin/employeeHeader";
+import MenuAppBarWithoutProgressBar from "../../components/Admin/employeeHeader2";
 import ClippedDrawer from "../../components/Admin/employee_sideNavbar";
 import CssBaseline from '@mui/material/CssBaseline';
 import Typography from '@mui/material/Typography';
