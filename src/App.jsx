@@ -25,31 +25,25 @@ function App() {
   const [formData, setFormData] = useState({});
 
   return (
-    <AuthProvider>
+    
       <BrowserRouter>
           <Routes>
-            <Route path="/" element={<Authenticate />} />
+            <Route path="/" element={<LoginForm />} />
             <Route path="/LoginForm" element={<LoginForm />} />
             <Route path="/RegistrationForm" element={<RegistrationForm setFormData={setFormData} />} />
             <Route path="/RegistrationForm2" element={<RegistrationForm2 formData={formData} />} />
             <Route path="/Otp_verify" element={<Otp_verify formData={formData} />} />
-            <Route path="/Otp" element={<Otp />} />
             <Route path="/employee_Notification" element={<Notification />} />
             <Route path= "/RequestPasswordReset" element={<RequestPasswordReset />} />
             <Route path="/ResetPassword" element={<ResetPassword />} />
-
-            <Route element={<ProtectedRoute allowedRoles={['user']} />}>
-              <Route path="/employee_Personality" element={<PersonalityPage />} />
-              <Route path="/Assessment" element={<AssessmentPage />} />
-              <Route path="/employee_Home" element={<HomePage />} />
-            </Route>
-
-            <Route element={<ProtectedRoute allowedRoles={['admin']} />}>
-              <Route path="/Dashboard" element={<Dashboard />} />
-            </Route>
+            <Route path="/employee_Personality" element={<PersonalityPage />} />
+            <Route path="/Assessment" element={<AssessmentPage />} />
+            <Route path="/employee_Home" element={<HomePage />} />
+            <Route path="/Dashboard" element={<Dashboard />} />
+            
           </Routes>
       </BrowserRouter>
-    </AuthProvider>
+    
   );
 
   
