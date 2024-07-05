@@ -3,17 +3,23 @@ import { MenuAppBarWithoutProgressBar } from "../components/admin/adminHeader.js
 import CssBaseline from "@mui/material/CssBaseline";
 import ClippedDrawer from "../components/admin/adminSideNavbar.jsx";
 
-const PageLayout = ({ content, departmentValue, setDepartmentValue, departments }) => {
+const PageLayout = ({
+  content,
+  departmentValue,
+  setDepartmentValue,
+  departments,
+  sortValue,
+  setSortValue,
+}) => {
   return (
     <div
       style={{
         display: "flex",
         flexDirection: "column",
-        minHeight: "100vh",
-        overflowY: "Hidden",
+
+        overflowY: "hidden",
       }}
     >
-      {/* Fixed header */}
       <div
         style={{
           height: "60px",
@@ -29,17 +35,18 @@ const PageLayout = ({ content, departmentValue, setDepartmentValue, departments 
           departmentValue={departmentValue}
           setDepartmentValue={setDepartmentValue}
           departments={departments}
+          sortCriteria={sortValue}
+          setSortCriteria={setSortValue}
         />
       </div>
 
       <div style={{ display: "flex", flex: 1, overflow: "hidden" }}>
-        {/* Fixed side navbar */}
         <div
           style={{
             width: "140px",
-            height: "calc(100vh)",
+            height: "calc(100vh - 60px)", // Adjusted to account for the header height
             position: "fixed",
-            top: "100px",
+            top: "60px", // Adjusted to start below the header
             left: 0,
             zIndex: 90,
             overflow: "hidden",
@@ -48,10 +55,15 @@ const PageLayout = ({ content, departmentValue, setDepartmentValue, departments 
           <ClippedDrawer />
         </div>
         <CssBaseline />
-        {/* Content */}
-        <div className="sm:ml-32 mt-16 flex-1 overflow-y-auto">
-          {/* Add your main content here */}
-
+        <div
+          className="sm:flex-1 overflow-hidden"
+          style={{
+            marginLeft: "140px", // Adjusted to align with the sidebar width
+            marginTop: "6vw", // Adjusted to account for the header height
+            paddingLeft: "20px", // Added padding for left alignment
+            width: "100%", // Adjusted to fill remaining width
+          }}
+        >
           {content}
         </div>
       </div>
