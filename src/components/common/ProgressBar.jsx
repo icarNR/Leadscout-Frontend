@@ -35,7 +35,7 @@ const BorderLinearProgress = styled(LinearProgress)(({ theme, colorr}) => ({
   },
 }));
 
-export default function CustomizedProgressBars({ progress, color }) {
+export default function CustomizedProgressBars({ progress, color, txtcolor }) {
   const [currentProgress, setCurrentProgress] = React.useState(progress);
 
   // Update progress when the prop changes
@@ -48,7 +48,7 @@ export default function CustomizedProgressBars({ progress, color }) {
     <ThemeProvider theme={theme}>
       <BorderLinearProgress variant="determinate" value={currentProgress} colorr={color} sx={{ flex: 1 }} />
     </ThemeProvider>
-    <Typography className='text-xs' variant="body3" sx={{ pl: 1, lineHeight: '1rem', margin: 0 }}>
+    <Typography className='text-xs' variant="body3" sx={{ pl: 1, lineHeight: '1rem', margin: 0, color: txtcolor}}>
       {`${currentProgress}%`}
     </Typography>
   </Box>

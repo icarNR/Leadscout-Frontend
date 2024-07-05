@@ -2,7 +2,7 @@
     display: flex;
     height: 100vh;
 }
-h2 {
+.h2 {
     width: 358px;
     height: 63.636px;
     flex-shrink: 0;
@@ -21,7 +21,7 @@ h2 {
     margin-top: 100px;
     margin-left: 200px;
 }
-input {
+.input {
     font-size: 16px;
     border: none;
     margin: 5px;

@@ -16,7 +16,7 @@
     justify-content: center;
     flex-direction: column;
 }
-h2 {
+.h2 {
     width: 358px;
     height: 63.636px;
     flex-shrink: 0;
@@ -60,7 +60,7 @@ p2 {
     padding-left: 10px; 
 }
 
-input {
+.input {
     flex: 1;
     padding: 10px;
     font-size: 16px;
@@ -68,7 +68,7 @@ input {
     outline: none;
     
 } 
-button {
+.button {
     width: 128.907px;
     height: 49px;
     border-radius: 8px;

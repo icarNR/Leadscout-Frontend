@@ -52,36 +52,42 @@ const StyledAvatar = styled(Avatar)(({ theme }) => ({
     height: theme.spacing(7),
   }));
 
-  export default function InteractiveList() {
+export default function InteractiveList() {
 
     const server = import.meta.env.VITE_REACT_APP_SERVER_URL;
+    const accessToken = localStorage.getItem('access_token');
 
-    const [dense, setDense] = React.useState(false);
-    const [secondary, setSecondary] = React.useState(false); 
+    const [dense, setDense] = useState(false);
+    const [secondary, setSecondary] = useState(false); 
     const [group, setGroup] = useState([]);
+
+    const [userId, setUserId] = useState("001");//------------------------
 
     // const toggleAlert = () => {
     //   setShowAlert(!showAlert);
     // };
 
     useEffect(() => {
-      // Try to get the supervisees list from the session storage
-      const storedGroup = sessionStorage.getItem('supervisees');
-      const userID = sessionStorage.getItem('user_id');
-      // If the supervisees list is in the session storage, use it
-      if (storedGroup) 
-        setGroup(JSON.parse(storedGroup));
-      else{
-        //If the supervisees list is not in the session storage, fetch it from the database
-        fetch(`${server}/get_users/${userID}`)
+      
+      try {
+        const storedGroup = localStorage.getItem('supervisees');
+        if (storedGroup) {
+            setGroup(JSON.parse(storedGroup));
+        }
+    } catch (error) {
+        console.error('Error while no stored on supervisees');
+    }
+
+      //fetch it from the database
+      fetch(`${server}/get_users/${userId}`)
           .then(response => response.json())
           .then(data => {
             // Save the supervisees list in the session storage for future use
-            sessionStorage.setItem('supervisees', JSON.stringify(data));
+            localStorage.setItem('supervisees', JSON.stringify(data));
             setGroup(data);
           })
           .catch(error => console.error('Error fetching data: ', error));
-  }
+  
     }, []);
 
     return (

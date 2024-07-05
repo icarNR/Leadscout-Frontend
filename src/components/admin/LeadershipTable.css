@@ -10,7 +10,6 @@
 }
 
 .MuiTableCell-head {
-  transition-duration: 0s !important;
   color: rgb(22, 169, 219);
 }
 
@@ -47,4 +46,8 @@
   border: none;
   font-size: 24px;
   cursor: pointer;
+}
+
+tr {
+  height: 1px;
 }

@@ -1,17 +1,15 @@
 import React from 'react';
-import '../../style/RegistrationForm2.css'; 
 import LeftPart from '../../components/Registration/left-part';
 import RightPart from '../../components/Registration/right-part2';
 
 const RegistrationForm2 = ({ formData }) => {
     return (
-        <div className="registration-page">
+        <div className="flex h-screen flex-col md:flex-row">
             <LeftPart />
-            <div className="right-part">
                 
-             <RightPart formData={formData} />   
+            <RightPart formData={formData} />   
             </div>
-        </div>
+        
     );
 };
 export default RegistrationForm2;

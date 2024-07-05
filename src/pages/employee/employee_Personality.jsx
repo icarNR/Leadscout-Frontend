@@ -5,10 +5,11 @@ import Results from '../../components/employee/quizresults';
 import { Typography } from '@mui/material';
 import { VscArrowLeft } from "react-icons/vsc";
 import { VscArrowRight } from "react-icons/vsc";
-import image1 from '../../assets/Scene-1-16-1024x575.jpg'; // Adjust the file extension based on the actual image type
-import axios from 'axios'; // Make sure to install this package
+import image1 from '../../assets/Scene-1-16-1024x575.jpg'; 
+import axios from 'axios'; 
 import Alert from '@mui/material/Alert';
 import { useSwipeable } from 'react-swipeable';
+
 const data = [
   { imageSrc: image1, bodyText1: '...', bodyText2: '...' },
   { imageSrc: 'image2.jpg', bodyText1: '...', bodyText2: '...'  },
@@ -39,8 +40,14 @@ const Div1 = ({ imageSrc, bodyText1, bodyText2 }) => (
 
 const PersonalityPage = () => {
 
-const server = import.meta.env.VITE_REACT_APP_SERVER_URL;
+const accessToken = localStorage.getItem('access_token');
 
+const server = import.meta.env.VITE_REACT_APP_SERVER_URL;
+const [selfAssessment,setselfAssessment] = useState(true);
+const [supervisorAssessment,setsupervisorAssessment] = useState(true);
+const [currentIndex, setCuvrrentIndex] = useState(0);
+
+const [userId, setUserId] = useState("001");//------------------------
   
 const [results, setResults] = useState({
     Extraversion: 0,
@@ -57,27 +64,27 @@ const [results, setResults] = useState({
     Openness: 0
   });
 
-  const [selfAssessment,setselfAssessment] = useState(true);
-  const [supervisorAssessment,setsupervisorAssessment] = useState(true);
-
   useEffect(() => {
-    const userId = sessionStorage.getItem('user_id'); 
-    const storedResults = JSON.parse(sessionStorage.getItem('results'));
-    const storedAverages = JSON.parse(sessionStorage.getItem('averages'));
-
-    if(storedResults && storedAverages){
-      console.log("storedResults");
-
-      console.log(storedResults);
-      console.log(storedAverages);
-      setAverages(storedAverages);
-      setResults(storedResults); }
     console.log("fetching");
-    
     Promise.all([
-        fetch(`${server}/api/assessment_status/${userId}`),
-        fetch(`${server}/send_results/${userId}`),
-        fetch(`${server}/send_average_results`)
+        fetch(`${server}/api/assessment_status/${userId}`,{
+          method: 'GET',
+          headers: {
+            'Authorization': `Bearer ${accessToken}`
+          }
+        }),
+        fetch(`${server}/send_results/${userId}`,{
+          method: 'GET',
+          headers: {
+            'Authorization': `Bearer ${accessToken}`
+          }
+        }),
+        fetch(`${server}/send_average_results`,{
+          method: 'GET',
+          headers: {
+            'Authorization': `Bearer ${accessToken}`
+          }
+        })
       ])
       .then(async ([res1, res2, res3]) => {
         console.log("fetched");
@@ -85,27 +92,27 @@ const [results, setResults] = useState({
         const data2 = await res2.json();
         const data3 = await res3.json();
         
-
-    
         setselfAssessment(data1.self_assessment);
         //sessionStorage.setItem('self_assessment',data1.self_assessment);
         setsupervisorAssessment(data1.supervisor_assessment);
         //sessionStorage.setItem('supervisor_assessment',data1.supervisor_assessment);
         //set results
         const adjustedResults = {
-          Extraversion: data2.extraversion,
-          Agreeableness: data2.agreeableness,
-          Conscientiousness: data2.conscientiousness,
-          Neuroticism: data2.neuroticism,
-          Openness: data2.openness
+          Extraversion: Math.round(data2.extraversion),
+          Agreeableness: Math.round(data2.agreeableness),
+          Conscientiousness: Math.round(data2.conscientiousness),
+          Neuroticism: Math.round(data2.neuroticism),
+          Openness: Math.round(data2.openness)
         };
+        
         const averageResults = {
-          Extraversion: data3.extraversion,
-          Agreeableness: data3.agreeableness,
-          Conscientiousness: data3.conscientiousness,
-          Neuroticism: data3.neuroticism,
-          Openness: data3.openness
+          Extraversion: Math.round(data3.extraversion),
+          Agreeableness: Math.round(data3.agreeableness),
+          Conscientiousness: Math.round(data3.conscientiousness),
+          Neuroticism: Math.round(data3.neuroticism),
+          Openness: Math.round(data3.openness)
         };
+        
         setAverages(averageResults);
         sessionStorage.setItem('averages', JSON.stringify(averageResults));
         setResults(adjustedResults);
@@ -116,11 +123,10 @@ const [results, setResults] = useState({
         console.error('Error fetching data: ', error);
       });
 
-
   }, []);
   
 
-    const [currentIndex, setCurrentIndex] = useState(0);
+
     const handlePrev = () => {
       setCurrentIndex(prevIndex => (prevIndex > 0 ? prevIndex - 1 : 0));
     };
@@ -142,17 +148,17 @@ const [results, setResults] = useState({
     
     
     const pageContent = (
-      <div className="flex flex-col h-full "> {/* Increased space-y from 10 to 20 */}
+      <div className="flex flex-col h-full pt-10"> {/* Increased space-y from 10 to 20 */}
         {
           supervisorAssessment && !selfAssessment ? 
-            <Alert severity="info">Current result is based on supervisor assessment.</Alert> 
+            <Alert severity="info" >Current result is based on supervisor assessment.</Alert> 
           : !supervisorAssessment && selfAssessment ? 
             <Alert severity="info">Current result is based on self assessment.</Alert> 
           : !supervisorAssessment && !selfAssessment ? 
             <Alert severity="warning">Do the assessment to see your results.</Alert> 
           : null
         }
-        <div className="flex flex-col items-center pt-20 pb-20" >
+        <div className="flex flex-col items-center pt-10 pb-20" >
             <BasicTabs
               panelcontent1={<Results {...results} />} 
               panelcontent2={<Results {...averages} />} />
@@ -160,13 +166,15 @@ const [results, setResults] = useState({
         <div  {...handlers} className="flex flex-row items-center justify-center  mb-4 space-x-4 flex-1"> 
           <button 
             onClick={handlePrev} 
-            className="sm:block px-4 py-4 bg-[#00818A] text-white rounded-md hover:bg-[#006B74]"><VscArrowLeft /></button>
+            className="sm:block px-4 py-4 bg-[#00818A] text-white rounded-md hover:bg-[#006B74]"><VscArrowLeft />
+          </button>
          
             <Div1 {...data[currentIndex]} />
        
           <button 
             onClick={handleNext} 
-            className="sm:block px-4 py-4 bg-[#00818A] text-white rounded-md hover:bg-[#006B74]"><VscArrowRight /></button>
+            className="sm:block px-4 py-4 bg-[#00818A] text-white rounded-md hover:bg-[#006B74]"><VscArrowRight />
+          </button>
         </div>
      </div>
     );

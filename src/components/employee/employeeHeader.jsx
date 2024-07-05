@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { useNavigate } from 'react-router-dom';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -20,6 +21,8 @@ const appbarStyles = {
 
 export default function MenuAppBar({percentage}) {
   const [anchorEl, setAnchorEl] = React.useState(null);
+  const navigate = useNavigate();
+
 
   const handleMenu = (event) => {
     setAnchorEl(event.currentTarget);
@@ -29,12 +32,23 @@ export default function MenuAppBar({percentage}) {
     setAnchorEl(null);
   };
 
+  const handleLogout = () => {
+    // Clear tokens from localStorage
+    localStorage.removeItem('access_token');
+    localStorage.removeItem('refresh_token');
+    localStorage.removeItem('token_type');
+    
+    // Redirect to login page
+    navigate('/LoginForm');
+  };
+
+  
+
   return (
-    <Box sx={{ flexGrow: 1}}>
       <AppBar position="static" sx={{...appbarStyles}}>
         <Box sx={{ display: 'flex', flexDirection: 'column' , paddingTop: '12px', paddingBottom: '12px' , }}>
           <Toolbar sx={{ display:'flex', justifyContent: 'space-between' }}>
-            <Box sx={{ display: 'flex', alignItems: 'center', width: { xs: '100px', sm: '180px' }, flexShrink: { xs: 1, sm: 0 } }}>
+            <Box sx={{ display: 'flex', alignItems: 'center', width: { xs: '180px', sm: '180px' }, flexShrink: { xs: 1, sm: 1 } }}>
               <img
                 src={logo}
                 alt="LeadScoutLogo"
@@ -74,22 +88,23 @@ export default function MenuAppBar({percentage}) {
               >
                 <MenuItem onClick={handleClose}>Profile</MenuItem>
                 <MenuItem onClick={handleClose}>My account</MenuItem>
+                <MenuItem onClick={handleLogout}>Logout</MenuItem>
               </Menu>
             </Box>
           </Toolbar>
-          <Box className="w-full fixed top-16"> 
-             <div className="w-full max-w-md md:max-w-lg lg:max-w-xl mx-auto">
-              <CustomizedProgressBars progress={percentage} />
-             </div>
+          <Box className="w-full fixed top-16 flex justify-center"> 
+            <div className="w-full max-w-md md:max-w-lg lg:max-w-xl pl-[20px] sm:pl-0 sm:ml-[150px]">
+              <CustomizedProgressBars progress={percentage} txtcolor={'#71EFD8'} />
+            </div>
           </Box>
         </Box>
       </AppBar>
-    </Box>
   );
 }
 
 export function MenuAppBarWithoutProgressBar() {
   const [anchorEl, setAnchorEl] = React.useState(null);
+  const navigate = useNavigate();
 
   const handleMenu = (event) => {
     setAnchorEl(event.currentTarget);
@@ -99,8 +114,17 @@ export function MenuAppBarWithoutProgressBar() {
     setAnchorEl(null);
   };
 
+  const handleLogout = () => {
+    // Clear tokens from localStorage
+    localStorage.removeItem('access_token');
+    localStorage.removeItem('refresh_token');
+    localStorage.removeItem('token_type');
+    
+    // Redirect to login page
+    navigate('/LoginForm');
+  }
+
   return (
-    <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static" sx={{...appbarStyles}}>
         <Toolbar sx={{ justifyContent: 'space-between',paddingTop: '15px', paddingBottom: '15px'  }}>
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
@@ -143,10 +167,10 @@ export function MenuAppBarWithoutProgressBar() {
             >
               <MenuItem onClick={handleClose}>Profile</MenuItem>
               <MenuItem onClick={handleClose}>My account</MenuItem>
+              <MenuItem onClick={handleLogout}>Logout</MenuItem>
             </Menu>
           </div>
         </Toolbar>
       </AppBar>
-    </Box>
   );
 }

@@ -3,7 +3,7 @@ import axios from "axios";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import LeadershipTable from "../../components/admin/LeadershipTable.jsx";
-import Criteria from "../../components/admin/Criteria.jsx";
+import Criteria from "../../components/admin/HomeCriteria.jsx";
 import PageLayout from "../../layouts/APLayout.jsx";
 import Profile from "../../components/admin/profile.jsx";
 import "./Dashboard.css";
@@ -54,7 +54,7 @@ function Dashboard() {
   const pageContent = (
     <div className="container">
       <Box sx={{ flexGrow: 1 }}>
-        <Grid container spacing={2}>
+        <Grid container spacing={7}>
           <Grid item xs={9.5} style={{ width: "65vw" }}>
             {selectedProfile ? (
               <Profile profileData={selectedProfile} onClose={closeProfile} />

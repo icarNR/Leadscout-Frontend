@@ -114,7 +114,7 @@ const LeadershipTable = ({
           src={params.value || "default_image_path"}
           alt={params.row.name}
           style={{
-            width: "40px",
+            width: "50px",
             height: "50px",
             objectFit: "cover",
             borderRadius: "50%",
@@ -161,7 +161,14 @@ const LeadershipTable = ({
       >
         <Table stickyHeader aria-label="sticky table">
           <TableHead>
-            <TableRow>
+            <TableRow
+            sx={{
+                    "& th": {
+                      padding: "8px",
+                      height: "55px"
+                    },
+                  }}
+            >
               {columns.map((column) => (
                 <TableCell style={{ color: "#00818A" }} key={column.field}>
                   {column.headerName}
@@ -175,9 +182,14 @@ const LeadershipTable = ({
               .map((row) => (
                 <TableRow
                   key={row.id}
-                  style={{ backgroundColor:"#F9F9F9"}}
                   onClick={() => handleRowClick(row)}
-                  sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                  sx={{
+                    "&:last-child td, &:last-child th": { border: 0 },
+                    height: "40px", // Adjust this value to your desired row height
+                    "& td, & th": {
+                      padding: "8px", // Adjust this value to your desired cell padding
+                    },
+                  }}
                 >
                   {columns.map((column) => (
                     <TableCell key={column.field}>
