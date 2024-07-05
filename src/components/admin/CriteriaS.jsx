@@ -1,20 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { GrPlug } from 'react-icons/gr';
 
-
-    
-const Criteria = ({ onSelect, department, searchTerm, sortByUsage }) => {
+const Criteria = ({ onSelect, department, searchTerm = '', sortByUsage }) => {
     const [criteriaData, setCriteriaData] = useState([]);
     const [selectedId, setSelectedId] = useState(null);
     const [plugMessage, setPlugMessage] = useState('');
     const [sortedCriteria, setSortedCriteria] = useState([]);
     const [showAllCriteria, setShowAllCriteria] = useState(true);
-
-    // useEffect(() => {
-    //     console.log("Selected Department in EmployeeCriteria:", department);
-    //     console.log("Search Value in EmployeeCriteria:", searchTerm);
-    //     console.log("Most Used Clicked in EmployeeCriteria:", sortByUsage);
-    // }, [department, searchTerm, sortByUsage])
 
     useEffect(() => {
         fetchData();
@@ -77,9 +69,9 @@ const Criteria = ({ onSelect, department, searchTerm, sortByUsage }) => {
     };
 
     useEffect(() => {
-        if (searchTerm.trim() === '') {
+        if (searchTerm && searchTerm.trim() === '') {
             setShowAllCriteria(true);
-        } else {
+        } else if (searchTerm) {
             try {
                 const regex = new RegExp(searchTerm.trim(), 'i');
                 const filteredCriteria = criteriaData.filter(criteria => regex.test(criteria.id.trim()));
@@ -92,7 +84,7 @@ const Criteria = ({ onSelect, department, searchTerm, sortByUsage }) => {
             }
         }
     }, [searchTerm]);
-    
+
     const handleShowAllCriteria = () => {
         setShowAllCriteria(true);
         fetchData();
