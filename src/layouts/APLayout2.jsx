@@ -1,8 +1,8 @@
-// EPLayout.jsx
+// APLayout.jsx
 
 import React, { useState } from 'react';
-import MenuAppBarWithoutProgressBar from "../components/Admin/adminHeader2;";
-import ClippedDrawer from "../components/Admin/adminsideNavbar";
+import MenuAppBarWithoutProgressBar from "../components/Admin/employeeHeader";
+import ClippedDrawer from "../components/Admin/employee_sideNavbar";
 import CssBaseline from '@mui/material/CssBaseline';
 
 const PageLayout = ({ content, pagename }) => {
