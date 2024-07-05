@@ -61,7 +61,7 @@ const [results, setResults] = useState({
   const [supervisorAssessment,setsupervisorAssessment] = useState(true);
   const [currentIndex, setCurrentIndex] = useState(0);
   
-  const userId = sessionStorage.getItem('user_id'); 
+  const userId = localStorage.getItem('user_id'); 
   const storedResults = JSON.parse(sessionStorage.getItem('results'));
   const storedAverages = JSON.parse(sessionStorage.getItem('averages'));
 

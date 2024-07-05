@@ -7,8 +7,7 @@ import { deepOrange, deepPurple } from '@mui/material/colors';
 import PageLayout from '../../layouts/EPLayout';
 import image1 from '../../assets/employee_home.jpeg'; // Adjust the file extension based on the actual image type
 //import { userStore } from '../../store.jsx'// Path to your store
-
-
+import { useNavigate } from 'react-router-dom';
 
 
 const HomePage = () => {
@@ -21,10 +20,14 @@ const HomePage = () => {
   const [requested, setRequested] = useState(null);
   const [attempts, setAttempts] = useState(1);
   const [allowed, setAllowed] = useState(false);
-  const [name, setName] = useState("Nisal Ravindu");
+  const [assessedId, setAssessedId] = useState("");
+
+  const [name, setName] = useState("");
+  const [userId, setUserId] = useState("001");//------------------------
   
   const accessToken = localStorage.getItem('access_token');
-  const userId = localStorage.getItem('user_id');
+  const navigate = useNavigate();
+
   
   
   useEffect(() => {
@@ -44,7 +47,6 @@ const HomePage = () => {
 
   useEffect(() => {
     sessionStorage.clear()//--------------------------------
-    sessionStorage.setItem('assessed_id', userId);    
     //--------------------------------------------------------
     fetch(`${server}/protected-route`, {
       method: 'GET',
@@ -72,7 +74,7 @@ const HomePage = () => {
       setAllowed(JSON.parse(localStorage.getItem('allowed_assess')));
     }
     
-      // Fetch the number of attempts, requeested and allowed for the current user
+    // Fetch the number of attempts, requeested and allowed for the current user
     fetch(`${server}/api/users/${userId}/attempts`, {
         method: 'GET',
         headers: {
@@ -85,31 +87,36 @@ const HomePage = () => {
         if(data){
         setRequested(data.requested)
         setAttempts(data.attempts)
-        setAllowed(data.allowed)  
-          console.log(`fetched Requested :${data.requested}`)
-          localStorage.setItem('requested', data.requested);
-    
-          localStorage.setItem('attempts', data.attempts);
+        setAllowed(data.allowed)
+        setName(data.name)
+        setUserId(data.user_id) 
+        setAssessedId(data.user_id)
+        sessionStorage.setItem('assessed_id', userId);//---------------------------     
 
-          console.log(`fetched Allowed :${data.allowed}`)
-          localStorage.setItem('allowed', data.allowed);
+        console.log(`fetched Requested :${data.requested}`)
+        console.log(`fetched Name :${data.name}`)
+        console.log(`fetched Id :${data.user_id}`)
+        console.log(`fetched Allowed :${data.allowed}`)
+        
+        //localStorage.setItem('requested', data.requested);
+        //localStorage.setItem('attempts', data.attempts);
+        //localStorage.setItem('allowed', data.allowed);
         }
     })
     .catch(error => console.error('Error:', error));
   }, []);  // The empty array means this useEffect will run once when the component mounts
 
   const handleButtonClick = () => {
-    console.log(attempts)
-    console.log(requested)
-    if (attempts == 0 || allowed) { //change this-----------------------------------------------------------------------
+ //change this-----------------------------------------------------------------------
         // Navigate to the assessment page
-        window.location.href = "/Assessment";}
-    else if(requested==false){
+        navigate('/Assessment', { state: { assessedId, userId } });
+      
+    if(requested==false){
         // Set the `requested` flag to `true` for the current user 
         fetch(`${server}/api/users/${userId}/request`, { method: 'POST' })
         .then(() => {
           setRequested(true)
-          localStorage.setItem('requested', true);
+          //localStorage.setItem('requested', true);
         });
     
         // Add to the notification dictionary for their supervisor
@@ -119,7 +126,7 @@ const HomePage = () => {
               'Content-Type': 'application/json'
           },
           body: JSON.stringify({
-              userID: localStorage.getItem('user_id'),
+              userID: userId,
               ntype: 'assess_req'
           })
           })
