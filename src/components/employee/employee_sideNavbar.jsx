@@ -1,11 +1,11 @@
-// import React from 'react';
+
+import React,{useEffect,useState} from 'react';
+import Badge from '@mui/material/Badge';
 import { PiMaskHappy } from "react-icons/pi";
 import { GoHome } from "react-icons/go";
 import { HiOutlineBellAlert } from "react-icons/hi2";
 import { IoMenu } from "react-icons/io5";
 import IconButton from '@mui/material/IconButton';
-
-import * as React from 'react';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import Box from '@mui/material/Box';
@@ -19,6 +19,10 @@ import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import { Typography } from "@mui/material";
+import client from '../common/websocket';
+
+
+
 const drawerWidth = '128px';
 const icons = [<GoHome />, <PiMaskHappy />, <HiOutlineBellAlert />];
 
@@ -27,35 +31,49 @@ const drawerStyles = {
   color: "#404B69",
 };
 
-export default function ResponsiveDrawer(props){
-
-
+export default function ResponsiveDrawer(props) {
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const [isClosing, setIsClosing] = React.useState(false);
   const [selectedIndex, setSelectedIndex] = React.useState(null);
+  const [notificationCount, setNotificationCount] = React.useState(1); // You can replace 4 with your notification logic
+
+
+  useEffect(() => {
+    client.onmessage = (message) => {
+      const data = JSON.parse(message.data);
+      if (data.type === 'notification') {
+        setNotificationCount(notificationCount + 1);
+      }
+    };
+  }, []);
+    
+
 
   const links = [
     { text: 'Home', linkName: '/employee_home' },
     { text: 'Personality', linkName: '/employee_Personality' },
     { text: 'Notifications', linkName: '/employee_Notification' }
   ];
-  
+
   const handleListItemClick = (event, index) => {
     setSelectedIndex(index);
   };
+
   const handleDrawerClose = () => {
     setIsClosing(true);
     setMobileOpen(false);
   };
+
   const handleDrawerTransitionEnd = () => {
     setIsClosing(false);
   };
+
   const handleDrawerToggle = () => {
     if (!isClosing) {
       setMobileOpen(!mobileOpen);
     }
   };
-  
+
   const drawer = (
     <div>
       <Toolbar />
@@ -85,7 +103,13 @@ export default function ResponsiveDrawer(props){
                       fontSize: '25px',
                     }}
                   >
-                    {icons[index]}
+                    {index === 2 ? (
+                      <Badge badgeContent={notificationCount} color="error">
+                        <HiOutlineBellAlert />
+                      </Badge>
+                    ) : (
+                      icons[index]
+                    )}
                   </ListItemIcon>
                   <Typography
                     sx={{
@@ -105,8 +129,6 @@ export default function ResponsiveDrawer(props){
       </Box>
     </div>
   );
-  
-
   return (
     <Box sx={{ display: 'flex' }}>
     
@@ -155,17 +177,4 @@ export default function ResponsiveDrawer(props){
 }
 
 
-// function SideNavBar() {
-//   return (
-//     <div className="side-nav-bar">
-//       <ul>
-//         <NavItem icon={<GoHome />} text="Home" to="/HR_Dashboard/AdminHome"/>
-
-//         <NavItem icon={<PiMaskHappy />} text="Personality" to="/personality"/>
-//         <NavItem icon={<HiOutlineBellAlert />} text="Notifications" to="/notifications"/>
-//         {/* Add more navigation links with icons and text as needed */}
-//       </ul>
-//     </div>
-//   );
-// }
 

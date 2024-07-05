@@ -10,10 +10,24 @@ function RequestPasswordReset() {
     const [message, setMessage] = useState('');
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false); // Add loading state
+    const[emailError, setEmailError] = useState(''); // Add emailError state
     const navigate = useNavigate();
+
+
+    const validateEmail = (email) => {
+        const emailRegex = /\S+@\S+\.\S+/;
+        return emailRegex.test(email);
+    };
 
     const handleRequest = async () => {
         setLoading(true); // Start loading
+        setError(''); // Clear error
+
+        if(!validateEmail(email)){
+            setEmailError('Please enter a valid email address');
+            setLoading(false);
+            return;
+        }
 
         try {
             const response = await axios.post('http://127.0.0.1:800/request_password_reset', { email });
@@ -48,6 +62,7 @@ function RequestPasswordReset() {
                         className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none"
                     />
                 </div>
+                {emailError && <Alert severity="error" className="mt-4 w-full">{emailError}</Alert>}
                 {message && <Alert severity="success" className="mt-4 w-full">{message}</Alert>}
                 {error && <Alert severity="error" className="mt-4 w-full">{error}</Alert>}
                 <div className="flex justify-center mt-4">
