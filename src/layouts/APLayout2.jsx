@@ -1,7 +1,7 @@
-// APLayout.jsx
+// EPLayout.jsx
 
 import React, { useState } from 'react';
-import MenuAppBarWithoutProgressBar from "../components/Admin/employeeHeader";
+import MenuAppBarWithoutProgressBar from "../components/Admin/employeeHeader2";
 import ClippedDrawer from "../components/Admin/employee_sideNavbar";
 import CssBaseline from '@mui/material/CssBaseline';
 
