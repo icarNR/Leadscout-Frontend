@@ -53,9 +53,9 @@ function Dashboard() {
   };
 
   const pageContent = (
-    <div className="container border">
+    <div className="container">
       <Box sx={{ flexGrow: 1 }}>
-        <Grid container spacing={2}>
+        <Grid container spacing={7}>
           <Grid item xs={9.5} style={{ width: "65vw" }}>
             {selectedProfile ? (
               <Profile profileData={selectedProfile} onClose={closeProfile} />

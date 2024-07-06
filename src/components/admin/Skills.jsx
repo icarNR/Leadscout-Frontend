@@ -27,10 +27,14 @@ const Skills = ({ criteriaId }) => {
     };
 
     const tableStyle = {
-        width: '300px',
+        // width: '300px',
+        // borderCollapse: 'collapse',
+        // marginTop: '10px',
+        // borderRadius: '8px',
+        width: '120%',
         borderCollapse: 'collapse',
         marginTop: '10px',
-        borderRadius: '8px',
+        borderRadius: '10px',
         overflow: 'hidden',
     };
 

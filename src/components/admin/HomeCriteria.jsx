@@ -186,11 +186,6 @@ export default function Criteria({ onCriteriaChange }) {
       )}
 
       <FormGroup>
-        <div style={{ display: "flex", alignItems: "center" }}>
-          <span style={{ color: "black", marginRight: "10px" }}>Criteria</span>
-          <FormControlLabel control={<Switch />} />
-        </div>
-
         {skillsFromStorage.length > 0 && (
           <>
             <Table

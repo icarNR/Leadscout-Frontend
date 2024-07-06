@@ -56,9 +56,15 @@ const PageLayout = ({
         </div>
         <CssBaseline />
         <div
-          className="sm:ml-32 sm:flex-1 overflow-hidden"
-          style={{ // Adjusted to align with the sidebar width
-            marginTop: "6vw", // Adjusted to account for the header height
+          // className="sm:ml-32 sm:flex-1 overflow-hidden"
+          // style={{ // Adjusted to align with the sidebar width
+          //   marginTop: "6vw", // Adjusted to account for the header height
+          className="sm:flex-1 overflow-hidden"
+          style={{
+            height: "calc(100vh - 10%)", // Adjusted to account for the header height
+            marginLeft: "140px", // Adjusted to align with the sidebar width
+            marginTop: "5vw", // Adjusted to account for the header height
+            paddingTop: "15px",
             paddingLeft: "20px", // Added padding for left alignment
             width: "100%", // Adjusted to fill remaining width
           }}
