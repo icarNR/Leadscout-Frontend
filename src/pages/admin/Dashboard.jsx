@@ -8,7 +8,7 @@ import PageLayout from "../../layouts/APLayout.jsx";
 import Profile from "../../components/admin/profile.jsx";
 import "./Dashboard.css";
 
-const server = "http://127.0.0.1:8000";
+const server = import.meta.env.VITE_REACT_APP_SERVER_URL;
 
 function Dashboard() {
   const [departmentValue, setDepartmentValue] = useState("");
@@ -16,11 +16,12 @@ function Dashboard() {
   const [departments, setDepartments] = useState([]);
   const [sortValue, setSortValue] = useState("");
   const [selectedProfile, setSelectedProfile] = useState(null);
+  const accessToken = sessionStorage.getItem("access_token");
+
 
   useEffect(() => {
     const fetchDepartments = async () => {
       try {
-        const accessToken = sessionStorage.getItem("access_token");
         const response = await axios.get(`${server}/departments`, {
           headers: {
             Authorization: `Bearer ${accessToken}`,

@@ -1,15 +1,13 @@
 import React from "react";
-import { MenuAppBarWithoutProgressBar } from "../components/admin/adminHeader.jsx";
+import { MenuAppBarWithoutProgressBar } from "../components/admin/adminHeader2.jsx";
 import CssBaseline from "@mui/material/CssBaseline";
 import ClippedDrawer from "../components/admin/adminSideNavbar.jsx";
 
 const PageLayout = ({
   content,
-  departmentValue,
-  setDepartmentValue,
-  departments,
-  sortValue,
-  setSortValue,
+  handleDepartmentChange,
+  handleSearchChange,
+  handleMostUsedClick,
 }) => {
   return (
     <div
@@ -32,11 +30,9 @@ const PageLayout = ({
         }}
       >
         <MenuAppBarWithoutProgressBar
-          departmentValue={departmentValue}
-          setDepartmentValue={setDepartmentValue}
-          departments={departments}
-          sortCriteria={sortValue}
-          setSortCriteria={setSortValue}
+          onDepartmentChange={handleDepartmentChange} 
+          onSearchChange={handleSearchChange}
+          onMostUsedClick={handleMostUsedClick}
         />
       </div>
 
@@ -57,7 +53,7 @@ const PageLayout = ({
         <CssBaseline />
         <div
           className="sm:ml-32 sm:flex-1 overflow-hidden"
-          style={{ // Adjusted to align with the sidebar width
+          style={{// Adjusted to align with the sidebar width
             marginTop: "6vw", // Adjusted to account for the header height
             paddingLeft: "20px", // Added padding for left alignment
             width: "100%", // Adjusted to fill remaining width

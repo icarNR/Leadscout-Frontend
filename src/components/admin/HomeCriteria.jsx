@@ -196,7 +196,7 @@ export default function Criteria({ onCriteriaChange }) {
             <Table
               aria-label="simple table"
               component={Paper}
-              sx={{ backgroundColor: "#007791", width: "100%" }}
+              sx={{ backgroundColor: "#649DAD", width: "100%" }}
             >
               <TableHead>
                 <TableRow>
@@ -244,7 +244,7 @@ export default function Criteria({ onCriteriaChange }) {
               <Button
                 variant="contained"
                 onClick={handleEditClick}
-                sx={{ backgroundColor: "#007791", width: "5vw" }}
+                sx={{ backgroundColor: "#00818A", width: "5vw" }}
               >
                 {isEditing ? "Save" : "Edit"}
               </Button>
@@ -256,11 +256,11 @@ export default function Criteria({ onCriteriaChange }) {
         <Stack direction="column" spacing={2}>
           <CustomButton
             onClick={() => setShowQuickCriteria(true)}
-            sx={{ backgroundColor: "#007791", width: "100%" }}
+            sx={{ backgroundColor: "#00818A", width: "100%" }}
           >
             Quick Criteria
           </CustomButton>
-          <CustomButton sx={{ backgroundColor: "#007791", width: "100%" }}>
+          <CustomButton sx={{ backgroundColor: "#00818A", width: "100%" }}>
             Browse Criteria
           </CustomButton>
         </Stack>

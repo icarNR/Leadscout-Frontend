@@ -12,6 +12,7 @@ import RegistrationForm2 from './pages/Login/RegistrationForm2.jsx'
 import Otp_verify from './pages/Login/Otp_verify.jsx' 
 import RequestPasswordReset from './pages/Login/RequestPasswordReset.jsx'
 import ResetPassword from './pages/Login/ResetPassword.jsx';
+import EmployeeCriteria from './pages/admin/Employee_Criteria.jsx';
 import React, { useState } from 'react';
 import { createTheme } from '@mui/material';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
@@ -45,6 +46,8 @@ function App() {
 
             <Route element={<ProtectedRoute allowedRoles={['admin']} />}>
               <Route path="/Dashboard" element={<Dashboard />} />
+              <Route path="/Employee_Criteria" element={<EmployeeCriteria />} />
+
             </Route>
           </Routes>
       </BrowserRouter>
