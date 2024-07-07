@@ -1,18 +1,12 @@
-/* Global Styles */
-.body {
+.profile-card-wrapper {
   font-family: Arial, sans-serif;
-  display: flex;
-  position: relative;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-  margin: 0;
-  background-color: #f0f2f5;
 }
 
-/* Profile Card Styles */
+.profile-card-wrapper .profile-card {
+  overflow-y: auto; /* Allow scrolling if content is too tall */
+}
 
-.profile-header {
+.profile-card-wrapper .profile-header {
   display: flex;
   align-items: center;
   position: relative;
@@ -21,70 +15,70 @@
   margin-top: 4%;
 }
 
-.profile-pic {
-  width: 15%;
-  height: 15%;
+.profile-card-wrapper .profile-pic {
+  width: 12%;
+  height: 12%;
   border-radius: 50%;
   position: relative;
   margin-right: 4%;
 }
 
-.profile-info {
+.profile-card-wrapper .profile-info {
   flex-grow: 1;
 }
 
-.profile-info h2 {
+.profile-card-wrapper .profile-info h2 {
   margin: 0;
   font-size: 20px;
 }
 
-.profile-info p {
+.profile-card-wrapper .profile-info p {
   margin: 2px 0;
   color: gray;
 }
 
-.flex {
+.profile-card-wrapper .flex {
   display: flex;
 }
 
-.flex-col {
+.profile-card-wrapper .flex-col {
   flex-direction: column;
 }
 
-.overflow-hidden {
+.profile-card-wrapper .overflow-hidden {
   overflow: hidden;
 }
 
-.items-center {
+.profile-card-wrapper .items-center {
   align-items: center;
 }
 
-.w-full {
+.profile-card-wrapper .w-full {
   width: 100%;
 }
 
-.border {
+.profile-card-wrapper .border {
   border: 1px solid #ccc;
 }
 
-.bg-gray-200 {
+.profile-card-wrapper .bg-gray-200 {
   background-color: #e2e2e2;
 }
-.px-2 {
+.profile-card-wrapper .px-2 {
   padding-left: 0.5rem;
   padding-right: 0.5rem;
 }
 
-.py-1 {
+.profile-card-wrapper .py-1 {
   padding-top: 0.25rem;
   padding-bottom: 0.25rem;
 }
 
-.bg-white {
+.profile-card-wrapper .bg-white {
   background-color: white;
 }
 
-.button-group {
+.profile-card-wrapper .button-group {
   display: flex;
   justify-content: center;
   margin-top: 5%;
@@ -92,18 +86,13 @@
   color: #000;
 }
 
-.profile-body {
+.profile-card-wrapper .profile-body {
   display: flex;
   align-items: center;
   margin-top: 5%;
 }
 
-.progress-circle {
-  position: relative;
-  margin-right: 5%;
-}
-
-.progress-value {
+.profile-card-wrapper .progress-value {
   position: absolute;
   top: 50%;
   left: 50%;
@@ -112,69 +101,71 @@
   color: rgb(0, 129, 138);
 }
 
-.traits {
+.profile-card-wrapper .traits{
   flex-grow: 1;
 }
 
-.trait {
+.profile-card-wrapper .trait {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 10px;
+  cursor: pointer;
 }
 
-.trait span:first-of-type {
+.profile-card-wrapper .trait span:first-of-type {
   flex-basis: 30%;
   text-transform: capitalize;
   text-align: left;
 }
 
-.trait-bar {
+.profile-card-wrapper .trait-bar {
   flex-basis: 40%;
   background-color: #e6e6e6;
   border-radius: 4px;
   overflow: hidden;
 }
 
-.trait-progress {
+.profile-card-wrapper .trait-progress {
   height: 10px;
   border-radius: 4px;
   transition: width 0.5s ease;
 }
 
-.p-3 {
-  padding: 1rem;
+.profile-card-wrapper .p-3 {
+  padding: 0rem 1rem;
 }
 
-.justify-center {
+.profile-card-wrapper .justify-center {
   justify-content: center;
 }
 
-.td-close-icon {
+.profile-card-wrapper .td-close-icon {
   flex-basis: 30%;
   text-align: right;
   cursor: pointer;
 }
 
-.trait-description {
+.profile-card-wrapper .trait-description {
   padding-left: 5%;
 }
-.trait-description h3 {
+.profile-card-wrapper .trait-description h3 {
   text-align: left;
   color: rgb(0, 129, 138);
 }
 
-.trait-description p {
+.profile-card-wrapper .trait-description p {
   text-align: justify;
   color: rgb(92, 91, 91);
 }
 
-.close-icon {
+.profile-card-wrapper .close-icon {
   top: 100%;
   right: 0;
 }
 
-.profile-close-icon {
+.profile-card-wrapper .profile-close-icon {
   float: right;
   cursor: pointer;
+  padding: 5%
 }

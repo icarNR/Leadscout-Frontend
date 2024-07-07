@@ -23,7 +23,7 @@ const LeadershipTable = ({
 }) => {
   const [leadershipData, setLeadershipData] = useState([]);
   const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [rowsPerPage, setRowsPerPage] = useState(20);
   const [sortedRows, setSortedRows] = useState([]);
   const { searchTerm } = useContext(SearchContext);
 
@@ -114,8 +114,8 @@ const LeadershipTable = ({
           src={params.value || "default_image_path"}
           alt={params.row.name}
           style={{
-            width: "40px",
-            height: "50px",
+            width: "35px",
+            height: "35px",
             objectFit: "cover",
             borderRadius: "50%",
           }}
@@ -161,7 +161,14 @@ const LeadershipTable = ({
       >
         <Table stickyHeader aria-label="sticky table">
           <TableHead>
-            <TableRow>
+            <TableRow
+              sx={{
+                "& th": {
+                  padding: "8px",
+                  height: "55px",
+                },
+              }}
+            >
               {columns.map((column) => (
                 <TableCell style={{ color: "#00818A" }} key={column.field}>
                   {column.headerName}
@@ -175,9 +182,14 @@ const LeadershipTable = ({
               .map((row) => (
                 <TableRow
                   key={row.id}
-                  style={{ backgroundColor:"#F9F9F9"}}
                   onClick={() => handleRowClick(row)}
-                  sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                  sx={{
+                    "&:last-child td, &:last-child th": { border: 0 },
+                    height: "35px", // Adjust this value to your desired row height
+                    "& td, & th": {
+                      padding: "8px", // Adjust this value to your desired cell padding
+                    },
+                  }}
                 >
                   {columns.map((column) => (
                     <TableCell key={column.field}>
@@ -195,7 +207,7 @@ const LeadershipTable = ({
         </Table>
       </TableContainer>
       <TablePagination
-        rowsPerPageOptions={[5, 10, 20, 100]}
+        rowsPerPageOptions={[10, 20, 50, 100]}
         component="div"
         count={filteredData.length}
         rowsPerPage={rowsPerPage}

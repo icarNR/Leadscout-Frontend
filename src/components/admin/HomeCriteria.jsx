@@ -29,10 +29,28 @@ const CustomButton = styled(Button)(({ theme }) => ({
   },
 }));
 
+const CustomTextField = styled(TextField)({
+  "& .MuiOutlinedInput-root": {
+    "& fieldset": {
+      borderColor: "#007791", // Remove border in default state
+    },
+    "&:hover fieldset": {
+      borderColor: "white", // Show border on hover
+    },
+    "&.Mui-focused fieldset": {
+      borderColor: "white", // Show border when focused
+    },
+    backgroundColor: "#007791",
+    color: "white",
+  },
+  "& .MuiInputBase-input": {
+    color: "white",
+  },
+});
+
 export default function Criteria({ onCriteriaChange }) {
   const [rows, setRows] = useState([]);
   const [showQuickCriteria, setShowQuickCriteria] = useState(false);
-  const [isEditing, setIsEditing] = useState(false);
   const [skillsFromStorage, setSkillsFromStorage] = useState([]);
 
   useEffect(() => {
@@ -48,7 +66,6 @@ export default function Criteria({ onCriteriaChange }) {
           checked: false,
           Status: skill,
           Current: 0,
-          isEditing: false,
         }));
         setRows(skills);
       } catch (error) {
@@ -84,6 +101,10 @@ export default function Criteria({ onCriteriaChange }) {
       .map((row) => row.Status);
 
     const criteriaWithDefaults = selectedCriteria.map((skill) => [skill, 0]);
+
+    // Clear sessionStorage before setting new criteria
+    sessionStorage.removeItem("selectedCriteria");
+
     sessionStorage.setItem(
       "selectedCriteria",
       JSON.stringify(criteriaWithDefaults)
@@ -92,10 +113,6 @@ export default function Criteria({ onCriteriaChange }) {
 
     console.log("Selected criteria:", criteriaWithDefaults);
     onCriteriaChange(criteriaWithDefaults);
-  };
-
-  const handleEditClick = () => {
-    setIsEditing(!isEditing);
   };
 
   const handleInputChange = (event, index) => {
@@ -130,8 +147,8 @@ export default function Criteria({ onCriteriaChange }) {
 
             <div
               style={{
-                maxHeight: "300px",
-                width: "750px",
+                maxHeight: "32vw",
+                width: "18vw",
                 overflowY: "auto",
                 marginBottom: "10px",
                 border: "1px solid #ced4da",
@@ -146,12 +163,20 @@ export default function Criteria({ onCriteriaChange }) {
                 sx={{
                   backgroundColor: "#007791",
                   borderRadius: 4,
-                  padding: "10px",
                 }}
               >
                 <TableBody>
                   {rows.map((row, index) => (
-                    <TableRow key={index}>
+                    <TableRow
+                      key={index}
+                      sx={{
+                        "&:last-child td, &:last-child th": { border: 0 },
+                        height: "30px", // Adjust this value to your desired row height
+                        "& td, & th": {
+                          padding: "8px", // Adjust this value to your desired cell padding
+                        },
+                      }}
+                    >
                       <TableCell>
                         <FormControlLabel
                           control={
@@ -186,69 +211,70 @@ export default function Criteria({ onCriteriaChange }) {
       )}
 
       <FormGroup>
-        <div style={{ display: "flex", alignItems: "center" }}>
-          <span style={{ color: "black", marginRight: "10px" }}>Criteria</span>
-          <FormControlLabel control={<Switch />} />
-        </div>
-
         {skillsFromStorage.length > 0 && (
           <>
-            <Table
-              aria-label="simple table"
-              component={Paper}
-              sx={{ backgroundColor: "#007791", width: "100%" }}
+            <div
+              style={{
+                maxHeight: "20vw", // Set the maximum height for the table
+                overflowY: "auto", // Add vertical scroll for overflow
+              }}
             >
-              <TableHead>
-                <TableRow>
-                  <TableCell align="left" className="whiteText">
-                    Skills
-                  </TableCell>
-                  <TableCell align="left" className="whiteText">
-                    Current
-                  </TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {skillsFromStorage.map((skill, index) => (
-                  <TableRow key={index} sx={{ height: "5px" }}>
-                    <TableCell
-                      align="left"
-                      className="whiteText"
-                      sx={{ height: "5px" }}
-                    >
-                      {skill[0]}
+              <Table
+                aria-label="simple table"
+                component={Paper}
+                sx={{ backgroundColor: "#007791", width: "100%" }}
+              >
+                <TableHead>
+                  <TableRow>
+                    <TableCell align="left" className="whiteText">
+                      Skills
                     </TableCell>
                     <TableCell align="left" className="whiteText">
-                      {isEditing ? (
-                        <TextField
+                      Current
+                    </TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {skillsFromStorage.map((skill, index) => (
+                    <TableRow
+                      key={index}
+                      sx={{
+                        "&:last-child td, &:last-child th": { border: 0 },
+                        height: "30px", // Adjust this value to your desired row height
+                        "& td, & th": {
+                          padding: "8px", // Adjust this value to your desired cell padding
+                        },
+                      }}
+                    >
+                      <TableCell
+                        align="left"
+                        className="whiteText"
+                        sx={{ height: "5px" }}
+                      >
+                        {skill[0]}
+                      </TableCell>
+                      <TableCell
+                        align="left"
+                        className="whiteText"
+                        width="100px"
+                      >
+                        <CustomTextField
                           value={skill[1]}
                           onChange={(event) => handleInputChange(event, index)}
                           variant="outlined"
                           size="small"
-                          sx={{ backgroundColor: "#ffffff", width: "100%" }}
                           inputProps={{
                             inputMode: "numeric",
                             pattern: "[0-9]*",
-                          }} // Restrict input to numbers only
+                          }}
                         />
-                      ) : (
-                        skill[1]
-                      )}
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </div>
             <br />
-            <Stack direction="column" spacing={2} alignItems="flex-end">
-              <Button
-                variant="contained"
-                onClick={handleEditClick}
-                sx={{ backgroundColor: "#007791", width: "5vw" }}
-              >
-                {isEditing ? "Save" : "Edit"}
-              </Button>
-            </Stack>
           </>
         )}
 
