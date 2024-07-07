@@ -31,8 +31,8 @@ export default function ResponsiveDrawer(props){
   
   const links = [
     { text: 'Employees', linkName: '/Dashboard' },
-    { text: 'Skill Manage', linkName: '/' },
-    { text: 'Criteria Manage', linkName: '/' },
+    //{ text: 'Skill Manage', linkName: '/' },
+    { text: 'Criteria Manage', linkName: '/Employee_Criteria' },
     { text: 'Notifications', linkName: '/' }
   ];
   
