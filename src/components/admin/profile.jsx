@@ -8,7 +8,8 @@ import Grid from "@mui/material/Grid";
 // Styled CircularProgress component
 const StyledCircularProgress = styled(CircularProgress)(({ theme }) => ({
   circle: {
-    strokeWidth: 4,
+    strokeWidth: 3.3,
+    color: "#499aa1",
   },
   circleDeterminate: {
     strokeWidth: 3,
@@ -124,184 +125,185 @@ const Profile = ({ profileData, onClose }) => {
       "Neuroticism is characterized by sadness, moodiness, and emotional instability. It is a physical and emotional response to stress and perceived threats in someone’s daily life. Individuals who exhibit high levels of neuroticism will tend to experience mood swings, anxiety and irritability. Those who rank lower on the neurotic level will exhibit a more stable and emotionally resilient attitude to stress and situations. Low neurotic sufferers also rarely feel sad or depressed and not get involved in mental arithmetic on possible stress-inducing factors.",
   };
 
-  const colors = ["blue", "yellow", "pink", "green", "purple", "yellow"];
-
   return (
-    <div
-      className="profile-card"
-      style={{ width: "60vw", height: "35vw", border: "1px solid #ccc" }}
-    >
-      <div className="profile-close-icon">
-        <CloseIcon onClick={onClose} />
-      </div>
-      <div className="profile-header">
-        <img src={picture} alt="Profile" className="profile-pic" />
-        <div className="profile-info">
-          <h2>{name}</h2>
-          <p>{user_id}</p>
-          <p className="position">{position}</p>
+    <div className="profile-card-wrapper">
+      <div
+        className="profile-card"
+        style={{ width: "60vw", height: "35vw", border: "1px solid #ccc" }}
+      >
+        <div className="profile-close-icon">
+          <CloseIcon onClick={onClose} />
         </div>
-      </div>
-      <br />
-      <div className="flex flex-col overflow-hidden items-center w-full">
-        <div className="flex border bg-gray-200 items-center border rounded-[5px]">
-          <button
-            onClick={() => handleTabChange(0)}
-            className={`px-2 py-1 ${
-              selectedTab === 0 ? "bg-white" : "bg-gray-200"
-            } w-[150px] border rounded-[5px]`}
-          >
-            Leadership
-          </button>
-          <button
-            onClick={() => handleTabChange(1)}
-            className={`px-2 py-1 ${
-              selectedTab === 1 ? "bg-white" : "bg-gray-200"
-            } w-[150px] border rounded-[5px]`}
-          >
-            Competency
-          </button>
+        <div className="profile-header">
+          <img src={picture} alt="Profile" className="profile-pic" />
+          <div className="profile-info">
+            <h2>{name}</h2>
+            <p>{user_id}</p>
+            <p className="position">{position}</p>
+          </div>
         </div>
-        <div className="w-full sm:w-[480px]">
-          <div className="p-3 w-full items-center justify-center">
-            <div className="profile-body">
-              <div
-                className="progress-circle"
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  width: "20%",
-                  height: "20%",
-                  padding: "10px",
-                  boxSizing: "border-box",
-                }}
-              >
-                <StyledCircularProgress
-                  variant="determinate"
-                  value={progress}
-                  size={150}
-                />
-                <div className="progress-value">
-                  {selectedTab === 0 ? potential : competency}%
+        <br />
+        <div className="flex flex-col overflow-hidden items-center w-full">
+          <div className="flex border bg-gray-200 items-center border rounded-[5px]">
+            <button
+              onClick={() => handleTabChange(0)}
+              className={`px-2 py-1 ${
+                selectedTab === 0 ? "bg-white" : "bg-gray-200"
+              } w-[150px] border rounded-[5px]`}
+            >
+              Leadership
+            </button>
+            <button
+              onClick={() => handleTabChange(1)}
+              className={`px-2 py-1 ${
+                selectedTab === 1 ? "bg-white" : "bg-gray-200"
+              } w-[150px] border rounded-[5px]`}
+            >
+              Competency
+            </button>
+          </div>
+          <div className="w-full sm:w-[480px]">
+            <div className="p-3 w-full items-center justify-center">
+              <div className="profile-body">
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    width: "20%",
+                    height: "20%",
+                    padding: "10px",
+                    boxSizing: "border-box",
+                    position: "relative",
+                    marginRight: "5%",
+                  }}
+                >
+                  <StyledCircularProgress
+                    variant="determinate"
+                    value={progress}
+                    size={150}
+                  />
+                  <div className="progress-value">
+                    {selectedTab === 0 ? potential : competency}%
+                  </div>
                 </div>
-              </div>
-              {selectedTab === 0 && (
-                <div className="traits">
-                  {!selectedTrait ? (
-                    <div className="traits-list">
-                      <div
-                        className="trait"
-                        onClick={() => handleTraitClick("Openness")}
-                      >
-                        <span>Openness</span>
-                        <div className="trait-bar">
-                          <div
-                            className="trait-progress"
-                            style={{
-                              width: `${traits.openness}%`,
-                              backgroundColor: "#FFF500",
-                            }}
-                          ></div>
-                        </div>
-                        <span>{traits.openness}</span>
-                      </div>
-                      <div
-                        className="trait"
-                        onClick={() => handleTraitClick("Conscientiousness")}
-                      >
-                        <span>Conscientiousness</span>
-                        <div className="trait-bar">
-                          <div
-                            className="trait-progress"
-                            style={{
-                              width: `${traits.conscientiousness}%`,
-                              backgroundColor: "#AB40FF",
-                            }}
-                          ></div>
-                        </div>
-                        <span>{traits.conscientiousness}</span>
-                      </div>
-                      <div
-                        className="trait"
-                        onClick={() => handleTraitClick("Extraversion")}
-                      >
-                        <span>Extraversion</span>
-                        <div className="trait-bar">
-                          <div
-                            className="trait-progress"
-                            style={{
-                              width: `${traits.extraversion}%`,
-                              backgroundColor: "#FF00B8",
-                            }}
-                          ></div>
-                        </div>
-                        <span>{traits.extraversion}</span>
-                      </div>
-                      <div
-                        className="trait"
-                        onClick={() => handleTraitClick("Agreeableness")}
-                      >
-                        <span>Agreeableness</span>
-                        <div className="trait-bar">
-                          <div
-                            className="trait-progress"
-                            style={{
-                              width: `${traits.agreeableness}%`,
-                              backgroundColor: "#52FF00",
-                            }}
-                          ></div>
-                        </div>
-                        <span>{traits.agreeableness}</span>
-                      </div>
-                      <div
-                        className="trait"
-                        onClick={() => handleTraitClick("Neuroticism")}
-                      >
-                        <span>Neuroticism</span>
-                        <div className="trait-bar">
-                          <div
-                            className="trait-progress"
-                            style={{
-                              width: `${traits.neuroticism}%`,
-                              backgroundColor: "#00D1FF",
-                            }}
-                          ></div>
-                        </div>
-                        <span>{traits.neuroticism}</span>
-                      </div>
-                    </div>
-                  ) : (
-                    <div className="trait-description">
-                      <div className="td-close-icon">
-                        <CloseIcon onClick={handleCloseDescription} />
-                      </div>
-                      <h3>{selectedTrait}</h3>
-                      <br />
-                      <p>{traitDescriptions[selectedTrait]}</p>
-                    </div>
-                  )}
-                </div>
-              )}
-              {selectedTab === 1 && (
-                <div className="traits">
-                  {skills.map((skill, index) => (
-                    <div className="trait" key={index}>
-                      <span>{skill[0]}</span>
-                      <div className="trait-bar">
+                {selectedTab === 0 && (
+                  <div className="traits">
+                    {!selectedTrait ? (
+                      <div className="traits-list">
                         <div
-                          className="trait-progress"
-                          style={{
-                            width: `${skill[1] * 10}%`,
-                            backgroundColor: colors[index % colors.length],
-                          }}
-                        ></div>
+                          className="trait"
+                          onClick={() => handleTraitClick("Openness")}
+                        >
+                          <span>Openness</span>
+                          <div className="trait-bar">
+                            <div
+                              className="trait-progress"
+                              style={{
+                                width: `${traits.openness}%`,
+                                backgroundColor: "#FFF500",
+                              }}
+                            ></div>
+                          </div>
+                          <span>{traits.openness}</span>
+                        </div>
+                        <div
+                          className="trait"
+                          onClick={() => handleTraitClick("Conscientiousness")}
+                        >
+                          <span>Conscientiousness</span>
+                          <div className="trait-bar">
+                            <div
+                              className="trait-progress"
+                              style={{
+                                width: `${traits.conscientiousness}%`,
+                                backgroundColor: "#AB40FF",
+                              }}
+                            ></div>
+                          </div>
+                          <span>{traits.conscientiousness}</span>
+                        </div>
+                        <div
+                          className="trait"
+                          onClick={() => handleTraitClick("Extraversion")}
+                        >
+                          <span>Extraversion</span>
+                          <div className="trait-bar">
+                            <div
+                              className="trait-progress"
+                              style={{
+                                width: `${traits.extraversion}%`,
+                                backgroundColor: "#FF00B8",
+                              }}
+                            ></div>
+                          </div>
+                          <span>{traits.extraversion}</span>
+                        </div>
+                        <div
+                          className="trait"
+                          onClick={() => handleTraitClick("Agreeableness")}
+                        >
+                          <span>Agreeableness</span>
+                          <div className="trait-bar">
+                            <div
+                              className="trait-progress"
+                              style={{
+                                width: `${traits.agreeableness}%`,
+                                backgroundColor: "#52FF00",
+                              }}
+                            ></div>
+                          </div>
+                          <span>{traits.agreeableness}</span>
+                        </div>
+                        <div
+                          className="trait"
+                          onClick={() => handleTraitClick("Neuroticism")}
+                        >
+                          <span>Neuroticism</span>
+                          <div className="trait-bar">
+                            <div
+                              className="trait-progress"
+                              style={{
+                                width: `${traits.neuroticism}%`,
+                                backgroundColor: "#00D1FF",
+                              }}
+                            ></div>
+                          </div>
+                          <span>{traits.neuroticism}</span>
+                        </div>
                       </div>
-                      <span>{`${skill[1] * 10}%`}</span>
-                    </div>
-                  ))}
-                </div>
-              )}
+                    ) : (
+                      <div className="trait-description">
+                        <div className="td-close-icon">
+                          <CloseIcon onClick={handleCloseDescription} />
+                        </div>
+                        <h3>{selectedTrait}</h3>
+                        <br />
+                        <p>{traitDescriptions[selectedTrait]}</p>
+                      </div>
+                    )}
+                  </div>
+                )}
+                {selectedTab === 1 && (
+                  <div class="traits">
+                    {skills.map((skill, index) => (
+                      <div className="trait" key={index}>
+                        <span>{skill[0]}</span>
+                        <div className="trait-bar">
+                          <div
+                            className="trait-progress"
+                            style={{
+                              width: `${skill[1] * 10}%`,
+                              backgroundColor: "#499aa1",
+                            }}
+                          ></div>
+                        </div>
+                        <span>{`${skill[1] * 10}%`}</span>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
             </div>
           </div>
         </div>
