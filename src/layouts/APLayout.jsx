@@ -59,7 +59,7 @@ const PageLayout = ({
         {/*}
         <div
           className="sm:flex-1 overflow-hidden"
-         style={{
+          style={{
             height: "calc(100vh - 10%)", // Adjusted to account for the header height
             marginLeft: "140px", // Adjusted to align with the sidebar width
             marginTop: "5vw", // Adjusted to account for the header height
