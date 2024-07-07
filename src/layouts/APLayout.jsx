@@ -1,7 +1,7 @@
 import React from "react";
 import { MenuAppBarWithoutProgressBar } from "../components/admin/adminHeader.jsx";
 import CssBaseline from "@mui/material/CssBaseline";
-import ClippedDrawer from "../components/admin/adminSideNavbar.jsx";
+import ResponsiveDrawer from "../components/admin/adminSideNavbar.jsx";
 
 const PageLayout = ({
   content,
@@ -52,22 +52,30 @@ const PageLayout = ({
             overflow: "hidden",
           }}
         >
-          <ClippedDrawer />
+          <ResponsiveDrawer />
         </div>
         <CssBaseline />
-        <div
-          // className="sm:ml-32 sm:flex-1 overflow-hidden"
+        <div className='sm:ml-32 mt-[120px] flex-1 overflow-y-auto'
+        style={{// Adjusted to align with the sidebar width
+          paddingLeft: "20px", // Added padding for left alignment
+          width: "100%", // Adjusted to fill remaining width
+        }}  
           // style={{ // Adjusted to align with the sidebar width
           //   marginTop: "6vw", // Adjusted to account for the header height
-          className="sm:flex-1 overflow-hidden"
-          style={{
-            height: "calc(100vh - 10%)", // Adjusted to account for the header height
-            marginLeft: "140px", // Adjusted to align with the sidebar width
-            marginTop: "5vw", // Adjusted to account for the header height
-            paddingTop: "15px",
-            paddingLeft: "20px", // Added padding for left alignment
-            width: "100%", // Adjusted to fill remaining width
-          }}
+          // className="sm:flex-1 overflow-hidden"
+          // style={{// Adjusted to align with the sidebar width
+          //   marginTop: "6vw", // Adjusted to account for the header height
+          //   paddingLeft: "20px", // Added padding for left alignment
+          //   width: "100%", // Adjusted to fill remaining width
+          //}}
+          // style={{
+          //   height: "calc(100vh - 10%)", // Adjusted to account for the header height
+          //   marginLeft: "140px", // Adjusted to align with the sidebar width
+          //   marginTop: "5vw", // Adjusted to account for the header height
+          //   paddingTop: "15px",
+          //   paddingLeft: "20px", // Added padding for left alignment
+          //   width: "100%", // Adjusted to fill remaining width
+          //}}
         >
           {content}
         </div>

@@ -91,10 +91,10 @@ const Criteria = ({ onSelect, department, searchTerm = '', sortByUsage }) => {
     };
 
     return (
-        <div style={{ width: '100%', padding: '20px' }}>
+        <div style={{ width: '100%' }}>
             {plugMessage && <p>{plugMessage}</p>}
 
-            <div style={{ maxHeight: '500px', overflowY: 'auto' }}>
+            <div style={{ maxHeight: '424px', overflowY: 'auto' }}>
                 <table style={{ width: '100%', borderCollapse: 'separate', borderSpacing: '0 10px' }}>
                     <thead style={{ position: 'sticky', top: 0, backgroundColor: '#fff', zIndex: 1 }}>
                         <tr style={{ borderBottom: '2px solid #ddd' }}>
@@ -109,7 +109,7 @@ const Criteria = ({ onSelect, department, searchTerm = '', sortByUsage }) => {
                             (showAllCriteria ? (sortByUsage ? sortedCriteria : criteriaData) : criteriaData).map((criteria, index) => (
                                 <tr
                                     key={index}
-                                    style={criteria.id === selectedId ? { backgroundColor: 'rgb(37, 150, 190)', color: 'white' } : { borderBottom: '1px solid #ddd', backgroundColor: 'rgba(37, 150, 190, 0.1)' }}
+                                    style={criteria.id === selectedId ? { backgroundColor: '#DBEDF3' } : {  backgroundColor: 'rgba(37, 150, 190, 0.1)' }}
                                     onClick={() => handleItemClick(criteria)}
                                 >
                                     <td style={{ textAlign: 'left', padding: '20px', borderTopLeftRadius: '10px', borderBottomLeftRadius: '10px' }}>

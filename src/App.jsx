@@ -6,6 +6,8 @@ import PersonalityPage from './pages/employee/employee_Personality.jsx';
 import AssessmentPage from './pages/employee/Assessment.jsx';
 import HomePage from './pages/employee/employee_Home.jsx';
 import Notification from './pages/employee/employee_Notification.jsx';
+import Notification2 from './pages/admin/admin_notification.jsx';
+
 import LoginForm from './pages/Login/LoginForm.jsx';
 import RegistrationForm from './pages/Login/RegistrationForm.jsx'
 import RegistrationForm2 from './pages/Login/RegistrationForm2.jsx'
@@ -29,12 +31,12 @@ function App() {
     <AuthProvider>
       <BrowserRouter>
           <Routes>
+
             <Route path="/" element={<Authenticate />} />
             <Route path="/LoginForm" element={<LoginForm />} />
             <Route path="/RegistrationForm" element={<RegistrationForm setFormData={setFormData} />} />
             <Route path="/RegistrationForm2" element={<RegistrationForm2 formData={formData} />} />
             <Route path="/Otp_verify" element={<Otp_verify formData={formData} />} />
-            <Route path="/employee_Notification" element={<Notification />} />
             <Route path= "/RequestPasswordReset" element={<RequestPasswordReset />} />
             <Route path="/ResetPassword" element={<ResetPassword />} />
 
@@ -42,13 +44,15 @@ function App() {
               <Route path="/employee_Personality" element={<PersonalityPage />} />
               <Route path="/Assessment" element={<AssessmentPage />} />
               <Route path="/employee_Home" element={<HomePage />} />
+              <Route path="/employee_Notification" element={<Notification />} />
             </Route>
 
             <Route element={<ProtectedRoute allowedRoles={['admin']} />}>
               <Route path="/Dashboard" element={<Dashboard />} />
               <Route path="/Employee_Criteria" element={<EmployeeCriteria />} />
-
+              <Route path="/admin_notification" element={<Notification2 />} />
             </Route>
+
           </Routes>
       </BrowserRouter>
     </AuthProvider>

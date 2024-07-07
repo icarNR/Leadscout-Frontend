@@ -44,13 +44,13 @@ function EmployeeCriteria() {
   };
 
   const pageContent=(
-  <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh', overflowY: 'hidden' }}>
+  <div style={{ display: 'flex', flexDirection: 'column', maxHeight: '100vh', overflowY: 'hidden' }}>
   <CssBaseline />
   <div className='flex-1 overflow-y-auto'>
-    <div className="flex h-screen flex-row ">
+    <div className="flex flex-row ">
         {/* left part */}
-      <div className="flex flex-col items-center flex-grow h-full lg:h-full border">
-        <div style={{ marginTop: '50px' }} className="w-full flex justify-center px-10 mb-10 ">
+      <div className="flex flex-col items-center flex-grow">
+        <div style={{ marginTop: '50px' }} className="w-full flex justify-center px-10  ">
           <Criteria 
             onSelect={handleCriteriaSelect}
             department={selectedDepartment}
@@ -60,8 +60,8 @@ function EmployeeCriteria() {
         </div>
       </div>
       {/* right part */}
-      <div className="bg-cover bg-center w-[340px] flex flex-col items-start justify-top gap-7 h-screen lg:h-full p-5 border" style={{ alignItems: 'flex-start' }}>
-        <div style={{ marginTop: '70px' }}>
+      <div className="bg-cover bg-center w-[340px] flex flex-col items-start justify-top p-5 " style={{ alignItems: 'flex-start' }}>
+        <div style={{ marginTop: '50px' }}>
           <Recent />
         </div>
         <div style={{ marginTop: '10px'}}>

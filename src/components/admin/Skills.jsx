@@ -27,19 +27,16 @@ const Skills = ({ criteriaId }) => {
     };
 
     const tableStyle = {
-        // width: '300px',
-        // borderCollapse: 'collapse',
-        // marginTop: '10px',
-        // borderRadius: '8px',
-        width: '120%',
+        width: '300px',
         borderCollapse: 'collapse',
         marginTop: '10px',
-        borderRadius: '10px',
+        borderRadius: '8px',
         overflow: 'hidden',
+        backgroundColor: '#649DAD'
     };
 
     const thStyle = {
-        backgroundColor: 'rgb(37, 150, 190)',
+        backgroundColor: '#649DAD',
         color: 'white',
         padding: '10px',
         textAlign: 'left',
@@ -53,7 +50,7 @@ const Skills = ({ criteriaId }) => {
         textAlign: 'left',
         borderTop: '1px solid #ddd',
         borderBottom: '1px solid #ddd',
-        backgroundColor: 'rgb(37, 150, 190)',
+        backgroundColor: '#649DAD',
         color: 'white', // Ensuring text color is readable
     };
 

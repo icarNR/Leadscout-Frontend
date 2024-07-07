@@ -35,6 +35,11 @@ const Search = styled("div")(({ theme }) => ({
   },
 }));
 
+const appbarStyles = {
+  backgroundColor: "#404B69",
+  color: "#00818A"
+};
+
 const SearchIconWrapper = styled("div")(({ theme }) => ({
   padding: theme.spacing(0, 2),
   height: "100%",
@@ -129,7 +134,7 @@ export function MenuAppBarWithoutProgressBar({ onDepartmentChange, onSearchChang
 
   return (
     <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="static">
+      <AppBar position="static" sx={{...appbarStyles}}>
         <Box
           sx={{
             display: "flex",

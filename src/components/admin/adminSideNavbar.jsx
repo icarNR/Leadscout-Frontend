@@ -33,7 +33,7 @@ export default function ResponsiveDrawer(props){
     { text: 'Employees', linkName: '/Dashboard' },
     //{ text: 'Skill Manage', linkName: '/' },
     { text: 'Criteria Manage', linkName: '/Employee_Criteria' },
-    { text: 'Notifications', linkName: '/' }
+    { text: 'Notifications', linkName: '/admin_notification' }
   ];
   
   const handleListItemClick = (event, index) => {
