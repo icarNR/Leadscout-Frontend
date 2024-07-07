@@ -28,7 +28,7 @@ function App() {
   const [formData, setFormData] = useState({});
 
   return (
-    <AuthProvider>
+    
       <BrowserRouter>
           <Routes>
 
@@ -55,7 +55,7 @@ function App() {
 
           </Routes>
       </BrowserRouter>
-    </AuthProvider>
+    
   );
 
   
