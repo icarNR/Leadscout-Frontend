@@ -23,7 +23,7 @@ const LeadershipTable = ({
 }) => {
   const [leadershipData, setLeadershipData] = useState([]);
   const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [rowsPerPage, setRowsPerPage] = useState(20);
   const [sortedRows, setSortedRows] = useState([]);
   const { searchTerm } = useContext(SearchContext);
 
@@ -114,8 +114,8 @@ const LeadershipTable = ({
           src={params.value || "default_image_path"}
           alt={params.row.name}
           style={{
-            width: "50px",
-            height: "50px",
+            width: "35px",
+            height: "35px",
             objectFit: "cover",
             borderRadius: "50%",
           }}
@@ -162,12 +162,12 @@ const LeadershipTable = ({
         <Table stickyHeader aria-label="sticky table">
           <TableHead>
             <TableRow
-            sx={{
-                    "& th": {
-                      padding: "8px",
-                      height: "55px"
-                    },
-                  }}
+              sx={{
+                "& th": {
+                  padding: "8px",
+                  height: "55px",
+                },
+              }}
             >
               {columns.map((column) => (
                 <TableCell style={{ color: "#00818A" }} key={column.field}>
@@ -185,7 +185,7 @@ const LeadershipTable = ({
                   onClick={() => handleRowClick(row)}
                   sx={{
                     "&:last-child td, &:last-child th": { border: 0 },
-                    height: "40px", // Adjust this value to your desired row height
+                    height: "35px", // Adjust this value to your desired row height
                     "& td, & th": {
                       padding: "8px", // Adjust this value to your desired cell padding
                     },
@@ -207,7 +207,7 @@ const LeadershipTable = ({
         </Table>
       </TableContainer>
       <TablePagination
-        rowsPerPageOptions={[5, 10, 20, 100]}
+        rowsPerPageOptions={[10, 20, 50, 100]}
         component="div"
         count={filteredData.length}
         rowsPerPage={rowsPerPage}

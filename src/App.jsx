@@ -26,10 +26,10 @@ function App() {
   const [formData, setFormData] = useState({});
 
   return (
-    <AuthProvider>
+    
       <BrowserRouter>
           <Routes>
-            <Route path="/" element={<Authenticate />} />
+            <Route path="/" element={<LoginForm />} />
             <Route path="/LoginForm" element={<LoginForm />} />
             <Route path="/RegistrationForm" element={<RegistrationForm setFormData={setFormData} />} />
             <Route path="/RegistrationForm2" element={<RegistrationForm2 formData={formData} />} />
@@ -47,11 +47,11 @@ function App() {
             <Route element={<ProtectedRoute allowedRoles={['admin']} />}>
               <Route path="/Dashboard" element={<Dashboard />} />
               <Route path="/Employee_Criteria" element={<EmployeeCriteria />} />
-
             </Route>
+
           </Routes>
       </BrowserRouter>
-    </AuthProvider>
+    
   );
 
   
