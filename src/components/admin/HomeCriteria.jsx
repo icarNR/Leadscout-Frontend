@@ -20,8 +20,8 @@ const server = "http://127.0.0.1:8000";
 
 const CustomButton = styled(Button)(({ theme }) => ({
   borderRadius: 8,
-  backgroundColor: theme.palette.primary.main,
-  width: 330,
+  backgroundColor: "#007791",
+  width: "300px",
   color: theme.palette.primary.contrastText,
   margin: "0 5px",
   "&:hover": {
@@ -57,11 +57,23 @@ export default function Criteria({ onCriteriaChange }) {
     const fetchSkills = async () => {
       try {
         const accessToken = sessionStorage.getItem("access_token"); // Retrieve the access token
-        const response = await axios.get(`${server}/skills`, {
-          headers: {
-            Authorization: `Bearer ${accessToken}`, // Include the access token in the request headers
-          },
-        });
+        const response = await axios
+          .get(`${server}/skills`, {
+            headers: {
+              Authorization: `Bearer ${accessToken}`, // Include the access token in the request headers
+            },
+          })
+          .then((response) => {
+            if (response.status == 403 || response.status == 401) {
+              throw new Error("Network response was not ok");
+            }
+            return response.data;
+          })
+          .catch((error) => {
+            console.error("There was an error!", error);
+            navigate("/LoginForm"); // Navigate to login form on error
+          });
+
         const skills = response.data.map((skill) => ({
           checked: false,
           Status: skill,
@@ -229,7 +241,10 @@ export default function Criteria({ onCriteriaChange }) {
               <Table
                 aria-label="simple table"
                 component={Paper}
-                sx={{ backgroundColor: "#007791", width: "100%" }}
+                sx={{
+                  backgroundColor: "#007791",
+                  width: "300px",
+                }}
               >
                 <TableHead>
                   <TableRow>
@@ -300,11 +315,10 @@ export default function Criteria({ onCriteriaChange }) {
         <Stack direction="column" spacing={2}>
           <CustomButton
             onClick={() => setShowQuickCriteria(true)}
-            sx={{ backgroundColor: "#00818A", width: "100%" }}
           >
             Quick Criteria
           </CustomButton>
-          <CustomButton sx={{ backgroundColor: "#00818A", width: "100%" }}>
+          <CustomButton>
             Browse Criteria
           </CustomButton>
         </Stack>

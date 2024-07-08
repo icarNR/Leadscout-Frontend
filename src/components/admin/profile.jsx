@@ -43,7 +43,17 @@ const Profile = ({ profileData, onClose }) => {
               Authorization: `Bearer ${accessToken}`,
             },
           }
-        );
+        )
+          .then((response) => {
+            if (response.status == 403 || response.status == 401) {
+              throw new Error("Network response was not ok");
+            }
+            return response.data;
+          })
+          .catch((error) => {
+            console.error("There was an error!", error);
+            navigate("/LoginForm"); // Navigate to login form on error
+          });
 
         if (!response.ok) {
           throw new Error("Network response was not ok");
@@ -205,7 +215,9 @@ const Profile = ({ profileData, onClose }) => {
                               }}
                             ></div>
                           </div>
-                          <span>{traits.openness}</span>
+                          <span>
+                            {traits.openness.toString().padStart(2, "0")}
+                          </span>
                         </div>
                         <div
                           className="trait"
@@ -221,7 +233,11 @@ const Profile = ({ profileData, onClose }) => {
                               }}
                             ></div>
                           </div>
-                          <span>{traits.conscientiousness}</span>
+                          <span>
+                            {traits.conscientiousness
+                              .toString()
+                              .padStart(2, "0")}
+                          </span>
                         </div>
                         <div
                           className="trait"
@@ -237,7 +253,9 @@ const Profile = ({ profileData, onClose }) => {
                               }}
                             ></div>
                           </div>
-                          <span>{traits.extraversion}</span>
+                          <span>
+                            {traits.extraversion.toString().padStart(2, "0")}
+                          </span>
                         </div>
                         <div
                           className="trait"
@@ -253,7 +271,9 @@ const Profile = ({ profileData, onClose }) => {
                               }}
                             ></div>
                           </div>
-                          <span>{traits.agreeableness}</span>
+                          <span>
+                            {traits.agreeableness.toString().padStart(2, "0")}
+                          </span>
                         </div>
                         <div
                           className="trait"
@@ -269,7 +289,9 @@ const Profile = ({ profileData, onClose }) => {
                               }}
                             ></div>
                           </div>
-                          <span>{traits.neuroticism}</span>
+                          <span>
+                            {traits.neuroticism.toString().padStart(2, "0")}
+                          </span>
                         </div>
                       </div>
                     ) : (
@@ -298,7 +320,7 @@ const Profile = ({ profileData, onClose }) => {
                             }}
                           ></div>
                         </div>
-                        <span>{`${skill[1] * 10}%`}</span>
+                        <span>{`${skill[1]}`}</span>
                       </div>
                     ))}
                   </div>
