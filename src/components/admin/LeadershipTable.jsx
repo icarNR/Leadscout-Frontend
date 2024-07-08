@@ -45,15 +45,23 @@ const LeadershipTable = ({
           params.session_data = JSON.stringify(Object.fromEntries(sessionData));
         }
 
-        const response = await axios.get(
-          `${server}/src/component/admin/LeadershipTable/`,
-          {
+        const response = await axios
+          .get(`${server}/src/component/admin/LeadershipTable/`, {
             params,
             headers: {
               Authorization: `Bearer ${accessToken}`,
             },
-          }
-        );
+          })
+          .then((response) => {
+            if (response.status == 403 || response.status == 401) {
+              throw new Error("Network response was not ok");
+            }
+            return response.data;
+          })
+          .catch((error) => {
+            console.error("There was an error!", error);
+            navigate("/LoginForm"); // Navigate to login form on error
+          });
 
         const dataWithId = response.data.map((item, index) => ({
           ...item,
@@ -155,7 +163,7 @@ const LeadershipTable = ({
   ];
 
   return (
-    <Paper style={{ width: "65vw", overflow: "hidden" }}>
+    <Paper style={{ width: "100%", overflow: "hidden" }}>
       <TableContainer
         style={{ maxHeight: "calc(100vh - 240px)", minHeight: "35vw" }}
       >

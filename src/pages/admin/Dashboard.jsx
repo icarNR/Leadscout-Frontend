@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Box from "@mui/material/Box";
+import CssBaseline from "@mui/material/CssBaseline";
 import Grid from "@mui/material/Grid";
 import LeadershipTable from "../../components/admin/LeadershipTable.jsx";
 import Criteria from "../../components/admin/HomeCriteria.jsx";
 import PageLayout from "../../layouts/APLayout.jsx";
 import Profile from "../../components/admin/profile.jsx";
-import "./Dashboard.css";
+//import "./Dashboard.css";
 
 const server = "http://127.0.0.1:8000";
 
@@ -26,6 +27,20 @@ function Dashboard() {
             Authorization: `Bearer ${accessToken}`,
           },
         });
+        {
+          /*
+          .then((response) => {
+            if (response.status == 403 || response.status !== 401) {
+              throw new Error("Network response was not ok");
+            }
+            return response.data;
+          })
+          .catch((error) => {
+            console.error("There was an error!", error);
+            navigate("/LoginForm"); // Navigate to login form on error
+          });*/
+        }
+
         setDepartments(response.data);
       } catch (error) {
         console.error("Error fetching departments:", error);
@@ -52,26 +67,46 @@ function Dashboard() {
   };
 
   const pageContent = (
-    <div className="container">
-      <Box sx={{ flexGrow: 1 }}>
-        <Grid container spacing={7}>
-          <Grid item xs={9.5} style={{ width: "65vw" }}>
-            {selectedProfile ? (
-              <Profile profileData={selectedProfile} onClose={closeProfile} />
-            ) : (
-              <LeadershipTable
-                selectedCriteria={selectedCriteria}
-                departmentValue={departmentValue}
-                sortCriteria={sortValue}
-                onRowClick={handleRowClick}
-              />
-            )}
-          </Grid>
-          <Grid item xs={2.5} style={{ width: "35vw" }}>
-            <Criteria onCriteriaChange={handleCriteriaChange} />
-          </Grid>
-        </Grid>
-      </Box>
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        maxHeight: "100vh",
+        overflowY: "hidden",
+        width: "100%",
+      }}
+    >
+      <CssBaseline />
+      <div className="flex-1 overflow-y-auto">
+        <div className="flex flex-row ">
+          {/* left part */}
+          <div className="flex flex-col items-center flex-grow">
+            <div
+              style={{ marginTop: "50px" }}
+              className="w-full flex justify-center px-10  "
+            >
+              {selectedProfile ? (
+                <Profile profileData={selectedProfile} onClose={closeProfile} />
+              ) : (
+                <LeadershipTable
+                  selectedCriteria={selectedCriteria}
+                  departmentValue={departmentValue}
+                  sortCriteria={sortValue}
+                  onRowClick={handleRowClick}
+                />
+              )}
+            </div>
+          </div>
+          <div
+            className="bg-cover bg-center w-[340px] flex flex-col items-start justify-top p-5"
+            style={{ alignItems: "flex-start" }}
+          >
+            <div style={{ marginTop: "50px" }}>
+              <Criteria onCriteriaChange={handleCriteriaChange} />
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 
