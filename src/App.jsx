@@ -12,6 +12,7 @@ import RegistrationForm2 from './pages/Login/RegistrationForm2.jsx'
 import Otp_verify from './pages/Login/Otp_verify.jsx' 
 import RequestPasswordReset from './pages/Login/RequestPasswordReset.jsx'
 import ResetPassword from './pages/Login/ResetPassword.jsx';
+import EmployeeCriteria from './pages/admin/Employee_Criteria.jsx';
 import React, { useState } from 'react';
 import { createTheme } from '@mui/material';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
@@ -36,11 +37,18 @@ function App() {
             <Route path="/employee_Notification" element={<Notification />} />
             <Route path= "/RequestPasswordReset" element={<RequestPasswordReset />} />
             <Route path="/ResetPassword" element={<ResetPassword />} />
-            <Route path="/employee_Personality" element={<PersonalityPage />} />
-            <Route path="/Assessment" element={<AssessmentPage />} />
-            <Route path="/employee_Home" element={<HomePage />} />
-            <Route path="/Dashboard" element={<Dashboard />} />
-            
+
+            <Route element={<ProtectedRoute allowedRoles={['user']} />}>
+              <Route path="/employee_Personality" element={<PersonalityPage />} />
+              <Route path="/Assessment" element={<AssessmentPage />} />
+              <Route path="/employee_Home" element={<HomePage />} />
+            </Route>
+
+            <Route element={<ProtectedRoute allowedRoles={['admin']} />}>
+              <Route path="/Dashboard" element={<Dashboard />} />
+              <Route path="/Employee_Criteria" element={<EmployeeCriteria />} />
+            </Route>
+
           </Routes>
       </BrowserRouter>
     

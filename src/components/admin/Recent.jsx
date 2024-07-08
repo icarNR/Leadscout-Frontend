@@ -32,6 +32,7 @@ const Recent = () => {
         padding: '15px',
         margin: '1px',
         backgroundColor: 'rgb(233, 244, 248)',
+        //width: '300px',
         width: '400px',
         marginRight: '10px',
         paddingLeft: '20px',

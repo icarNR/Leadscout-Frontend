@@ -34,7 +34,7 @@ function LoginForm() {
     const handleLogin = async () => {
         if (validate()) {
             try {
-                const response = await axios.post('http://127.0.0.1:800/login_token',
+                const response = await axios.post('http://127.0.0.1:8000/login_token',
                     new URLSearchParams({ username: email, password: password }),
                     { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } });
                     

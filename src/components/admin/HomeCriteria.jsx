@@ -225,11 +225,18 @@ export default function Criteria({ onCriteriaChange }) {
       <FormGroup>
         {skillsFromStorage.length > 0 && (
           <>
+
             <div
               style={{
                 maxHeight: "20vw", // Set the maximum height for the table
                 overflowY: "auto", // Add vertical scroll for overflow
               }}
+
+            //<Table
+              //aria-label="simple table"
+              //component={Paper}
+              //sx={{ backgroundColor: "#649DAD", width: "100%" }}
+
             >
               <Table
                 aria-label="simple table"
@@ -290,6 +297,17 @@ export default function Criteria({ onCriteriaChange }) {
               </Table>
             </div>
             <br />
+
+           // <Stack direction="column" spacing={2} alignItems="flex-end">
+          //    <Button
+         //       variant="contained"
+         //       onClick={handleEditClick}
+            //    sx={{ backgroundColor: "#00818A", width: "5vw" }}
+          //    >
+                {isEditing ? "Save" : "Edit"}
+           //   </Button>
+           // </Stack>
+
           </>
         )}
 
