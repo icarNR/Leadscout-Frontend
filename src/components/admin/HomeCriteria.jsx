@@ -20,8 +20,8 @@ const server = "http://127.0.0.1:8000";
 
 const CustomButton = styled(Button)(({ theme }) => ({
   borderRadius: 8,
-  backgroundColor: "#007791",
-  width: "300px",
+  backgroundColor: theme.palette.primary.main,
+  width: 330,
   color: theme.palette.primary.contrastText,
   margin: "0 5px",
   "&:hover": {
@@ -57,23 +57,11 @@ export default function Criteria({ onCriteriaChange }) {
     const fetchSkills = async () => {
       try {
         const accessToken = sessionStorage.getItem("access_token"); // Retrieve the access token
-        const response = await axios
-          .get(`${server}/skills`, {
-            headers: {
-              Authorization: `Bearer ${accessToken}`, // Include the access token in the request headers
-            },
-          })
-          .then((response) => {
-            if (response.status == 403 || response.status == 401) {
-              throw new Error("Network response was not ok");
-            }
-            return response.data;
-          })
-          .catch((error) => {
-            console.error("There was an error!", error);
-            navigate("/LoginForm"); // Navigate to login form on error
-          });
-
+        const response = await axios.get(`${server}/skills`, {
+          headers: {
+            Authorization: `Bearer ${accessToken}`, // Include the access token in the request headers
+          },
+        });
         const skills = response.data.map((skill) => ({
           checked: false,
           Status: skill,
@@ -81,7 +69,15 @@ export default function Criteria({ onCriteriaChange }) {
         }));
         setRows(skills);
       } catch (error) {
-        console.error("Error fetching skills:", error);
+        if (
+          (error.response && error.response.status === 403) ||
+          error.response.status === 401
+        ) {
+          console.error("Access is unauthorized because of invalid token");
+          window.location.href = "/LoginForm";
+        } else {
+          console.error("Error fetching notifications:", error);
+        }
       }
     };
 
@@ -225,18 +221,11 @@ export default function Criteria({ onCriteriaChange }) {
       <FormGroup>
         {skillsFromStorage.length > 0 && (
           <>
-
             <div
               style={{
                 maxHeight: "20vw", // Set the maximum height for the table
                 overflowY: "auto", // Add vertical scroll for overflow
               }}
-
-            //<Table
-              //aria-label="simple table"
-              //component={Paper}
-              //sx={{ backgroundColor: "#649DAD", width: "100%" }}
-
             >
               <Table
                 aria-label="simple table"
@@ -297,17 +286,6 @@ export default function Criteria({ onCriteriaChange }) {
               </Table>
             </div>
             <br />
-
-           // <Stack direction="column" spacing={2} alignItems="flex-end">
-          //    <Button
-         //       variant="contained"
-         //       onClick={handleEditClick}
-            //    sx={{ backgroundColor: "#00818A", width: "5vw" }}
-          //    >
-                {isEditing ? "Save" : "Edit"}
-           //   </Button>
-           // </Stack>
-
           </>
         )}
 
@@ -315,10 +293,11 @@ export default function Criteria({ onCriteriaChange }) {
         <Stack direction="column" spacing={2}>
           <CustomButton
             onClick={() => setShowQuickCriteria(true)}
+            sx={{ backgroundColor: "#007791", width: "300px" }}
           >
             Quick Criteria
           </CustomButton>
-          <CustomButton>
+          <CustomButton sx={{ backgroundColor: "#007791", width: "300px" }}>
             Browse Criteria
           </CustomButton>
         </Stack>

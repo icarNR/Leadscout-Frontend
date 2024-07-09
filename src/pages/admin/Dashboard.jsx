@@ -9,7 +9,7 @@ import PageLayout from "../../layouts/APLayout.jsx";
 import Profile from "../../components/admin/profile.jsx";
 //import "./Dashboard.css";
 
-const server = import.meta.env.VITE_REACT_APP_SERVER_URL;
+const server = "http://127.0.0.1:8000";
 
 function Dashboard() {
   const [departmentValue, setDepartmentValue] = useState("");
@@ -17,34 +17,27 @@ function Dashboard() {
   const [departments, setDepartments] = useState([]);
   const [sortValue, setSortValue] = useState("");
   const [selectedProfile, setSelectedProfile] = useState(null);
-  const accessToken = sessionStorage.getItem("access_token");
-
 
   useEffect(() => {
     const fetchDepartments = async () => {
       try {
+        const accessToken = sessionStorage.getItem("access_token");
         const response = await axios.get(`${server}/departments`, {
           headers: {
             Authorization: `Bearer ${accessToken}`,
           },
         });
-        {
-          /*
-          .then((response) => {
-            if (response.status == 403 || response.status !== 401) {
-              throw new Error("Network response was not ok");
-            }
-            return response.data;
-          })
-          .catch((error) => {
-            console.error("There was an error!", error);
-            navigate("/LoginForm"); // Navigate to login form on error
-          });*/
-        }
-
         setDepartments(response.data);
       } catch (error) {
-        console.error("Error fetching departments:", error);
+        if (
+          (error.response && error.response.status === 403) ||
+          error.response.status === 401
+        ) {
+          console.error("Access is unauthorized because of invalid token");
+          window.location.href = "/LoginForm";
+        } else {
+          console.error("Error fetching notifications:", error);
+        }
       }
     };
 

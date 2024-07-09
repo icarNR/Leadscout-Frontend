@@ -45,24 +45,15 @@ const LeadershipTable = ({
           params.session_data = JSON.stringify(Object.fromEntries(sessionData));
         }
 
-        const response = await axios
-          .get(`${server}/src/component/admin/LeadershipTable/`, {
+        const response = await axios.get(
+          `${server}/src/component/admin/LeadershipTable/`,
+          {
             params,
             headers: {
               Authorization: `Bearer ${accessToken}`,
             },
-          })
-          .then((response) => {
-            if (response.status == 403 || response.status == 401) {
-              throw new Error("Network response was not ok");
-            }
-            return response.data;
-          })
-          .catch((error) => {
-            console.error("There was an error!", error);
-            navigate("/LoginForm"); // Navigate to login form on error
-          });
-
+          }
+        );
         const dataWithId = response.data.map((item, index) => ({
           ...item,
           id: item.id || `${index}`,
@@ -71,8 +62,15 @@ const LeadershipTable = ({
 
         setLeadershipData(dataWithId);
       } catch (error) {
-        console.error("Error fetching leadership data:", error);
-        setLeadershipData([]); // Set empty array in case of error
+        if (
+          (error.response && error.response.status === 403) ||
+          error.response.status === 401
+        ) {
+          console.error("Access is unauthorized because of invalid token");
+          window.location.href = "/LoginForm";
+        } else {
+          console.error("Error fetching notifications:", error);
+        }
       }
     }
 

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import CircularProgress from "@mui/material/CircularProgress";
 import { styled } from "@mui/system";
-//import "./profile.css";
+import "./profile.css";
 import CloseIcon from "@mui/icons-material/Close";
 import Grid from "@mui/material/Grid";
 
@@ -43,26 +43,19 @@ const Profile = ({ profileData, onClose }) => {
               Authorization: `Bearer ${accessToken}`,
             },
           }
-        )
-          .then((response) => {
-            if (response.status == 403 || response.status == 401) {
-              throw new Error("Network response was not ok");
-            }
-            return response.data;
-          })
-          .catch((error) => {
-            console.error("There was an error!", error);
-            navigate("/LoginForm"); // Navigate to login form on error
-          });
-
-        if (!response.ok) {
-          throw new Error("Network response was not ok");
-        }
-
+        );
         const data = await response.json();
         setTraits(data);
       } catch (error) {
-        console.error("Error fetching traits data:", error);
+        if (
+          (error.response && error.response.status === 403) ||
+          error.response.status === 401
+        ) {
+          console.error("Access is unauthorized because of invalid token");
+          window.location.href = "/LoginForm";
+        } else {
+          console.error("Error fetching notifications:", error);
+        }
         setTraits({
           openness: 0,
           conscientiousness: 0,
