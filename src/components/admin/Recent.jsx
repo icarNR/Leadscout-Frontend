@@ -6,9 +6,13 @@ const Recent = () => {
     const [recentCriteria, setRecentCriteria] = useState(null);
 
     useEffect(() => {
+        loadRecentCriteria();
+    }, []);
+
+    const loadRecentCriteria = () => {
         const recent = JSON.parse(sessionStorage.getItem('recentCriteria'));
         setRecentCriteria(recent);
-    }, []);
+    };
 
     const saveToRecentCriteria = () => {
         if (recentCriteria) {
@@ -25,6 +29,10 @@ const Recent = () => {
 
             alert(`Plugged in for criteria ID: ${recentCriteria.id}`);
         }
+    };
+
+    const refreshRecentCriteria = () => {
+        loadRecentCriteria();
     };
 
     const pStyle = {
@@ -49,7 +57,7 @@ const Recent = () => {
     return (
         <div>
             <h1 style={h1Style}>Recent</h1>
-            <FaClockRotateLeft />
+            <FaClockRotateLeft onClick={refreshRecentCriteria} style={{ cursor: 'pointer' }} />
             <pre>
                 {recentCriteria ? (
                     <div style={pStyle}>
