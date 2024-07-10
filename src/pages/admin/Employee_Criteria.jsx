@@ -5,10 +5,10 @@ import MenuAppBarWithoutProgressBar from "../../components/Admin/adminHeader2";
 import ClippedDrawer from "../../components/Admin/adminSideNavbar";
 import CssBaseline from '@mui/material/CssBaseline';
 import Typography from '@mui/material/Typography';
-import Criteria from '../../components/admin/CriteriaS';
-import Skills from '../../components/admin/Skills';
-import Recent from '../../components/admin/Recent';
-import '../../components/admin/tailwind.css';
+import Criteria from '../../components/Admin/CriteriaS.jsx';
+import Skills from '../../components/Admin/Skills';
+import Recent from '../../components/Admin/Recent';
+import '../../components/Admin/tailwind.css';
 import PageLayout from "../../layouts/ACLayout.jsx";
 
 
